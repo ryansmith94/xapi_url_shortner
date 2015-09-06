@@ -1,0 +1,12 @@
+{
+  "name": "xapi_url_shortener",
+  "version": "0.0.0",
+  "description": "A installable URL shortening web service that is xAPI enabled for analytics.",
+  "dependencies": {
+  },
+  "devDependencies": {
+  },
+  "scripts": {
+  },
+  "license": "GPLv3",
+}
