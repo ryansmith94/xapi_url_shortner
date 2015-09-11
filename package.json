@@ -3,10 +3,26 @@
   "version": "0.0.0",
   "description": "A installable URL shortening web service that is xAPI enabled for analytics.",
   "dependencies": {
+    "body-parser": "^1.13.3",
+    "bootstrap": "^3.3.5",
+    "express": "^4.13.3",
+    "knex": "^0.8.6",
+    "mysql": "^2.9.0",
+    "q": "^1.4.1",
+    "react": "^0.13.3"
   },
   "devDependencies": {
+    "browserify": "^11.0.1",
+    "chai": "^3.2.0",
+    "mocha": "^2.3.1",
+    "sassify": "^0.9.1",
+    "tsify": "^0.11.11",
+    "typescript": "^1.6.0-beta",
+    "watchify": "^3.4.0"
   },
   "scripts": {
+    "dev:ify": "watchify dist/client/main.js -o dist/client/bundle.js",
+    "dev:ts": "tsc src/**/**/*.ts --outDir dist --module commonjs -t ES5 --watch"
   },
   "license": "GPLv3"
 }
