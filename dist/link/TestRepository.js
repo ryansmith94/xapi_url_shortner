@@ -1,4 +1,4 @@
-/// <reference path="../../definitions/references.d.ts" />
+/// <reference path="../definitions/references.d.ts" />
 var q = require('q');
 var Repository = (function () {
     function Repository() {

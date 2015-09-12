@@ -3,25 +3,25 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var TestCase = require('../../TestCase');
-var Service = require('./Service');
+var BaseTest = require('../BaseTest');
+var Service = require('./ServerService');
 var TestRepository = require('./TestRepository');
 var Test = (function (_super) {
     __extends(Test, _super);
     function Test() {
         _super.apply(this, arguments);
-        this.name = 'ServiceTest';
+        this.name = 'ServerServiceTest';
     }
     Test.prototype.beforeEach = function () {
         this.service = new Service(new TestRepository());
     };
-    Test.prototype.testCreateLink = function (assert) {
+    Test.prototype.testCreateLink = function (assert, done) {
         var long_url = 'http://www.example.com';
         this.service.createLink('http://www.example.com').then(function (link) {
             assert.equal(long_url, link.long_url);
-        });
+        }).then(done, done);
     };
     return Test;
-})(TestCase);
+})(BaseTest);
 (new Test()).run();
 module.exports = Test;

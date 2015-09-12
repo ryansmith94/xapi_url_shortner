@@ -12,7 +12,9 @@ var TestCase = (function () {
             });
             tests.forEach(function (test) {
                 beforeEach(this.beforeEach.bind(this));
-                it(test, this[test].bind(this, chai.assert));
+                it(test, function (done) {
+                    return this[test](chai.assert, done);
+                }.bind(this));
                 afterEach(this.afterEach.bind(this));
             }.bind(this));
         }.bind(this));

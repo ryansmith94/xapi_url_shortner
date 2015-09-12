@@ -1,4 +1,4 @@
-/// <reference path="../definitions/references.d.ts" />
+/// <reference path="./definitions/references.d.ts" />
 var express = require('express');
 var knex = require('knex');
 var bodyParser = require('body-parser');
@@ -12,6 +12,8 @@ var knex_connection = knex({
         database: 'shortener'
     }
 });
+app.use(express.static(__dirname));
+app.use('/node_modules', express.static(__dirname + '/../node_modules'));
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 knex_connection.schema.createTable('link', function (table) {
@@ -24,12 +26,12 @@ knex_connection.schema.createTable('link', function (table) {
 });
 // Link.
 var LinkRepository = require('./link/KnexRepository');
-var LinkService = require('./link/Service');
-var LinkController = require('./link/Controller');
+var LinkService = require('./link/ServerService');
+var LinkController = require('./link/ExpressController');
 var link_repository = new LinkRepository(knex_connection('link'));
 var link_service = new LinkService(link_repository);
 var link_controller = new LinkController(link_service);
-app.post('/link', link_controller.createLink.bind(link_controller));
+app.post('/api/link', link_controller.createLink.bind(link_controller));
 var port = 3000;
 var server = app.listen(port);
 console.log('App running at http://localhost:' + port);

@@ -6,6 +6,7 @@
     "body-parser": "^1.13.3",
     "bootstrap": "^3.3.5",
     "express": "^4.13.3",
+    "jquery": "^2.1.4",
     "knex": "^0.8.6",
     "mysql": "^2.9.0",
     "q": "^1.4.1",
@@ -21,8 +22,10 @@
     "watchify": "^3.4.0"
   },
   "scripts": {
-    "dev:ify": "watchify dist/client/main.js -o dist/client/bundle.js",
-    "dev:ts": "tsc src/**/**/*.ts --outDir dist --module commonjs -t ES5 --watch"
+    "dev:ify": "watchify dist/client.js -o dist/client.bundle.js",
+    "dev:ts": "tsc src/**/*.ts src/*.ts --outDir dist --module commonjs -t ES5 --watch",
+    "dev:start": "nodemon dist/server.js",
+    "test": "mocha dist/**/*.test.js"
   },
   "license": "GPLv3"
 }

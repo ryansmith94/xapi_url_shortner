@@ -1,14 +1,18 @@
-class Service {
+import BaseService = require('../BaseService');
+
+class Service extends BaseService {
   private repo: any;
 
   public constructor(repository: any) {
     this.repo = repository;
+    super();
   }
 
   public createLink(long_url: string) {
     return this.repo.createLink({
       long_url: long_url
     }).then(function (link) {
+      this.emitChange();
       return {
         id: link.id,
         long_url: link.long_url,

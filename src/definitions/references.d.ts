@@ -4,3 +4,6 @@
 /// <reference path="./knex.d.ts" />
 /// <reference path="./body-parser.d.ts" />
 /// <reference path="./q.d.ts" />
+/// <reference path="./node.d.ts" />
+/// <reference path="./jquery.d.ts" />
+/// <reference path="./react.d.ts" />
