@@ -7,6 +7,11 @@ var Controller = (function () {
             res.json(model);
         });
     };
+    Controller.prototype.visitLink = function (req, res) {
+        this.service.getLinkByShortUrl(req.params.short_url).then(function (model) {
+            res.redirect(301, model.long_url);
+        });
+    };
     return Controller;
 })();
 module.exports = Controller;

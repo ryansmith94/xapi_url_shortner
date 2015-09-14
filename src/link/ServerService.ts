@@ -21,6 +21,17 @@ class Service extends BaseService {
     }.bind(this));
   }
 
+  public getLinkByShortUrl(short_url: string) {
+    var id = this.shortUrlToId(short_url);
+    return this.repo.getLinkById(id).then(function (link) {
+      return {
+        id: link.id,
+        long_url: link.long_url,
+        short_url: short_url
+      };
+    });
+  }
+
   private convertBase(value: string, from_base: number, to_base: number): string {
     var range = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'.split('');
     var from_range = range.slice(0, from_base);

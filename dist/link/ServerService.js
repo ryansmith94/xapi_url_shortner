@@ -22,6 +22,16 @@ var Service = (function (_super) {
             };
         }.bind(this));
     };
+    Service.prototype.getLinkByShortUrl = function (short_url) {
+        var id = this.shortUrlToId(short_url);
+        return this.repo.getLinkById(id).then(function (link) {
+            return {
+                id: link.id,
+                long_url: link.long_url,
+                short_url: short_url
+            };
+        });
+    };
     Service.prototype.convertBase = function (value, from_base, to_base) {
         var range = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'.split('');
         var from_range = range.slice(0, from_base);

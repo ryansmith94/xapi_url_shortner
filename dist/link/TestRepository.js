@@ -9,6 +9,12 @@ var Repository = (function () {
             long_url: link.long_url
         });
     };
+    Repository.prototype.getLinkById = function (id) {
+        return q({
+            id: id,
+            long_url: 'http://www.example.com/test'
+        });
+    };
     return Repository;
 })();
 module.exports = Repository;

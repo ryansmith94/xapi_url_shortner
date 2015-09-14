@@ -9,6 +9,13 @@ class Repository {
       long_url: link.long_url
     });
   }
+
+  public getLinkById(id) {
+    return q({
+      id: id,
+      long_url: 'http://www.example.com/test'
+    })
+  }
 }
 
 export = Repository;

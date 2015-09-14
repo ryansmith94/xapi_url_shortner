@@ -10,6 +10,12 @@ class Controller {
       res.json(model);
     });
   }
+
+  public visitLink(req, res) {
+    this.service.getLinkByShortUrl(req.params.short_url).then(function (model) {
+      res.redirect(301, model.long_url);
+    });
+  }
 }
 
 export = Controller;

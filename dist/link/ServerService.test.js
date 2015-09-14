@@ -6,6 +6,8 @@ var __extends = (this && this.__extends) || function (d, b) {
 var BaseTest = require('../BaseTest');
 var Service = require('./ServerService');
 var TestRepository = require('./TestRepository');
+var LONG_URL = 'http://www.example.com';
+var SHORT_URL = '1';
 var Test = (function (_super) {
     __extends(Test, _super);
     function Test() {
@@ -16,9 +18,13 @@ var Test = (function (_super) {
         this.service = new Service(new TestRepository());
     };
     Test.prototype.testCreateLink = function (assert, done) {
-        var long_url = 'http://www.example.com';
-        this.service.createLink('http://www.example.com').then(function (link) {
-            assert.equal(long_url, link.long_url);
+        this.service.createLink(LONG_URL).then(function (link) {
+            assert.equal(LONG_URL, link.long_url);
+        }).then(done, done);
+    };
+    Test.prototype.testGetLinkByShortUrl = function (assert, done) {
+        this.service.getLinkByShortUrl(SHORT_URL).then(function (link) {
+            assert.equal(SHORT_URL, link.short_url);
         }).then(done, done);
     };
     return Test;
