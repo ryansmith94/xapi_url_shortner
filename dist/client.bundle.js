@@ -170,7 +170,7 @@ var Component = (function (_super) {
             }),
             dom.button({
                 type: 'submit',
-                className: 'btn btn-default'
+                className: 'btn btn-success'
             }, ['Shorten'])
         ]);
     };

@@ -31,7 +31,7 @@ class Component extends react.Component<any, any> {
       }),
       dom.button({
         type: 'submit',
-        className: 'btn btn-default'
+        className: 'btn btn-success'
       }, ['Shorten'])
     ]);
   }

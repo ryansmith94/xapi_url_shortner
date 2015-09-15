@@ -1,4 +1,6 @@
 import BaseService = require('../BaseService');
+import url_regex = require('./UrlRegex');
+import q = require('q');
 
 class Service extends BaseService {
   private repo;
@@ -11,6 +13,12 @@ class Service extends BaseService {
   }
 
   public createLink(long_url: string) {
+    if (!url_regex.test(long_url)) {
+      var deferred = q.defer();
+      deferred.reject(new Error('Invalid URL'));
+      return deferred.promise;
+    }
+
     return this.repo.createLink({
       long_url: long_url
     }).then(function (link) {

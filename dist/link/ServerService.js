@@ -4,6 +4,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var BaseService = require('../BaseService');
+var url_regex = require('./UrlRegex');
+var q = require('q');
 var Service = (function (_super) {
     __extends(Service, _super);
     function Service(repository, tracking_service) {
@@ -12,6 +14,11 @@ var Service = (function (_super) {
         _super.call(this);
     }
     Service.prototype.createLink = function (long_url) {
+        if (!url_regex.test(long_url)) {
+            var deferred = q.defer();
+            deferred.reject(new Error('Invalid URL'));
+            return deferred.promise;
+        }
         return this.repo.createLink({
             long_url: long_url
         }).then(function (link) {

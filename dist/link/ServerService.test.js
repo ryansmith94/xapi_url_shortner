@@ -26,6 +26,13 @@ var Test = (function (_super) {
             assert.equal(LONG_URL, link.long_url);
         }).then(done, done);
     };
+    Test.prototype.testCreateLinkInvalidUrl = function (assert, done) {
+        this.service.createLink('').then(function (link) {
+            assert.equal(true, false);
+        }, function (err) {
+            assert.equal(true, true);
+        }).then(done, done);
+    };
     Test.prototype.testGetLinkByShortUrlNoOptions = function (assert, done) {
         this.service.getLinkByShortUrl(SHORT_URL, null).then(function (link) {
             assert.equal(SHORT_URL, link.short_url);
