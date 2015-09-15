@@ -1,0 +1,36 @@
+.link_list {
+  margin-top: 20px;
+}
+
+.link_item {
+  margin-bottom: 5px;
+  background-color: #f8f8f8;
+  padding: 4px 10px;
+}
+
+.link_item .link_icon {
+  border-radius: 100px;
+  height: 20px;
+  background-color: #fff;
+  width: 20px;
+  border-color: #333;
+  border-size: 2px;
+}
+
+.link_item .link_icon_col, .link_info_col {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.link_item .link_icon_col {
+  width: 22px;
+  margin-right: 10px;
+}
+
+.link_create .long_url {
+  width: 80%;
+  display: inline-block;
+  margin-right: 4px;
+  vertical-align: top;
+  margin-bottom: 4px;
+}

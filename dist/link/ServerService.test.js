@@ -31,6 +31,11 @@ var Test = (function (_super) {
             assert.equal(SHORT_URL, link.short_url);
         }).then(done, done);
     };
+    Test.prototype.testGetLinks = function (assert, done) {
+        this.service.getLinks().then(function (links) {
+            assert.equal(true, Array.isArray(links));
+        }).then(done, done);
+    };
     return Test;
 })(BaseTest);
 (new Test()).run();

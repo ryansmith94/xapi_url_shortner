@@ -36,6 +36,17 @@ var Service = (function (_super) {
             return link;
         }.bind(this));
     };
+    Service.prototype.getLinks = function () {
+        return this.repo.getLinks().then(function (links) {
+            return links.map(function (link) {
+                return {
+                    id: link.id,
+                    long_url: link.long_url,
+                    short_url: this.idToShortUrl(link.id)
+                };
+            }.bind(this));
+        }.bind(this));
+    };
     Service.prototype.convertBase = function (value, from_base, to_base) {
         var range = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'.split('');
         var from_range = range.slice(0, from_base);

@@ -12,6 +12,13 @@ var Repository = (function () {
             data: link
         });
     };
+    Repository.prototype.getLinks = function () {
+        return jquery.ajax({
+            url: this.endpoint,
+            dataType: 'json',
+            method: 'GET'
+        });
+    };
     return Repository;
 })();
 module.exports = Repository;

@@ -16,6 +16,14 @@ class Repository {
       data: link
     });
   }
+
+  public getLinks() {
+    return jquery.ajax({
+      url: this.endpoint,
+      dataType: 'json',
+      method: 'GET'
+    });
+  }
 }
 
 export = Repository;

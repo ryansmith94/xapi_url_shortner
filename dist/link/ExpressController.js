@@ -13,6 +13,11 @@ var Controller = (function () {
             res.redirect(301, model.long_url);
         });
     };
+    Controller.prototype.getLinks = function (req, res) {
+        this.service.getLinks().then(function (models) {
+            res.json(models);
+        });
+    };
     return Controller;
 })();
 module.exports = Controller;

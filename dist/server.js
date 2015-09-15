@@ -44,6 +44,7 @@ var link_repository = new LinkRepository(knex_config, 'link');
 var link_service = new LinkService(link_repository, tracking_service);
 var link_controller = new LinkController(link_service);
 app.post('/api/link', link_controller.createLink.bind(link_controller));
+app.get('/api/link', link_controller.getLinks.bind(link_controller));
 app.get('/:short_url(\\w+)', link_controller.visitLink.bind(link_controller));
 var port = 3000;
 var server = app.listen(port);

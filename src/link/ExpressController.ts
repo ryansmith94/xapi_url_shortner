@@ -17,6 +17,12 @@ class Controller {
       res.redirect(301, model.long_url);
     });
   }
+
+  public getLinks(req, res) {
+    this.service.getLinks().then(function (models) {
+      res.json(models);
+    });
+  }
 }
 
 export = Controller;

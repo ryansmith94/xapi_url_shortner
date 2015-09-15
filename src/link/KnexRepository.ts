@@ -26,6 +26,10 @@ class Repository {
   public getLinkById(id) {
     return this.connect().where('id', id).first();
   }
+
+  public getLinks() {
+    return this.connect().select();
+  }
 }
 
 export = Repository;

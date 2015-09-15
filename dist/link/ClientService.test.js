@@ -21,30 +21,14 @@ var Test = (function (_super) {
             assert.equal(LONG_URL, link.long_url);
         }).then(done, done);
     };
-    Test.prototype.testLastCreatedLinkNull = function (assert, done) {
-        assert.equal(null, this.service.getLastCreatedLink());
+    Test.prototype.testGetLinks = function (assert, done) {
+        assert.equal(true, Array.isArray(this.service.getLinks()));
         done();
     };
-    Test.prototype.testLastCreatedLink = function (assert, done) {
-        this.service.createLink(LONG_URL).then(function (link) {
-            assert.equal(LONG_URL, link.long_url);
-            assert.equal(link, this.service.getLastCreatedLink());
-        }.bind(this)).then(done, done);
-    };
-    Test.prototype.testLastCreatedLinkTwo = function (assert, done) {
-        var second_url = LONG_URL + '/second';
-        this.service.createLink(LONG_URL);
-        this.service.createLink(second_url).then(function (link) {
-            assert.equal(second_url, link.long_url);
-            assert.equal(link, this.service.getLastCreatedLink());
-        }.bind(this)).then(done, done);
-    };
-    Test.prototype.testLastCreatedLinkSame = function (assert, done) {
-        this.service.createLink(LONG_URL).then(function (link) {
-            assert.equal(LONG_URL, link.long_url);
-            this.service.createLink(LONG_URL);
-            assert.equal(link, this.service.getLastCreatedLink());
-        }.bind(this)).then(done, done);
+    Test.prototype.testFetchLinks = function (assert, done) {
+        this.service.fetchLinks().then(function (links) {
+            assert.equal(true, Array.isArray(links));
+        }).then(done, done);
     };
     return Test;
 })(BaseTest);

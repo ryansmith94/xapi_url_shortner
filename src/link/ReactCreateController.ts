@@ -4,8 +4,7 @@ import react = require('react');
 var dom = react.DOM;
 class Component extends react.Component<any, any> {
   state = {
-    long_url: '',
-    short_url: ''
+    long_url: ''
   };
   handleShorten(event) {
     this.props.service.createLink(this.state.long_url);
@@ -14,9 +13,7 @@ class Component extends react.Component<any, any> {
   handleLongUrlChange(event) {
     this.setState({long_url: event.target.value});
   }
-  handleDataChange() {
-    this.setState({short_url: this.props.service.getLastCreatedLink().short_url});
-  }
+  handleDataChange() {}
   componentDidMount() {
     this.props.service.addChangeListener(this.handleDataChange.bind(this));
   }
@@ -24,20 +21,18 @@ class Component extends react.Component<any, any> {
     this.props.service.removeChangeListener(this.handleDataChange.bind(this));
   }
   render() {
-    var short_url = this.state.short_url && document.location.host + '/' + this.state.short_url;
-    return dom.form({onSubmit: this.handleShorten.bind(this)}, [
+    return dom.form({className: 'link_create', onSubmit: this.handleShorten.bind(this), style: {textAlign: 'center'}}, [
       dom.input({
         value: this.state.long_url,
         onChange: this.handleLongUrlChange.bind(this),
         type: 'text',
         placeholder: 'Long URL',
-        className: 'form-control'
+        className: 'long_url form-control'
       }),
       dom.button({
         type: 'submit',
         className: 'btn btn-default'
-      }, ['Shorten']),
-      dom.span({}, [' ' + short_url])
+      }, ['Shorten'])
     ]);
   }
 }

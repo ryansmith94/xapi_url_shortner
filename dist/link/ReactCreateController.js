@@ -11,8 +11,7 @@ var Component = (function (_super) {
     function Component() {
         _super.apply(this, arguments);
         this.state = {
-            long_url: '',
-            short_url: ''
+            long_url: ''
         };
     }
     Component.prototype.handleShorten = function (event) {
@@ -22,9 +21,7 @@ var Component = (function (_super) {
     Component.prototype.handleLongUrlChange = function (event) {
         this.setState({ long_url: event.target.value });
     };
-    Component.prototype.handleDataChange = function () {
-        this.setState({ short_url: this.props.service.getLastCreatedLink().short_url });
-    };
+    Component.prototype.handleDataChange = function () { };
     Component.prototype.componentDidMount = function () {
         this.props.service.addChangeListener(this.handleDataChange.bind(this));
     };
@@ -32,21 +29,18 @@ var Component = (function (_super) {
         this.props.service.removeChangeListener(this.handleDataChange.bind(this));
     };
     Component.prototype.render = function () {
-        var short_url = this.state.short_url && document.location.host + '/' + this.state.short_url;
-        return dom.form({ onSubmit: this.handleShorten.bind(this), style: { textAlign: 'center' } }, [
+        return dom.form({ className: 'link_create', onSubmit: this.handleShorten.bind(this), style: { textAlign: 'center' } }, [
             dom.input({
                 value: this.state.long_url,
                 onChange: this.handleLongUrlChange.bind(this),
                 type: 'text',
                 placeholder: 'Long URL',
-                className: 'form-control',
-                style: { width: '80%', display: 'inline-block' }
+                className: 'long_url form-control'
             }),
             dom.button({
                 type: 'submit',
                 className: 'btn btn-default'
-            }, ['Shorten']),
-            dom.div({}, [' ' + short_url])
+            }, ['Shorten'])
         ]);
     };
     return Component;

@@ -27,6 +27,12 @@ class Test extends BaseTest {
       assert.equal(SHORT_URL, link.short_url);
     }).then(done, done);
   }
+
+  public testGetLinks(assert, done) {
+    this.service.getLinks().then(function (links) {
+      assert.equal(true, Array.isArray(links));
+    }).then(done, done);
+  }
 }
 
 (new Test()).run();

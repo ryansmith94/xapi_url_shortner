@@ -19,6 +19,9 @@ var Repository = (function () {
     Repository.prototype.getLinkById = function (id) {
         return this.connect().where('id', id).first();
     };
+    Repository.prototype.getLinks = function () {
+        return this.connect().select();
+    };
     return Repository;
 })();
 module.exports = Repository;
