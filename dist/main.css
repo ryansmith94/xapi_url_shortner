@@ -1,5 +1,5 @@
 .link_list {
-  margin-top: 20px;
+  margin-top: 6px;
 }
 
 .link_item {
@@ -9,12 +9,9 @@
 }
 
 .link_item .link_icon {
-  border-radius: 100px;
+  border-radius: 5px;
   height: 20px;
-  background-color: #fff;
   width: 20px;
-  border-color: #333;
-  border-size: 2px;
 }
 
 .link_item .link_icon_col, .link_info_col {
