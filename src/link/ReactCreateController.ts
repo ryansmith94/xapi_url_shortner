@@ -7,7 +7,9 @@ class Component extends react.Component<any, any> {
     long_url: ''
   };
   handleShorten(event) {
-    this.props.service.createLink(this.state.long_url);
+    this.props.service.createLink(this.state.long_url).then(function () {}, function (err) {
+      alert(err);
+    });
     event.preventDefault();
   }
   handleLongUrlChange(event) {

@@ -21,6 +21,13 @@ var Test = (function (_super) {
             assert.equal(LONG_URL, link.long_url);
         }).then(done, done);
     };
+    Test.prototype.testCreateLinkInvalidUrl = function (assert, done) {
+        this.service.createLink('').then(function (link) {
+            assert.equal(true, false);
+        }, function (err) {
+            assert.equal(true, true);
+        }).then(done, done);
+    };
     Test.prototype.testGetLinks = function (assert, done) {
         assert.equal(true, Array.isArray(this.service.getLinks()));
         done();

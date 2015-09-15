@@ -5,6 +5,8 @@ var Controller = (function () {
     Controller.prototype.createLink = function (req, res) {
         this.service.createLink(req.body.long_url).then(function (model) {
             res.json(model);
+        }, function (err) {
+            res.status(400).send(String(err));
         });
     };
     Controller.prototype.visitLink = function (req, res) {

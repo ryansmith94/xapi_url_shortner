@@ -13,6 +13,7 @@ class Service extends BaseService {
   }
 
   public createLink(long_url: string) {
+    // Validates URL.
     if (!url_regex.test(long_url)) {
       var deferred = q.defer();
       deferred.reject(new Error('Invalid URL'));

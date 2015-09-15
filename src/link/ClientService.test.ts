@@ -17,6 +17,14 @@ class Test extends BaseTest {
     }).then(done, done);
   }
 
+  public testCreateLinkInvalidUrl(assert, done) {
+    this.service.createLink('').then(function (link) {
+      assert.equal(true, false);
+    }, function (err) {
+      assert.equal(true, true)
+    }).then(done, done); 
+  }
+
   public testGetLinks(assert, done) {
     assert.equal(true, Array.isArray(this.service.getLinks()));
     done();

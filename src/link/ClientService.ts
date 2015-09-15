@@ -1,4 +1,6 @@
 import BaseService = require('../BaseService');
+import url_regex = require('./UrlRegex');
+import q = require('q');
 
 class Service extends BaseService {
   private repo: any;
@@ -10,10 +12,21 @@ class Service extends BaseService {
   }
 
   public createLink(long_url: string) {
+    var deferred = q.defer();
+
     // Stops recreation of links.
     if (this.links.filter(function (link) {
       return link.long_url === long_url;
-    }).length > 0) return false;
+    }).length > 0) {
+      deferred.reject(new Error('URL already shortened'));
+      return deferred.promise;
+    }
+
+    // Validates URL.
+    if (!url_regex.test(long_url)) {
+      deferred.reject(new Error('Invalid URL'));
+      return deferred.promise;
+    }
 
     return this.repo.createLink({
       long_url: long_url

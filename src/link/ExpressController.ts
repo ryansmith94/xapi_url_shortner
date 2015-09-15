@@ -8,6 +8,8 @@ class Controller {
   public createLink(req, res) {
     this.service.createLink(req.body.long_url).then(function (model) {
       res.json(model);
+    }, function (err) {
+      res.status(400).send(String(err));
     });
   }
 
