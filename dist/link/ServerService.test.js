@@ -26,8 +26,8 @@ var Test = (function (_super) {
             assert.equal(LONG_URL, link.long_url);
         }).then(done, done);
     };
-    Test.prototype.testGetLinkByShortUrl = function (assert, done) {
-        this.service.getLinkByShortUrl(SHORT_URL).then(function (link) {
+    Test.prototype.testGetLinkByShortUrlNoOptions = function (assert, done) {
+        this.service.getLinkByShortUrl(SHORT_URL, null).then(function (link) {
             assert.equal(SHORT_URL, link.short_url);
         }).then(done, done);
     };

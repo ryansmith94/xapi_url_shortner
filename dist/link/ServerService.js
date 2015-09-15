@@ -23,7 +23,7 @@ var Service = (function (_super) {
             };
         }.bind(this));
     };
-    Service.prototype.getLinkByShortUrl = function (short_url) {
+    Service.prototype.getLinkByShortUrl = function (short_url, tracking_options) {
         var id = this.shortUrlToId(short_url);
         return this.repo.getLinkById(id).then(function (link) {
             return {
@@ -32,7 +32,7 @@ var Service = (function (_super) {
                 short_url: short_url
             };
         }).then(function (link) {
-            this.tracking_service.trackLink(link);
+            this.tracking_service.trackLink(link, tracking_options);
             return link;
         }.bind(this));
     };

@@ -12,6 +12,15 @@ var LINK = {
     long_url: 'http://www.example.com',
     short_url: '1'
 };
+var ACTOR = {
+    account: {
+        homePage: 'http://www.example.com',
+        name: '1'
+    }
+};
+var CONTEXT = {
+    platform: 'Test'
+};
 var Test = (function (_super) {
     __extends(Test, _super);
     function Test() {
@@ -21,12 +30,34 @@ var Test = (function (_super) {
     Test.prototype.beforeEach = function () {
         this.service = new Service(new TestLrsRepository(), new TestWebRepository());
     };
-    Test.prototype.testTrackLink = function (assert, done) {
-        this.service.trackLink(LINK).then(function (statement) {
-            assert.equal(statement.object.id, LINK.long_url);
-            assert.equal(statement.object.definition.extensions['https://github.com/ryansmith94/xapi_url_shortner/extensions/short_url'], LINK.short_url);
-            assert.equal(statement.object.definition.name['en-GB'], LINK.long_url);
-        }).then(done, done);
+    Test.prototype.assertStatement = function (assert, statement) {
+        assert.equal(LINK.long_url, statement.object.id);
+        assert.equal('http://localhost:3000/' + LINK.short_url, statement.object.definition.moreInfo);
+        assert.equal(LINK.long_url, statement.object.definition.name['en-GB']);
+    };
+    Test.prototype.testTrackLinkNoOptions = function (assert, done) {
+        this.service.trackLink(LINK, null).then(function (statement) {
+            this.assertStatement(assert, statement);
+        }.bind(this)).then(done, done);
+    };
+    Test.prototype.testTrackLinkWithActor = function (assert, done) {
+        this.service.trackLink(LINK, { actor: ACTOR }).then(function (statement) {
+            assert.equal(ACTOR, statement.actor);
+            this.assertStatement(assert, statement);
+        }.bind(this)).then(done, done);
+    };
+    Test.prototype.testTrackLinkWithContext = function (assert, done) {
+        this.service.trackLink(LINK, { context: CONTEXT }).then(function (statement) {
+            assert.equal(CONTEXT, statement.context);
+            this.assertStatement(assert, statement);
+        }.bind(this)).then(done, done);
+    };
+    Test.prototype.testTrackLinkWithActorAndContext = function (assert, done) {
+        this.service.trackLink(LINK, { actor: ACTOR, context: CONTEXT }).then(function (statement) {
+            assert.equal(ACTOR, statement.actor);
+            assert.equal(CONTEXT, statement.context);
+            this.assertStatement(assert, statement);
+        }.bind(this)).then(done, done);
     };
     return Test;
 })(BaseTest);

@@ -22,8 +22,8 @@ class Test extends BaseTest {
     }).then(done, done);
   }
 
-  public testGetLinkByShortUrl(assert, done) {
-    this.service.getLinkByShortUrl(SHORT_URL).then(function (link) {
+  public testGetLinkByShortUrlNoOptions(assert, done) {
+    this.service.getLinkByShortUrl(SHORT_URL, null).then(function (link) {
       assert.equal(SHORT_URL, link.short_url);
     }).then(done, done);
   }

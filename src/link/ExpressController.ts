@@ -12,7 +12,8 @@ class Controller {
   }
 
   public visitLink(req, res) {
-    this.service.getLinkByShortUrl(req.params.short_url).then(function (model) {
+    var options = req.query.options;
+    this.service.getLinkByShortUrl(req.params.short_url, JSON.parse(options)).then(function (model) {
       res.redirect(301, model.long_url);
     });
   }

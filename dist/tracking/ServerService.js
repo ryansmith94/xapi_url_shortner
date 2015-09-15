@@ -12,10 +12,11 @@ var Service = (function (_super) {
         this.web_repo = web_repository;
         _super.call(this);
     }
-    Service.prototype.trackLink = function (link) {
+    Service.prototype.trackLink = function (link, tracking_options) {
+        tracking_options = tracking_options || {};
         return this.web_repo.getTitle(link.long_url).then(function (page_title) {
-            return this.lrs_repo.createStatement({
-                'actor': {
+            var statement = {
+                'actor': tracking_options.actor || {
                     'account': {
                         'name': 'Unknown',
                         'homePage': 'https://github.com/ryansmith94/xapi_url_shortner/users'
@@ -37,7 +38,12 @@ var Service = (function (_super) {
                         'moreInfo': 'http://localhost:3000/' + link.short_url
                     }
                 }
-            });
+            };
+            var context = tracking_options.context;
+            if (context && context.constructor === Object && !Array.isArray(context) && Object.keys(context).length > 0) {
+                statement.context = context;
+            }
+            return this.lrs_repo.createStatement(statement);
         }.bind(this));
     };
     return Service;

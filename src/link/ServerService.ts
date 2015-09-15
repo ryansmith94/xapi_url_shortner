@@ -23,7 +23,7 @@ class Service extends BaseService {
     }.bind(this));
   }
 
-  public getLinkByShortUrl(short_url: string) {
+  public getLinkByShortUrl(short_url: string, tracking_options) {
     var id = this.shortUrlToId(short_url);
     return this.repo.getLinkById(id).then(function (link) {
       return {
@@ -32,7 +32,7 @@ class Service extends BaseService {
         short_url: short_url
       };
     }).then(function (link) {
-      this.tracking_service.trackLink(link);
+      this.tracking_service.trackLink(link, tracking_options);
       return link;
     }.bind(this));
   }
