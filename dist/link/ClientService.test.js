@@ -11,7 +11,7 @@ var Test = (function (_super) {
     __extends(Test, _super);
     function Test() {
         _super.apply(this, arguments);
-        this.name = 'ClientServiceTest';
+        this.name = 'link/ClientServiceTest';
     }
     Test.prototype.beforeEach = function () {
         this.service = new Service(new TestRepository());

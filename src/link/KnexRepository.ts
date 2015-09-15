@@ -2,16 +2,16 @@
 import knex = require('knex');
 
 class Repository {
-  private connection;
+  private config;
   private collection;
 
-  public constructor(connection, collection) {
-    this.connection = connection;
+  public constructor(config, collection) {
+    this.config = config;
     this.collection = collection;
   }
 
   private connect() {
-    return knex(this.connection)(this.collection);
+    return knex(this.config)(this.collection);
   }
 
   public createLink(link) {

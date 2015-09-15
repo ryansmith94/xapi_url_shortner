@@ -1,10 +1,12 @@
 import BaseService = require('../BaseService');
 
 class Service extends BaseService {
-  private repo: any;
+  private repo;
+  private tracking_service;
 
-  public constructor(repository: any) {
+  public constructor(repository, tracking_service) {
     this.repo = repository;
+    this.tracking_service = tracking_service;
     super();
   }
 
@@ -29,7 +31,10 @@ class Service extends BaseService {
         long_url: link.long_url,
         short_url: short_url
       };
-    });
+    }).then(function (link) {
+      this.tracking_service.trackLink(link);
+      return link;
+    }.bind(this));
   }
 
   private convertBase(value: string, from_base: number, to_base: number): string {

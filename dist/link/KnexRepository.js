@@ -1,12 +1,12 @@
 /// <reference path="../definitions/references.d.ts" />
 var knex = require('knex');
 var Repository = (function () {
-    function Repository(connection, collection) {
-        this.connection = connection;
+    function Repository(config, collection) {
+        this.config = config;
         this.collection = collection;
     }
     Repository.prototype.connect = function () {
-        return knex(this.connection)(this.collection);
+        return knex(this.config)(this.collection);
     };
     Repository.prototype.createLink = function (link) {
         return this.connect().insert(link, 'id').then(function (ids) {

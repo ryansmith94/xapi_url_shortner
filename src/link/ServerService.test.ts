@@ -1,15 +1,19 @@
 import BaseTest = require('../BaseTest');
 import Service = require('./ServerService');
 import TestRepository = require('./TestRepository');
+import TrackingService = require('../tracking/ServerService');
+import TrackingTestLrsRepository = require('../tracking/TestLrsRepository');
+import TrackingTestWebRepository = require('../tracking/TestWebRepository');
 
 var LONG_URL = 'http://www.example.com';
 var SHORT_URL = '1';
 class Test extends BaseTest {
-  protected name: string = 'ServerServiceTest';
+  protected name: string = 'link/ServerServiceTest';
   protected service: Service;
 
   public beforeEach() {
-    this.service = new Service(new TestRepository());
+    var tracking_service = new TrackingService(new TrackingTestLrsRepository(), new TrackingTestWebRepository());
+    this.service = new Service(new TestRepository(), tracking_service);
   }
 
   public testCreateLink(assert, done) {

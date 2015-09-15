@@ -6,16 +6,20 @@ var __extends = (this && this.__extends) || function (d, b) {
 var BaseTest = require('../BaseTest');
 var Service = require('./ServerService');
 var TestRepository = require('./TestRepository');
+var TrackingService = require('../tracking/ServerService');
+var TrackingTestLrsRepository = require('../tracking/TestLrsRepository');
+var TrackingTestWebRepository = require('../tracking/TestWebRepository');
 var LONG_URL = 'http://www.example.com';
 var SHORT_URL = '1';
 var Test = (function (_super) {
     __extends(Test, _super);
     function Test() {
         _super.apply(this, arguments);
-        this.name = 'ServerServiceTest';
+        this.name = 'link/ServerServiceTest';
     }
     Test.prototype.beforeEach = function () {
-        this.service = new Service(new TestRepository());
+        var tracking_service = new TrackingService(new TrackingTestLrsRepository(), new TrackingTestWebRepository());
+        this.service = new Service(new TestRepository(), tracking_service);
     };
     Test.prototype.testCreateLink = function (assert, done) {
         this.service.createLink(LONG_URL).then(function (link) {

@@ -7,3 +7,6 @@
 /// <reference path="./node.d.ts" />
 /// <reference path="./jquery.d.ts" />
 /// <reference path="./react.d.ts" />
+/// <reference path="./tincanjs.d.ts" />
+/// <reference path="./request.d.ts" />
+/// <reference path="./cheerio.d.ts" />

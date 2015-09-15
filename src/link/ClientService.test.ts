@@ -4,7 +4,7 @@ import TestRepository = require('./TestRepository');
 
 var LONG_URL = 'http://www.example.com';
 class Test extends BaseTest {
-  protected name: string = 'ClientServiceTest';
+  protected name: string = 'link/ClientServiceTest';
   protected service: Service;
 
   public beforeEach() {

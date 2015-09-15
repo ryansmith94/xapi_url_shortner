@@ -6,8 +6,9 @@ var __extends = (this && this.__extends) || function (d, b) {
 var BaseService = require('../BaseService');
 var Service = (function (_super) {
     __extends(Service, _super);
-    function Service(repository) {
+    function Service(repository, tracking_service) {
         this.repo = repository;
+        this.tracking_service = tracking_service;
         _super.call(this);
     }
     Service.prototype.createLink = function (long_url) {
@@ -30,7 +31,10 @@ var Service = (function (_super) {
                 long_url: link.long_url,
                 short_url: short_url
             };
-        });
+        }).then(function (link) {
+            this.tracking_service.trackLink(link);
+            return link;
+        }.bind(this));
     };
     Service.prototype.convertBase = function (value, from_base, to_base) {
         var range = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'.split('');
