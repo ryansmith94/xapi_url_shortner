@@ -36,14 +36,14 @@ knex(knex_config).schema.createTable('link', function (table) {
 // Tracking.
 import TrackingLrsRepository = require('./tracking/TinCanLrsRepository');
 import TrackingWebRepository = require('./tracking/CheerioWebRepository');
-import TrackingService = require('./tracking/ServerService');
+import TrackingService = require('./tracking/Service');
 var tracking_lrs_repository = new TrackingLrsRepository(lrs_config);
 var tracking_web_repository = new TrackingWebRepository();
 var tracking_service = new TrackingService(tracking_lrs_repository, tracking_web_repository);
 
 // Link.
 import LinkRepository = require('./link/KnexRepository');
-import LinkService = require('./link/ServerService');
+import LinkService = require('./link/Service');
 import LinkController = require('./link/ExpressController');
 var link_repository = new LinkRepository(knex_config, 'link');
 var link_service = new LinkService(link_repository, tracking_service);

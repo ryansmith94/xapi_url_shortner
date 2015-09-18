@@ -4,9 +4,9 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var BaseTest = require('../BaseTest');
-var Service = require('./ServerService');
+var Service = require('./Service');
 var TestRepository = require('./TestRepository');
-var TrackingService = require('../tracking/ServerService');
+var TrackingService = require('../tracking/Service');
 var TrackingTestLrsRepository = require('../tracking/TestLrsRepository');
 var TrackingTestWebRepository = require('../tracking/TestWebRepository');
 var LONG_URL = 'http://www.example.com';
@@ -15,7 +15,7 @@ var Test = (function (_super) {
     __extends(Test, _super);
     function Test() {
         _super.apply(this, arguments);
-        this.name = 'link/ServerServiceTest';
+        this.name = 'link/ServiceTest';
     }
     Test.prototype.beforeEach = function () {
         var tracking_service = new TrackingService(new TrackingTestLrsRepository(), new TrackingTestWebRepository());

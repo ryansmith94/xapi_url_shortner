@@ -15,12 +15,17 @@ var Component = (function (_super) {
             links: []
         };
     }
+    Component.prototype.getLinks = function () {
+        this.props.service.getLinks().then(function (links) {
+            this.setState({ links: links });
+        }.bind(this));
+    };
     Component.prototype.handleDataChange = function () {
-        this.setState({ links: this.props.service.getLinks() });
+        this.getLinks();
     };
     Component.prototype.componentDidMount = function () {
         this.props.service.addChangeListener(this.handleDataChange.bind(this));
-        this.props.service.fetchLinks();
+        this.getLinks();
     };
     Component.prototype.componentWillUnmount = function () {
         this.props.service.removeChangeListener(this.handleDataChange.bind(this));
