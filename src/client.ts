@@ -3,11 +3,11 @@ import react = require('react');
 
 // Link.
 import LinkRepository = require('./link/HttpRepository');
-import LinkService = require('./link/ClientService');
+import LinkService = require('./link/Service');
 import LinkCreateController = require('./link/ReactCreateController');
 import LinkListController = require('./link/ReactListController');
 var link_repository = new LinkRepository('api/link');
-var link_service = new LinkService(link_repository);
+var link_service = new LinkService(link_repository, null);
 var link_create_controller = LinkCreateController({service: link_service});
 var link_list_controller = LinkListController({service: link_service});
 

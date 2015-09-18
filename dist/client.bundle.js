@@ -30,11 +30,11 @@ module.exports = Service;
 var react = require('react');
 // Link.
 var LinkRepository = require('./link/HttpRepository');
-var LinkService = require('./link/ClientService');
+var LinkService = require('./link/Service');
 var LinkCreateController = require('./link/ReactCreateController');
 var LinkListController = require('./link/ReactListController');
 var link_repository = new LinkRepository('api/link');
-var link_service = new LinkService(link_repository);
+var link_service = new LinkService(link_repository, null);
 var link_create_controller = LinkCreateController({ service: link_service });
 var link_list_controller = LinkListController({ service: link_service });
 var dom = react.DOM;
@@ -60,61 +60,10 @@ react.render(dom.div({}, [
     ])
 ]), document.getElementById('app'));
 
-},{"./link/ClientService":3,"./link/HttpRepository":4,"./link/ReactCreateController":5,"./link/ReactListController":7,"react":165}],3:[function(require,module,exports){
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var BaseService = require('../BaseService');
-var url_regex = require('./UrlRegex');
-var q = require('q');
-var Service = (function (_super) {
-    __extends(Service, _super);
-    function Service(repository) {
-        _super.call(this);
-        this.links = [];
-        this.repo = repository;
-    }
-    Service.prototype.createLink = function (long_url) {
-        var deferred = q.defer();
-        // Stops recreation of links.
-        if (this.links.filter(function (link) {
-            return link.long_url === long_url;
-        }).length > 0) {
-            deferred.reject(new Error('URL already shortened'));
-            return deferred.promise;
-        }
-        // Validates URL.
-        if (!url_regex.test(long_url)) {
-            deferred.reject(new Error('Invalid URL'));
-            return deferred.promise;
-        }
-        return this.repo.createLink({
-            long_url: long_url
-        }).then(function (link) {
-            this.links.push(link);
-            this.emitChange();
-            return link;
-        }.bind(this));
-    };
-    Service.prototype.fetchLinks = function () {
-        return this.repo.getLinks().then(function (links) {
-            this.links = links;
-            this.emitChange();
-            return links;
-        }.bind(this));
-    };
-    Service.prototype.getLinks = function () {
-        return this.links;
-    };
-    return Service;
-})(BaseService);
-module.exports = Service;
-
-},{"../BaseService":1,"./UrlRegex":8,"q":10}],4:[function(require,module,exports){
+},{"./link/HttpRepository":3,"./link/ReactCreateController":4,"./link/ReactListController":6,"./link/Service":7,"react":165}],3:[function(require,module,exports){
 /// <reference path="../definitions/references.d.ts" />
 var jquery = require('jquery');
+var q = require('q');
 var Repository = (function () {
     function Repository(endpoint) {
         this.endpoint = endpoint;
@@ -125,20 +74,28 @@ var Repository = (function () {
             dataType: 'json',
             method: 'POST',
             data: link
-        });
+        }).then(function (link) {
+            this.links.push(link);
+            return link;
+        }.bind(this));
     };
     Repository.prototype.getLinks = function () {
+        if (this.links)
+            return q(this.links);
         return jquery.ajax({
             url: this.endpoint,
             dataType: 'json',
             method: 'GET'
-        });
+        }).then(function (links) {
+            this.links = links;
+            return links;
+        }.bind(this));
     };
     return Repository;
 })();
 module.exports = Repository;
 
-},{"jquery":9}],5:[function(require,module,exports){
+},{"jquery":9,"q":10}],4:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -190,7 +147,7 @@ var Component = (function (_super) {
 })(react.Component);
 module.exports = react.createFactory(Component);
 
-},{"react":165}],6:[function(require,module,exports){
+},{"react":165}],5:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -230,7 +187,7 @@ var Component = (function (_super) {
 })(react.Component);
 module.exports = react.createFactory(Component);
 
-},{"react":165}],7:[function(require,module,exports){
+},{"react":165}],6:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -248,12 +205,17 @@ var Component = (function (_super) {
             links: []
         };
     }
+    Component.prototype.getLinks = function () {
+        this.props.service.getLinks().then(function (links) {
+            this.setState({ links: links });
+        }.bind(this));
+    };
     Component.prototype.handleDataChange = function () {
-        this.setState({ links: this.props.service.getLinks() });
+        this.getLinks();
     };
     Component.prototype.componentDidMount = function () {
         this.props.service.addChangeListener(this.handleDataChange.bind(this));
-        this.props.service.fetchLinks();
+        this.getLinks();
     };
     Component.prototype.componentWillUnmount = function () {
         this.props.service.removeChangeListener(this.handleDataChange.bind(this));
@@ -265,7 +227,91 @@ var Component = (function (_super) {
 })(react.Component);
 module.exports = react.createFactory(Component);
 
-},{"./ReactItem":6,"react":165}],8:[function(require,module,exports){
+},{"./ReactItem":5,"react":165}],7:[function(require,module,exports){
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var BaseService = require('../BaseService');
+var url_regex = require('./UrlRegex');
+var q = require('q');
+var Service = (function (_super) {
+    __extends(Service, _super);
+    function Service(repository, tracking_service) {
+        this.repo = repository;
+        this.tracking_service = tracking_service;
+        _super.call(this);
+    }
+    Service.prototype.createLink = function (long_url) {
+        // Validates URL.
+        if (!url_regex.test(long_url)) {
+            var deferred = q.defer();
+            deferred.reject(new Error('Invalid URL'));
+            return deferred.promise;
+        }
+        return this.repo.createLink({
+            long_url: long_url
+        }).then(function (link) {
+            this.emitChange();
+            return {
+                id: link.id,
+                long_url: link.long_url,
+                short_url: this.idToShortUrl(link.id)
+            };
+        }.bind(this));
+    };
+    Service.prototype.getLinkByShortUrl = function (short_url, tracking_options) {
+        var id = this.shortUrlToId(short_url);
+        return this.repo.getLinkById(id).then(function (link) {
+            return {
+                id: link.id,
+                long_url: link.long_url,
+                short_url: short_url
+            };
+        }).then(function (link) {
+            this.tracking_service.trackLink(link, tracking_options);
+            return link;
+        }.bind(this));
+    };
+    Service.prototype.getLinks = function () {
+        return this.repo.getLinks().then(function (links) {
+            return links.map(function (link) {
+                return {
+                    id: link.id,
+                    long_url: link.long_url,
+                    short_url: this.idToShortUrl(link.id)
+                };
+            }.bind(this));
+        }.bind(this));
+    };
+    Service.prototype.convertBase = function (value, from_base, to_base) {
+        var range = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'.split('');
+        var from_range = range.slice(0, from_base);
+        var to_range = range.slice(0, to_base);
+        var dec_value = ('' + value).split('').reverse().reduce(function (carry, digit, index) {
+            if (from_range.indexOf(digit) === -1)
+                throw new Error('Invalid digit `' + digit + '` for base ' + from_base + '.');
+            return carry += from_range.indexOf(digit) * (Math.pow(from_base, index));
+        }, 0);
+        var new_value = '';
+        while (dec_value > 0) {
+            new_value = to_range[dec_value % to_base] + new_value;
+            dec_value = (dec_value - (dec_value % to_base)) / to_base;
+        }
+        return new_value || '0';
+    };
+    Service.prototype.idToShortUrl = function (value) {
+        return this.convertBase(value, 10, 34);
+    };
+    Service.prototype.shortUrlToId = function (value) {
+        return this.convertBase(value, 34, 10);
+    };
+    return Service;
+})(BaseService);
+module.exports = Service;
+
+},{"../BaseService":1,"./UrlRegex":8,"q":10}],8:[function(require,module,exports){
 module.exports = new RegExp("^" +
     // protocol identifier
     "(?:(?:https?|ftp)://)" +

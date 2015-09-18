@@ -1,14 +1,14 @@
 import BaseTest = require('../BaseTest');
-import Service = require('./ServerService');
+import Service = require('./Service');
 import TestRepository = require('./TestRepository');
-import TrackingService = require('../tracking/ServerService');
+import TrackingService = require('../tracking/Service');
 import TrackingTestLrsRepository = require('../tracking/TestLrsRepository');
 import TrackingTestWebRepository = require('../tracking/TestWebRepository');
 
 var LONG_URL = 'http://www.example.com';
 var SHORT_URL = '1';
 class Test extends BaseTest {
-  protected name: string = 'link/ServerServiceTest';
+  protected name: string = 'link/ServiceTest';
   protected service: Service;
 
   public beforeEach() {

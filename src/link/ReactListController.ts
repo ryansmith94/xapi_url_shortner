@@ -7,12 +7,17 @@ class Component extends react.Component<any, any> {
   state = {
     links: []
   };
+  getLinks() {
+    this.props.service.getLinks().then(function (links) {
+      this.setState({links: links});
+    }.bind(this));
+  }
   handleDataChange() {
-    this.setState({links: this.props.service.getLinks()});
+    this.getLinks();
   }
   componentDidMount() {
     this.props.service.addChangeListener(this.handleDataChange.bind(this));
-    this.props.service.fetchLinks();
+    this.getLinks();
   }
   componentWillUnmount() {
     this.props.service.removeChangeListener(this.handleDataChange.bind(this));

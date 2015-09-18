@@ -1,5 +1,5 @@
 import BaseTest = require('../BaseTest');
-import Service = require('./ServerService');
+import Service = require('./Service');
 import TestLrsRepository = require('./TestLrsRepository');
 import TestWebRepository = require('./TestWebRepository');
 
@@ -19,7 +19,7 @@ var CONTEXT = {
 };
 
 class Test extends BaseTest {
-  protected name: string = 'tracking/ServerServiceTest';
+  protected name: string = 'tracking/ServiceTest';
   protected service: Service;
 
   public beforeEach() {
