@@ -2,6 +2,7 @@
 var express = require('express');
 var knex = require('knex');
 var bodyParser = require('body-parser');
+var react = require('react');
 var app = express();
 var knex_config = {
     client: 'mysql',
@@ -46,6 +47,30 @@ var link_controller = new LinkController(link_service);
 app.post('/api/link', link_controller.createLink.bind(link_controller));
 app.get('/api/link', link_controller.getLinks.bind(link_controller));
 app.get('/:short_url(\\w+)', link_controller.visitLink.bind(link_controller));
+// UI.
+var App = require('./App');
+// Link.
+var LinkCreateController = require('./link/ReactCreateController');
+var LinkListController = require('./link/ReactListController');
+var link_create_controller = LinkCreateController({ service: link_service });
+var link_list_controller = LinkListController({ service: link_service });
+var dom = react.DOM;
+app.get('/', function (req, res) {
+    res.send(react.renderToString(dom.html({}, [
+        dom.head({}, [
+            dom.title({}, ['xAPI URL Shortener']),
+            dom.link({ rel: 'stylesheet', type: 'text/css', href: '../node_modules/bootstrap/dist/css/bootstrap.min.css' }),
+            dom.link({ rel: 'stylesheet', type: 'text/css', href: './main.css' })
+        ]),
+        dom.body({}, [
+            dom.div({ id: 'app' }, [App({
+                    link_create_controller: link_create_controller,
+                    link_list_controller: link_list_controller
+                })]),
+            dom.script({ src: 'client.bundle.js' })
+        ])
+    ])));
+});
 var port = 3000;
 var server = app.listen(port);
 console.log('App running at http://localhost:' + port);
