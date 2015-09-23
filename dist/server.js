@@ -22,6 +22,7 @@ var lrs_config = {
 };
 app.use(express.static(__dirname));
 app.use('/node_modules', express.static(__dirname + '/../node_modules'));
+app.use('/example', express.static(__dirname + '/../example'));
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 // Tracking.

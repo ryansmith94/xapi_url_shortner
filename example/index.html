@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>xAPI URL Shortener Example</title>
+  <script src="http://localhost:3000/tracker.js"></script>
+  <script>
+    console.log('Initialising tracking...');
+    window.track({
+      account: {
+        name: '1',
+        homePage: document.URL
+      }
+    }, {
+      contextActivities: {
+        parent: [{
+          objectType: "Activity",
+          id: document.location.href,
+          definition: {
+            name: {
+              "en-GB": document.title
+            }
+          }
+        }]
+      }
+    });
+    console.log('Tracking started...');
+  </script>
+</head>
+<body>
+  <a href="http://localhost:3000/fb">Facebook</a>
+</body>
+</html>
