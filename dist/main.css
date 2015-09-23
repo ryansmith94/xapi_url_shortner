@@ -24,10 +24,19 @@
   margin-right: 10px;
 }
 
-.link_create .long_url {
-  width: 80%;
+.link_create .long_url, .link_create .custom_url {
+  width: 100%;
   display: inline-block;
   margin-right: 4px;
   vertical-align: top;
   margin-bottom: 4px;
+}
+
+@media (min-width: 768px) {
+  .link_create .long_url {
+    width: 55%;
+  }
+  .link_create .custom_url {
+    width: 30%;
+  }
 }

@@ -20,7 +20,7 @@ class Service extends BaseService {
     }
 
     if (!/^[\da-z]+$/.test(custom_url)) {
-      deferred.reject(new Error('Invalid Custom URL. It may only contain digits and lowercase letters.'));
+      deferred.reject(new Error('Invalid Custom URL `'+custom_url+'`. It may only contain digits and lowercase letters.'));
     }
 
     this.getLinkByShortUrl(custom_url).then(function (link) {

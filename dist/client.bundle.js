@@ -180,7 +180,8 @@ var Component = (function (_super) {
         };
     }
     Component.prototype.handleShorten = function (event) {
-        this.props.service.createLink(this.state.long_url, this.state.custom_url).then(function () {
+        var custom_url = this.state.custom_url.split(document.location.host + '/');
+        this.props.service.createLink(this.state.long_url, custom_url[custom_url.length - 1] || undefined).then(function () {
             this.setState({ custom_url: '' });
         }, function (err) {
             alert(err);
@@ -328,7 +329,7 @@ var Service = (function (_super) {
             deferred.reject(new Error('Invalid Long URL'));
         }
         if (!/^[\da-z]+$/.test(custom_url)) {
-            deferred.reject(new Error('Invalid Custom URL. It may only contain digits and lowercase letters.'));
+            deferred.reject(new Error('Invalid Custom URL `' + custom_url + '`. It may only contain digits and lowercase letters.'));
         }
         this.getLinkByShortUrl(custom_url).then(function (link) {
             deferred.reject(new Error('Link already exists.'));

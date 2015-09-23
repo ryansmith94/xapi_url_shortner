@@ -16,7 +16,8 @@ var Component = (function (_super) {
         };
     }
     Component.prototype.handleShorten = function (event) {
-        this.props.service.createLink(this.state.long_url, this.state.custom_url).then(function () {
+        var custom_url = this.state.custom_url.split(document.location.host + '/');
+        this.props.service.createLink(this.state.long_url, custom_url[custom_url.length - 1] || undefined).then(function () {
             this.setState({ custom_url: '' });
         }, function (err) {
             alert(err);

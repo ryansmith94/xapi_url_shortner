@@ -8,9 +8,10 @@ class Component extends react.Component<any, any> {
     custom_url: ''
   };
   handleShorten(event) {
+    var custom_url = this.state.custom_url.split(document.location.host+'/');
     this.props.service.createLink(
       this.state.long_url,
-      this.state.custom_url
+      custom_url[custom_url.length - 1] || undefined
     ).then(function () {
       this.setState({custom_url: ''})
     }, function (err) {
