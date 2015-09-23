@@ -3,7 +3,7 @@ import chai = require('chai');
 import source_map_support = require('source-map-support');
 
 source_map_support.install({
-    handleUncaughtExceptions: false
+  handleUncaughtExceptions: false
 });
 
 class TestCase {

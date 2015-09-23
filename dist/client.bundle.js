@@ -103,6 +103,22 @@ var Repository = (function () {
             return link;
         }.bind(this));
     };
+    Repository.prototype.updateLink = function (updated_link) {
+        var deferred = q.defer();
+        var filtered_indexes = this.links.map(function (link, index) {
+            return link.id === updated_link.id ? index : null;
+        }).filter(function (index) {
+            return index !== null;
+        });
+        if (filtered_indexes.length > 0) {
+            this.links[filtered_indexes[0]] = updated_link;
+            deferred.resolve(updated_link);
+        }
+        else {
+            deferred.reject(new Error('No link'));
+        }
+        return deferred.promise;
+    };
     Repository.prototype.getLinks = function () {
         if (this.links)
             return q(this.links);
@@ -114,6 +130,32 @@ var Repository = (function () {
             this.links = links;
             return links;
         }.bind(this));
+    };
+    Repository.prototype.getLinkById = function (id) {
+        var deferred = q.defer();
+        var filtered_links = this.links.filter(function (link) {
+            return link.id === id;
+        });
+        if (filtered_links.length > 0) {
+            deferred.resolve(filtered_links[0]);
+        }
+        else {
+            deferred.reject(new Error('No link'));
+        }
+        return deferred.promise;
+    };
+    Repository.prototype.getCustomLinkByShortUrl = function (short_url) {
+        var deferred = q.defer();
+        var filtered_links = this.links.filter(function (link) {
+            return link.short_url === short_url;
+        });
+        if (filtered_links.length > 0) {
+            deferred.resolve(filtered_links[0]);
+        }
+        else {
+            deferred.reject(new Error('No link'));
+        }
+        return deferred.promise;
     };
     return Repository;
 })();

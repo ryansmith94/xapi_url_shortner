@@ -46,6 +46,22 @@ var Test = (function (_super) {
             assert.equal(true, true);
         }).then(done, done);
     };
+    Test.prototype.testCreateLinkWithExistingShortUrl = function (assert, done) {
+        this.service.createLink(LONG_URL, '2').then(function (first_link) {
+            return this.service.createLink(LONG_URL + '/2').then(function (second_link) {
+                assert.equal(second_link.short_url, first_link.id);
+            });
+        }.bind(this)).then(done, done);
+    };
+    Test.prototype.testCreateLinkWithShortUrlOfExistingId = function (assert, done) {
+        this.service.createLink(LONG_URL).then(function (first_link) {
+            return this.service.createLink(LONG_URL + '/2', '1').then(function () {
+                assert.equal(true, false);
+            }, function () {
+                assert.equal(true, true);
+            });
+        }.bind(this)).then(done, done);
+    };
     Test.prototype.testTrackLinkNoOptions = function (assert, done) {
         this.service.createLink(LONG_URL).then(function (link) {
             return this.service.trackLink(link.short_url, null);

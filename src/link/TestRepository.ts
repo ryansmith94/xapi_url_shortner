@@ -2,12 +2,25 @@
 import q = require('q');
 
 class Repository {
-  private links = [];
+  private links: Array<any> = [];
 
   public createLink(link) {
-    link.id = this.links.length;
+    link.id = this.links.length + 1;
     this.links.push(link);
     return q(link);
+  }
+
+  public updateLink(link) {
+    var deferred = q.defer();
+    
+    if (this.links[link.id - 1]) {
+      this.links[link.id - 1] = link;
+      deferred.resolve(link);
+    } else {
+      deferred.reject(new Error('No link'));
+    }
+
+    return deferred.promise;
   }
 
   public getLinkById(id) {

@@ -6,6 +6,7 @@ var Controller = (function () {
         this.service.createLink(req.body.long_url, req.body.short_url).then(function (model) {
             res.json(model);
         }, function (err) {
+            console.error(err.stack);
             res.status(400).send(String(err));
         });
     };

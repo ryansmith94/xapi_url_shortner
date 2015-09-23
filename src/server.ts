@@ -2,6 +2,11 @@
 import express = require('express');
 import knex = require('knex');
 import bodyParser = require('body-parser');
+import source_map_support = require('source-map-support');
+
+source_map_support.install({
+  handleUncaughtExceptions: false
+});
 
 var app = express();
 var knex_config = {
@@ -23,15 +28,6 @@ app.use(express.static(__dirname));
 app.use('/node_modules', express.static(__dirname+'/../node_modules'));
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-
-knex(knex_config).schema.createTable('link', function (table) {
-  table.increments('id').primary();
-  table.string('long_url');
-}).then(function (table) {
-  console.log(table);
-}, function (err) {
-  console.error(err);
-});
 
 // Tracking.
 import TrackingLrsRepository = require('./tracking/TinCanLrsRepository');

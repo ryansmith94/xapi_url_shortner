@@ -5,9 +5,20 @@ var Repository = (function () {
         this.links = [];
     }
     Repository.prototype.createLink = function (link) {
-        link.id = this.links.length;
+        link.id = this.links.length + 1;
         this.links.push(link);
         return q(link);
+    };
+    Repository.prototype.updateLink = function (link) {
+        var deferred = q.defer();
+        if (this.links[link.id - 1]) {
+            this.links[link.id - 1] = link;
+            deferred.resolve(link);
+        }
+        else {
+            deferred.reject(new Error('No link'));
+        }
+        return deferred.promise;
     };
     Repository.prototype.getLinkById = function (id) {
         var deferred = q.defer();

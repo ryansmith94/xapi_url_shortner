@@ -1,17 +1,15 @@
-/// <reference path="../definitions/references.d.ts" />
-import knex = require('knex');
+import BaseRepository = require('../BaseKnexRepository');
 
-class Repository {
-  private config;
-  private collection;
+class Repository extends BaseRepository {
 
   public constructor(config, collection) {
-    this.config = config;
-    this.collection = collection;
+    super(config, collection);
   }
 
-  private connect() {
-    return knex(this.config)(this.collection);
+  protected constructSchema(table) {
+    table.increments('id').primary();
+    table.string('long_url').notNullable();
+    table.string('short_url').unique();
   }
 
   public createLink(link) {
@@ -24,8 +22,24 @@ class Repository {
     });
   }
 
+  public updateLink(link) {
+    return this.connect().where('id', link.id).update(link).then(function () {
+      return link;
+    });
+  }
+
   public getLinkById(id) {
     return this.connect().where('id', id).first();
+  }
+
+  public getCustomLinkByShortUrl(short_url: string) {
+    return this.connect().where('short_url', short_url).first().then(function (link) {
+      if (!link) {
+        throw new Error('No link');
+      } else {
+        return link;
+      }
+    });
   }
 
   public getLinks() {
