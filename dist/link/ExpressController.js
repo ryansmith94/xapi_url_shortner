@@ -3,7 +3,7 @@ var Controller = (function () {
         this.service = service;
     }
     Controller.prototype.createLink = function (req, res) {
-        this.service.createLink(req.body.long_url).then(function (model) {
+        this.service.createLink(req.body.long_url, req.body.short_url).then(function (model) {
             res.json(model);
         }, function (err) {
             res.status(400).send(String(err));
@@ -11,7 +11,7 @@ var Controller = (function () {
     };
     Controller.prototype.visitLink = function (req, res) {
         var options = req.query.options;
-        this.service.getLinkByShortUrl(req.params.short_url, options && JSON.parse(options)).then(function (model) {
+        this.service.trackLink(req.params.short_url, options && JSON.parse(options)).then(function (model) {
             res.redirect(301, model.long_url);
         });
     };
@@ -23,3 +23,4 @@ var Controller = (function () {
     return Controller;
 })();
 module.exports = Controller;
+//# sourceMappingURL=ExpressController.js.map

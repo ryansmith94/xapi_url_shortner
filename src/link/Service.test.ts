@@ -6,7 +6,7 @@ import TrackingTestLrsRepository = require('../tracking/TestLrsRepository');
 import TrackingTestWebRepository = require('../tracking/TestWebRepository');
 
 var LONG_URL = 'http://www.example.com';
-var SHORT_URL = '1';
+var SHORT_URL = '2';
 class Test extends BaseTest {
   protected name: string = 'link/ServiceTest';
   protected service: Service;
@@ -18,22 +18,37 @@ class Test extends BaseTest {
 
   public testCreateLink(assert, done) {
     this.service.createLink(LONG_URL).then(function (link) {
-      assert.equal(LONG_URL, link.long_url);
+      assert.equal(link.long_url, LONG_URL);
     }).then(done, done);
   }
 
-  public testCreateLinkInvalidUrl(assert, done) {
+  public testCreateLinkInvalidLongUrl(assert, done) {
     this.service.createLink('').then(function (link) {
       assert.equal(true, false);
     }, function (err) {
       assert.equal(true, true)
-    }).then(done, done); 
+    }).then(done, done);
   }
 
-  public testGetLinkByShortUrlNoOptions(assert, done) {
-    this.service.getLinkByShortUrl(SHORT_URL, null).then(function (link) {
-      assert.equal(SHORT_URL, link.short_url);
+  public testCreateLinkWithShortUrl(assert, done) {
+    this.service.createLink(LONG_URL, SHORT_URL).then(function (link) {
+      assert.equal(link.long_url, LONG_URL);
+      assert.equal(link.short_url, SHORT_URL);
     }).then(done, done);
+  }
+
+  public testCreateLinkWithInvalidShortUrl(assert, done) {
+    this.service.createLink(LONG_URL, 'AAA').then(function (link) {
+      assert.equal(true, false);
+    }, function (err) {
+      assert.equal(true, true)
+    }).then(done, done);
+  }
+
+  public testTrackLinkNoOptions(assert, done) {
+    this.service.createLink(LONG_URL).then(function (link) {
+      return this.service.trackLink(link.short_url, null);
+    }.bind(this)).then(function () {}).then(done, done);
   }
 
   public testGetLinks(assert, done) {

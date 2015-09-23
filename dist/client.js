@@ -14,3 +14,4 @@ react.render(App({
     link_create_controller: link_create_controller,
     link_list_controller: link_list_controller
 }), document.getElementById('app'));
+//# sourceMappingURL=client.js.map

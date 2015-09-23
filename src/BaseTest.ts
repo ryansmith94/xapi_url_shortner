@@ -1,5 +1,10 @@
 /// <reference path="./definitions/references.d.ts" />
 import chai = require('chai');
+import source_map_support = require('source-map-support');
+
+source_map_support.install({
+    handleUncaughtExceptions: false
+});
 
 class TestCase {
   protected name: string = 'TestCase';

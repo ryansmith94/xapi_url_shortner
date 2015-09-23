@@ -6,7 +6,7 @@ class Controller {
   }
 
   public createLink(req, res) {
-    this.service.createLink(req.body.long_url).then(function (model) {
+    this.service.createLink(req.body.long_url, req.body.short_url).then(function (model) {
       res.json(model);
     }, function (err) {
       res.status(400).send(String(err));
@@ -15,7 +15,7 @@ class Controller {
 
   public visitLink(req, res) {
     var options = req.query.options;
-    this.service.getLinkByShortUrl(req.params.short_url, options && JSON.parse(options)).then(function (model) {
+    this.service.trackLink(req.params.short_url, options && JSON.parse(options)).then(function (model) {
       res.redirect(301, model.long_url);
     });
   }

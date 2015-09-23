@@ -2,25 +2,40 @@
 var q = require('q');
 var Repository = (function () {
     function Repository() {
+        this.links = [];
     }
     Repository.prototype.createLink = function (link) {
-        return q({
-            id: '1',
-            long_url: link.long_url
-        });
+        link.id = this.links.length;
+        this.links.push(link);
+        return q(link);
     };
     Repository.prototype.getLinkById = function (id) {
-        return q({
-            id: id,
-            long_url: 'http://www.example.com/test'
+        var deferred = q.defer();
+        if (this.links[id - 1]) {
+            deferred.resolve(this.links[id - 1]);
+        }
+        else {
+            deferred.reject(new Error('No link'));
+        }
+        return deferred.promise;
+    };
+    Repository.prototype.getCustomLinkByShortUrl = function (short_url) {
+        var deferred = q.defer();
+        var filtered_links = this.links.filter(function (link) {
+            return link.short_url === short_url;
         });
+        if (filtered_links.length > 0) {
+            deferred.resolve(filtered_links[0]);
+        }
+        else {
+            deferred.reject(new Error('No link'));
+        }
+        return deferred.promise;
     };
     Repository.prototype.getLinks = function () {
-        return q([{
-                id: '1',
-                long_url: 'http://www.example.com/test'
-            }]);
+        return q(this.links);
     };
     return Repository;
 })();
 module.exports = Repository;
+//# sourceMappingURL=TestRepository.js.map

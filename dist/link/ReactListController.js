@@ -36,3 +36,4 @@ var Component = (function (_super) {
     return Component;
 })(react.Component);
 module.exports = react.createFactory(Component);
+//# sourceMappingURL=ReactListController.js.map

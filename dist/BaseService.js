@@ -23,3 +23,4 @@ var Service = (function (_super) {
     return Service;
 })(events.EventEmitter);
 module.exports = Service;
+//# sourceMappingURL=BaseService.js.map

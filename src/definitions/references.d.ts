@@ -10,3 +10,4 @@
 /// <reference path="./tincanjs.d.ts" />
 /// <reference path="./request.d.ts" />
 /// <reference path="./cheerio.d.ts" />
+/// <reference path="./source-map-support.d.ts" />

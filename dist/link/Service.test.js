@@ -10,7 +10,7 @@ var TrackingService = require('../tracking/Service');
 var TrackingTestLrsRepository = require('../tracking/TestLrsRepository');
 var TrackingTestWebRepository = require('../tracking/TestWebRepository');
 var LONG_URL = 'http://www.example.com';
-var SHORT_URL = '1';
+var SHORT_URL = '2';
 var Test = (function (_super) {
     __extends(Test, _super);
     function Test() {
@@ -23,20 +23,33 @@ var Test = (function (_super) {
     };
     Test.prototype.testCreateLink = function (assert, done) {
         this.service.createLink(LONG_URL).then(function (link) {
-            assert.equal(LONG_URL, link.long_url);
+            assert.equal(link.long_url, LONG_URL);
         }).then(done, done);
     };
-    Test.prototype.testCreateLinkInvalidUrl = function (assert, done) {
+    Test.prototype.testCreateLinkInvalidLongUrl = function (assert, done) {
         this.service.createLink('').then(function (link) {
             assert.equal(true, false);
         }, function (err) {
             assert.equal(true, true);
         }).then(done, done);
     };
-    Test.prototype.testGetLinkByShortUrlNoOptions = function (assert, done) {
-        this.service.getLinkByShortUrl(SHORT_URL, null).then(function (link) {
-            assert.equal(SHORT_URL, link.short_url);
+    Test.prototype.testCreateLinkWithShortUrl = function (assert, done) {
+        this.service.createLink(LONG_URL, SHORT_URL).then(function (link) {
+            assert.equal(link.long_url, LONG_URL);
+            assert.equal(link.short_url, SHORT_URL);
         }).then(done, done);
+    };
+    Test.prototype.testCreateLinkWithInvalidShortUrl = function (assert, done) {
+        this.service.createLink(LONG_URL, 'AAA').then(function (link) {
+            assert.equal(true, false);
+        }, function (err) {
+            assert.equal(true, true);
+        }).then(done, done);
+    };
+    Test.prototype.testTrackLinkNoOptions = function (assert, done) {
+        this.service.createLink(LONG_URL).then(function (link) {
+            return this.service.trackLink(link.short_url, null);
+        }.bind(this)).then(function () { }).then(done, done);
     };
     Test.prototype.testGetLinks = function (assert, done) {
         this.service.getLinks().then(function (links) {
@@ -47,3 +60,4 @@ var Test = (function (_super) {
 })(BaseTest);
 (new Test()).run();
 module.exports = Test;
+//# sourceMappingURL=Service.test.js.map

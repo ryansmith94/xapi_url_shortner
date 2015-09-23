@@ -49,3 +49,4 @@ var Service = (function (_super) {
     return Service;
 })(BaseService);
 module.exports = Service;
+//# sourceMappingURL=Service.js.map

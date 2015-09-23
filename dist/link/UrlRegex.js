@@ -32,3 +32,4 @@ module.exports = new RegExp("^" +
     // resource path
     "(?:[/?#]\\S*)?" +
     "$", "i");
+//# sourceMappingURL=UrlRegex.js.map

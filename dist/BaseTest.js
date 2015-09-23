@@ -1,5 +1,9 @@
 /// <reference path="./definitions/references.d.ts" />
 var chai = require('chai');
+var source_map_support = require('source-map-support');
+source_map_support.install({
+    handleUncaughtExceptions: false
+});
 var TestCase = (function () {
     function TestCase() {
         this.name = 'TestCase';
@@ -32,3 +36,4 @@ var TestCase = (function () {
     return TestCase;
 })();
 module.exports = TestCase;
+//# sourceMappingURL=BaseTest.js.map

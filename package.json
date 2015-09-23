@@ -20,13 +20,14 @@
     "chai": "^3.2.0",
     "mocha": "^2.3.1",
     "sassify": "^0.9.1",
+    "source-map-support": "^0.3.2",
     "tsify": "^0.11.11",
     "typescript": "^1.6.0-beta",
     "watchify": "^3.4.0"
   },
   "scripts": {
     "dev:ify": "watchify dist/client.js -o dist/client.bundle.js",
-    "dev:ts": "tsc src/**/*.ts src/*.ts --outDir dist --module commonjs -t ES5 --watch",
+    "dev:ts": "tsc src/**/*.ts src/*.ts --outDir dist --module commonjs -t ES5 --sourceMap --watch",
     "dev:start": "nodemon dist/server.js",
     "test": "mocha dist/**/*.test.js"
   },

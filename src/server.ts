@@ -2,8 +2,6 @@
 import express = require('express');
 import knex = require('knex');
 import bodyParser = require('body-parser');
-import react = require('react');
-
 
 var app = express();
 var knex_config = {
@@ -56,9 +54,8 @@ app.get('/:short_url(\\w+)', link_controller.visitLink.bind(link_controller));
 
 
 // UI.
+import react = require('react');
 import App = require('./App');
-
-// Link.
 import LinkCreateController = require('./link/ReactCreateController');
 import LinkListController = require('./link/ReactListController');
 var link_create_controller = LinkCreateController({service: link_service});
@@ -66,7 +63,7 @@ var link_list_controller = LinkListController({service: link_service});
 
 var dom = react.DOM;
 app.get('/', function (req, res) {
-  res.send(react.renderToString(dom.html({}, [
+  res.send(react.renderToStaticMarkup(dom.html({}, [
     dom.head({}, [
       dom.title({}, ['xAPI URL Shortener']),
       dom.link({rel:'stylesheet', type:'text/css', href:'../node_modules/bootstrap/dist/css/bootstrap.min.css'}),

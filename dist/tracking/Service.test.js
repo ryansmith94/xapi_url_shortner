@@ -63,3 +63,4 @@ var Test = (function (_super) {
 })(BaseTest);
 (new Test()).run();
 module.exports = Test;
+//# sourceMappingURL=Service.test.js.map

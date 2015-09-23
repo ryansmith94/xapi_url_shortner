@@ -31,3 +31,4 @@ var Repository = (function () {
     return Repository;
 })();
 module.exports = Repository;
+//# sourceMappingURL=HttpRepository.js.map

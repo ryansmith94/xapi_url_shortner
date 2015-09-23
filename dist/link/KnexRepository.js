@@ -12,7 +12,8 @@ var Repository = (function () {
         return this.connect().insert(link, 'id').then(function (ids) {
             return {
                 id: ids[0],
-                long_url: link.long_url
+                long_url: link.long_url,
+                short_url: link.short_url
             };
         });
     };
@@ -25,3 +26,4 @@ var Repository = (function () {
     return Repository;
 })();
 module.exports = Repository;
+//# sourceMappingURL=KnexRepository.js.map
