@@ -70,9 +70,19 @@ class Test extends BaseTest {
   }
 
   public testGetLinks(assert, done) {
-    this.service.getLinks().then(function (links) {
-      assert.equal(true, Array.isArray(links));
-    }).then(done, done);
+    this.service.createLink(LONG_URL, '2').then(function (first_link) {
+      return this.service.createLink(LONG_URL+'/2').then(function (second_link) {
+        return this.service.getLinks().then(function (links) {
+          assert.equal(Array.isArray(links), true);
+          assert.equal(links[0].id, first_link.id);
+          assert.equal(links[0].long_url, first_link.long_url);
+          assert.equal(links[0].short_url, first_link.short_url);
+          assert.equal(links[1].id, second_link.id);
+          assert.equal(links[1].long_url, second_link.long_url);
+          assert.equal(links[1].short_url, second_link.short_url);
+        });
+      }.bind(this));
+    }.bind(this)).then(done, done);
   }
 }
 

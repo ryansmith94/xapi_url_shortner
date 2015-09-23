@@ -175,17 +175,23 @@ var Component = (function (_super) {
     function Component() {
         _super.apply(this, arguments);
         this.state = {
-            long_url: ''
+            long_url: '',
+            custom_url: ''
         };
     }
     Component.prototype.handleShorten = function (event) {
-        this.props.service.createLink(this.state.long_url).then(function () { }, function (err) {
+        this.props.service.createLink(this.state.long_url, this.state.custom_url).then(function () {
+            this.setState({ custom_url: '' });
+        }, function (err) {
             alert(err);
         });
         event.preventDefault();
     };
     Component.prototype.handleLongUrlChange = function (event) {
         this.setState({ long_url: event.target.value });
+    };
+    Component.prototype.handleCustomUrlChange = function (event) {
+        this.setState({ custom_url: event.target.value });
     };
     Component.prototype.handleDataChange = function () { };
     Component.prototype.componentDidMount = function () {
@@ -202,6 +208,13 @@ var Component = (function (_super) {
                 type: 'text',
                 placeholder: 'Long URL',
                 className: 'long_url form-control'
+            }),
+            dom.input({
+                value: this.state.custom_url,
+                onChange: this.handleCustomUrlChange.bind(this),
+                type: 'text',
+                placeholder: 'Custom URL',
+                className: 'custom_url form-control'
             }),
             dom.button({
                 type: 'submit',
@@ -314,8 +327,8 @@ var Service = (function (_super) {
         if (!url_regex.test(long_url)) {
             deferred.reject(new Error('Invalid Long URL'));
         }
-        if (!/[\da-z]/.test(custom_url)) {
-            deferred.reject(new Error('Invalid Custom URL'));
+        if (!/^[\da-z]+$/.test(custom_url)) {
+            deferred.reject(new Error('Invalid Custom URL. It may only contain digits and lowercase letters.'));
         }
         this.getLinkByShortUrl(custom_url).then(function (link) {
             deferred.reject(new Error('Link already exists.'));
@@ -357,7 +370,7 @@ var Service = (function (_super) {
                 return {
                     id: link.id,
                     long_url: link.long_url,
-                    short_url: this.idToShortUrl(link.id)
+                    short_url: link.short_url || this.idToShortUrl(link.id)
                 };
             }.bind(this));
         }.bind(this));

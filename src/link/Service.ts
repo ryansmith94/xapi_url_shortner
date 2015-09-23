@@ -19,8 +19,8 @@ class Service extends BaseService {
       deferred.reject(new Error('Invalid Long URL'));
     }
 
-    if (!/[\da-z]/.test(custom_url)) {
-      deferred.reject(new Error('Invalid Custom URL'));
+    if (!/^[\da-z]+$/.test(custom_url)) {
+      deferred.reject(new Error('Invalid Custom URL. It may only contain digits and lowercase letters.'));
     }
 
     this.getLinkByShortUrl(custom_url).then(function (link) {
@@ -67,7 +67,7 @@ class Service extends BaseService {
         return {
           id: link.id,
           long_url: link.long_url,
-          short_url: this.idToShortUrl(link.id)
+          short_url: link.short_url || this.idToShortUrl(link.id)
         };
       }.bind(this));
     }.bind(this));
