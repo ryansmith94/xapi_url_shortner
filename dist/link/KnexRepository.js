@@ -29,7 +29,14 @@ var Repository = (function (_super) {
         });
     };
     Repository.prototype.getLinkById = function (id) {
-        return this.connect().where('id', id).first();
+        return this.connect().where('id', id).first().then(function (link) {
+            if (!link) {
+                throw new Error('No link');
+            }
+            else {
+                return link;
+            }
+        });
     };
     Repository.prototype.getCustomLinkByShortUrl = function (short_url) {
         return this.connect().where('short_url', short_url).first().then(function (link) {

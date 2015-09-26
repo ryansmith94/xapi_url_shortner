@@ -17,10 +17,12 @@ var Repository = (function () {
         }.bind(this)).then(this.logSuccess, this.logError);
     };
     Repository.prototype.logSuccess = function () {
-        console.log('Success', arguments);
+        if (process.env.debug)
+            console.log('Success', arguments);
     };
     Repository.prototype.logError = function (err) {
-        console.error('Error', err);
+        if (process.env.debug)
+            console.error('Error', err);
     };
     Repository.prototype.constructSchema = function (table) { };
     Repository.prototype.connect = function () {

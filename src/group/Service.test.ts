@@ -16,6 +16,14 @@ class Test extends BaseTest {
       assert.equal(group.name, NAME);
     }).then(done, done);
   }
+
+  public testGetGroupById(assert, done) {
+    this.service.createGroup(NAME).then(function (created_group) {
+      return this.service.getGroupById(created_group.id).then(function (group) {
+        assert.equal(group.id, created_group.id);
+      });
+    }.bind(this)).then(done, done);
+  }
 }
 
 (new Test()).run();

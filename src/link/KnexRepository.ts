@@ -29,7 +29,13 @@ class Repository extends BaseRepository {
   }
 
   public getLinkById(id) {
-    return this.connect().where('id', id).first();
+    return this.connect().where('id', id).first().then(function (link) {
+      if (!link) {
+        throw new Error('No link');
+      } else {
+        return link;
+      }
+    });
   }
 
   public getCustomLinkByShortUrl(short_url: string) {

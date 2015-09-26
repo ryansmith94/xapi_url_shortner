@@ -19,6 +19,16 @@ class Repository extends BaseRepository {
       };
     });
   }
+
+  public getGroupById(id) {
+    return this.connect().where('id', id).first().then(function (group) {
+      if (!group) {
+        throw new Error('No group');
+      } else {
+        return group;
+      }
+    });
+  }
 }
 
 export = Repository;

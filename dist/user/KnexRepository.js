@@ -11,23 +11,27 @@ var Repository = (function (_super) {
     }
     Repository.prototype.constructSchema = function (table) {
         table.increments('id').primary();
-        table.string('name');
+        table.string('email').notNullable();
+        table.string('password').notNullable();
+        table.integer('group_id').notNullable();
     };
-    Repository.prototype.createGroup = function (group) {
-        return this.connect().insert(group, 'id').then(function (ids) {
+    Repository.prototype.createUser = function (user) {
+        return this.connect().insert(user, 'id').then(function (ids) {
             return {
                 id: ids[0],
-                name: group.name
+                email: user.email,
+                password: user.password,
+                group_id: user.group_id
             };
         });
     };
-    Repository.prototype.getGroupById = function (id) {
-        return this.connect().where('id', id).first().then(function (group) {
-            if (!group) {
-                throw new Error('No group');
+    Repository.prototype.getUserByEmail = function (email) {
+        return this.connect().where('email', email).first().then(function (user) {
+            if (!user) {
+                throw new Error('No user');
             }
             else {
-                return group;
+                return user;
             }
         });
     };

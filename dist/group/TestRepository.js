@@ -9,6 +9,16 @@ var Repository = (function () {
         this.groups.push(group);
         return q(group);
     };
+    Repository.prototype.getGroupById = function (id) {
+        var deferred = q.defer();
+        if (this.groups[id - 1]) {
+            deferred.resolve(this.groups[id - 1]);
+        }
+        else {
+            deferred.reject(new Error('No group'));
+        }
+        return deferred.promise;
+    };
     return Repository;
 })();
 module.exports = Repository;

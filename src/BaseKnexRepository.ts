@@ -22,11 +22,11 @@ class Repository {
   }
 
   private logSuccess() {
-    console.log('Success', arguments);
+    if (process.env.debug) console.log('Success', arguments);
   }
 
   private logError(err) {
-    console.error('Error', err);
+    if (process.env.debug) console.error('Error', err);
   }
 
   protected constructSchema(table) {}
