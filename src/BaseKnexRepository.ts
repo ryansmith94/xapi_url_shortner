@@ -12,7 +12,7 @@ class Repository {
   }
 
   private constructTable() {
-    knex(this.config).schema.hasTable(this.collection).then(function (exists) {
+    return knex(this.config).schema.hasTable(this.collection).then(function (exists) {
       if (exists) {
         return knex(this.config).schema.table(this.collection, this.constructSchema);
       } else {

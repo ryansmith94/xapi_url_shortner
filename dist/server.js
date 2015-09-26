@@ -2,24 +2,11 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var source_map_support = require('source-map-support');
+var config = require('./config');
 source_map_support.install({
     handleUncaughtExceptions: false
 });
 var app = express();
-var knex_config = {
-    client: 'mysql',
-    connection: {
-        host: '127.0.0.1',
-        user: 'root',
-        password: 'mysql',
-        database: 'shortener'
-    }
-};
-var lrs_config = {
-    endpoint: 'http://demo.learninglocker.net/data/xAPI',
-    username: 'd416e6220812740d3922eb09813ebb4163e8eb3e',
-    password: 'bc7e0a2edd5d1969b6d774e679d4eb4e7a35be13'
-};
 app.use(express.static(__dirname));
 app.use('/node_modules', express.static(__dirname + '/../node_modules'));
 app.use('/example', express.static(__dirname + '/../example'));
@@ -29,19 +16,16 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 var TrackingLrsRepository = require('./tracking/TinCanLrsRepository');
 var TrackingWebRepository = require('./tracking/CheerioWebRepository');
 var TrackingService = require('./tracking/Service');
-var tracking_lrs_repository = new TrackingLrsRepository(lrs_config);
+var tracking_lrs_repository = new TrackingLrsRepository(config.lrs);
 var tracking_web_repository = new TrackingWebRepository();
 var tracking_service = new TrackingService(tracking_lrs_repository, tracking_web_repository);
 // Link.
 var LinkRepository = require('./link/KnexRepository');
 var LinkService = require('./link/Service');
 var LinkController = require('./link/ExpressController');
-var link_repository = new LinkRepository(knex_config, 'link');
+var link_repository = new LinkRepository(config.knex, 'link');
 var link_service = new LinkService(link_repository, tracking_service);
-var link_controller = new LinkController(link_service);
-app.post('/api/link', link_controller.createLink.bind(link_controller));
-app.get('/api/link', link_controller.getLinks.bind(link_controller));
-app.get('/:short_url(\\w+)', link_controller.visitLink.bind(link_controller));
+var link_controller = new LinkController(app, link_service);
 // UI.
 var react = require('react');
 var App = require('./App');

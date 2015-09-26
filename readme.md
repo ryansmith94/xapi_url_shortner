@@ -3,3 +3,6 @@
 
 [![Build Status](https://travis-ci.org/ryansmith94/xapi_url_shortner.svg?branch=master)](https://travis-ci.org/ryansmith94/xapi_url_shortner)
 [![License](https://img.shields.io/badge/License-GPLv3-brightgreen.svg)](http://opensource.org/licenses/GPL-3.0)
+
+- npm link
+- xus cg NewGroup

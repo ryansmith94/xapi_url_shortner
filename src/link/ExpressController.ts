@@ -1,8 +1,15 @@
 class Controller {
   private service;
 
-  public constructor(service) {
+  public constructor(app, service) {
     this.service = service;
+    this.constructRoutes(app);
+  }
+
+  public constructRoutes(app) {
+    app.post('/api/link', this.createLink.bind(this));
+    app.get('/api/link', this.getLinks.bind(this));
+    app.get('/:short_url(\\w+)', this.visitLink.bind(this));
   }
 
   public createLink(req, res) {

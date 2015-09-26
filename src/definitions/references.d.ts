@@ -11,3 +11,5 @@
 /// <reference path="./request.d.ts" />
 /// <reference path="./cheerio.d.ts" />
 /// <reference path="./source-map-support.d.ts" />
+/// <reference path="./commander.d.ts" />
+/// <reference path="./dotenv.d.ts" />

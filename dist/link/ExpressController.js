@@ -1,7 +1,13 @@
 var Controller = (function () {
-    function Controller(service) {
+    function Controller(app, service) {
         this.service = service;
+        this.constructRoutes(app);
     }
+    Controller.prototype.constructRoutes = function (app) {
+        app.post('/api/link', this.createLink.bind(this));
+        app.get('/api/link', this.getLinks.bind(this));
+        app.get('/:short_url(\\w+)', this.visitLink.bind(this));
+    };
     Controller.prototype.createLink = function (req, res) {
         this.service.createLink(req.body.long_url, req.body.short_url).then(function (model) {
             res.json(model);
