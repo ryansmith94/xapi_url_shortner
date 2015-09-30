@@ -58,6 +58,31 @@ var Test = (function (_super) {
             }.bind(this));
         }.bind(this)).then(done, done);
     };
+    Test.prototype.testGetUserByEmailAndPassword = function (assert, done) {
+        this.group_service.createGroup(GROUP_NAME).then(function (group) {
+            return this.service.createUser(EMAIL, PASSWORD, group.id).then(function (existing_user) {
+                return this.service.getUserByEmailAndPassword(EMAIL, PASSWORD).then(function (user) {
+                    assert.equal(user.id, existing_user.id);
+                    assert.equal(user.email, EMAIL);
+                    assert.equal(user.password, PASSWORD);
+                });
+            }.bind(this));
+        }.bind(this)).then(done, done);
+    };
+    Test.prototype.testGetUserByEmailAndPasswordWithNoUser = function (assert, done) {
+        this.service.getUserByEmailAndPassword(EMAIL, PASSWORD).then(function (user) {
+            assert.equal(true, false);
+        }, function () {
+            assert.equal(false, false);
+        }).then(done, done);
+    };
+    Test.prototype.testGetUserByIdWithNoUser = function (assert, done) {
+        this.service.getUserById(1).then(function (user) {
+            assert.equal(true, false);
+        }, function () {
+            assert.equal(false, false);
+        }).then(done, done);
+    };
     return Test;
 })(BaseTest);
 (new Test()).run();

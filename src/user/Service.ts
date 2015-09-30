@@ -46,6 +46,22 @@ class Service extends BaseService {
     }.bind(this));
   }
 
+  public getUserByEmailAndPassword(email: string, password: string) {
+    return this.getUserByEmail(email).then(function (user) {
+      if (user.password === password) {
+        return user;
+      } else {
+        throw new Error('Invalid credentials.');
+      }
+    }, function () {
+      throw new Error('Invalid credentials.');
+    });
+  }
+
+  public getUserById(id) {
+    return this.repo.getUserById(id);
+  }
+
   private getUserByEmail(email: string) {
     return this.repo.getUserByEmail(email);
   }

@@ -24,6 +24,21 @@ class Repository {
 
     return deferred.promise;
   }
+
+  public getUserById(id) {
+    var deferred = q.defer();
+    var filtered_users = this.users.filter(function (user) {
+      return user.id === id;
+    });
+
+    if (filtered_users.length > 0) {
+      deferred.resolve(filtered_users[0]);
+    } else {
+      deferred.reject(new Error('No user'));
+    }
+
+    return deferred.promise;
+  }
 }
 
 export = Repository;

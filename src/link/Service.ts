@@ -92,11 +92,11 @@ class Service extends BaseService {
   }
 
   private idToShortUrl(value: string): string {
-    return this.convertBase(value, 10, 34);
+    return this.convertBase(value, 10, 36);
   }
 
   private shortUrlToId(value: string): string {
-    return this.convertBase(value, 34, 10);
+    return this.convertBase(value, 36, 10);
   }
 
   private getCustomLinkById(id) {

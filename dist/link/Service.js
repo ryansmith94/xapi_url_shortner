@@ -83,10 +83,10 @@ var Service = (function (_super) {
         return new_value || '0';
     };
     Service.prototype.idToShortUrl = function (value) {
-        return this.convertBase(value, 10, 34);
+        return this.convertBase(value, 10, 36);
     };
     Service.prototype.shortUrlToId = function (value) {
-        return this.convertBase(value, 34, 10);
+        return this.convertBase(value, 36, 10);
     };
     Service.prototype.getCustomLinkById = function (id) {
         var short_url = this.idToShortUrl(id);

@@ -6,7 +6,7 @@ import GroupTestRepository = require('../group/TestRepository');
 
 var EMAIL = 'test@example.com';
 var PASSWORD = 'password';
-var GROUP_NAME = 'Test group'
+var GROUP_NAME = 'Test group';
 var GROUP_ID = 1;
 class Test extends BaseTest {
   protected name: string = 'user/ServiceTest';
@@ -56,6 +56,34 @@ class Test extends BaseTest {
         });
       }.bind(this));
     }.bind(this)).then(done, done);
+  }
+
+  public testGetUserByEmailAndPassword(assert, done) {
+    this.group_service.createGroup(GROUP_NAME).then(function (group: any) {
+      return this.service.createUser(EMAIL, PASSWORD, group.id).then(function (existing_user) {
+        return this.service.getUserByEmailAndPassword(EMAIL, PASSWORD).then(function (user) {
+          assert.equal(user.id, existing_user.id);
+          assert.equal(user.email, EMAIL);
+          assert.equal(user.password, PASSWORD);
+        });
+      }.bind(this));
+    }.bind(this)).then(done, done);
+  }
+
+  public testGetUserByEmailAndPasswordWithNoUser(assert, done) {
+    this.service.getUserByEmailAndPassword(EMAIL, PASSWORD).then(function (user) {
+      assert.equal(true, false);
+    }, function () {
+      assert.equal(false, false);
+    }).then(done, done);
+  }
+
+  public testGetUserByIdWithNoUser(assert, done) {
+    this.service.getUserById(1).then(function (user) {
+      assert.equal(true, false);
+    }, function () {
+      assert.equal(false, false);
+    }).then(done, done);
   }
 }
 
