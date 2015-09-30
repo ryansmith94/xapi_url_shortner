@@ -33,6 +33,21 @@ var LinkCreateController = require('./link/ReactCreateController');
 var LinkListController = require('./link/ReactListController');
 var link_create_controller = LinkCreateController({ service: link_service });
 var link_list_controller = LinkListController({ service: link_service });
+// Token.
+var GroupRepository = require('./group/KnexRepository');
+var GroupService = require('./group/Service');
+var UserRepository = require('./user/KnexRepository');
+var UserService = require('./user/Service');
+var TokenRepository = require('./token/KnexRepository');
+var TokenService = require('./token/Service');
+var TokenController = require('./token/ExpressController');
+var group_repository = new GroupRepository(config.knex, 'group');
+var group_service = new GroupService(group_repository);
+var user_repository = new UserRepository(config.knex, 'user');
+var user_service = new UserService(user_repository, group_service);
+var token_repository = new TokenRepository(config.knex, 'token');
+var token_service = new TokenService(token_repository, user_service);
+var token_controller = new TokenController(app, token_service);
 var dom = react.DOM;
 app.get('/', function (req, res) {
     res.send(react.renderToStaticMarkup(dom.html({}, [
