@@ -6,12 +6,42 @@ var LinkRepository = require('./link/HttpRepository');
 var LinkService = require('./link/Service');
 var LinkCreateController = require('./link/ReactCreateController');
 var LinkListController = require('./link/ReactListController');
-var link_repository = new LinkRepository('api/link');
-var link_service = new LinkService(link_repository, null);
-var link_create_controller = LinkCreateController({ service: link_service });
-var link_list_controller = LinkListController({ service: link_service });
+// Token.
+var GroupRepository = require('./group/TestRepository');
+var GroupService = require('./group/Service');
+var UserRepository = require('./user/HttpRepository');
+var UserService = require('./user/Service');
+var TokenRepository = require('./token/HttpRepository');
+var TokenService = require('./token/Service');
+var TokenCreateController = require('./token/ReactCreateController');
+var group_repository = new GroupRepository();
+var group_service = new GroupService(group_repository);
+var user_repository = new UserRepository();
+var user_service = new UserService(user_repository, group_service);
+var token_repository = new TokenRepository('api/token');
+var token_service = new TokenService(token_repository, user_service);
+var content_controller = function (token, onTokenChange) {
+    var content;
+    if (token) {
+        var link_service = new LinkService(new LinkRepository('api/link', token.value), null);
+        content = [
+            LinkCreateController({
+                service: link_service
+            }),
+            LinkListController({
+                service: link_service
+            })
+        ];
+    }
+    else {
+        content = [TokenCreateController({
+                service: token_service,
+                onTokenChange: onTokenChange
+            })];
+    }
+    return content;
+};
 react.render(App({
-    link_create_controller: link_create_controller,
-    link_list_controller: link_list_controller
+    content_controller: content_controller
 }), document.getElementById('app'));
 //# sourceMappingURL=client.js.map

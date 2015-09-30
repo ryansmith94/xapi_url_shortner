@@ -25,6 +25,21 @@ class Repository {
     return deferred.promise;
   }
 
+  public getUserByEmailAndPassword(email: string, password: string) {
+    var deferred = q.defer();
+    var filtered_users = this.users.filter(function (user) {
+      return user.email === email && user.password === password;
+    });
+
+    if (filtered_users.length > 0) {
+      deferred.resolve(filtered_users[0]);
+    } else {
+      deferred.reject(new Error('No user with those credentials'));
+    }
+
+    return deferred.promise;
+  }
+
   public getUserById(id) {
     var deferred = q.defer();
     var filtered_users = this.users.filter(function (user) {

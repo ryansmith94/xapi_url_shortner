@@ -10,7 +10,13 @@ var Component = (function (_super) {
     __extends(Component, _super);
     function Component() {
         _super.apply(this, arguments);
+        this.state = {
+            token: ''
+        };
     }
+    Component.prototype.handleTokenChange = function (token) {
+        this.setState({ token: token });
+    };
     Component.prototype.render = function () {
         var navbar = dom.nav({ className: 'navbar navbar-default navbar-fixed-top' }, [
             dom.div({ className: 'container' }, [
@@ -26,12 +32,10 @@ var Component = (function (_super) {
                 dom.div({ id: 'bs-nav', className: 'collapse navbar-collapse' }, [])
             ])
         ]);
+        var content = this.props.content_controller(this.state.token, this.handleTokenChange.bind(this));
         return dom.div({}, [
             navbar,
-            dom.div({ className: 'container', style: { marginTop: '60px' } }, [
-                this.props.link_create_controller,
-                this.props.link_list_controller
-            ])
+            dom.div({ className: 'container', style: { marginTop: '60px' } }, content)
         ]);
     };
     return Component;

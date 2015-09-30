@@ -15,6 +15,8 @@ var Repository = (function (_super) {
         table.integer('user_id').notNullable();
     };
     Repository.prototype.createToken = function (token) {
+        delete token.email;
+        delete token.password;
         return this.connect().insert(token, 'id').then(function (ids) {
             return {
                 id: ids[0],

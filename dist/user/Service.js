@@ -44,16 +44,7 @@ var Service = (function (_super) {
         }.bind(this));
     };
     Service.prototype.getUserByEmailAndPassword = function (email, password) {
-        return this.getUserByEmail(email).then(function (user) {
-            if (user.password === password) {
-                return user;
-            }
-            else {
-                throw new Error('Invalid credentials.');
-            }
-        }, function () {
-            throw new Error('Invalid credentials.');
-        });
+        return this.repo.getUserByEmailAndPassword(email, password);
     };
     Service.prototype.getUserById = function (id) {
         return this.repo.getUserById(id);

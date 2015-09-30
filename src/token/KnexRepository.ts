@@ -13,6 +13,8 @@ class Repository extends BaseRepository {
   }
 
   public createToken(token) {
+    delete token.email;
+    delete token.password;
     return this.connect().insert(token, 'id').then(function (ids) {
       return {
         id: ids[0],

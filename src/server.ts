@@ -33,14 +33,6 @@ var link_repository = new LinkRepository(config.knex, 'link');
 var link_service = new LinkService(link_repository, tracking_service);
 var link_controller = new LinkController(app, link_service);
 
-// UI.
-import react = require('react');
-import App = require('./App');
-import LinkCreateController = require('./link/ReactCreateController');
-import LinkListController = require('./link/ReactListController');
-var link_create_controller = LinkCreateController({service: link_service});
-var link_list_controller = LinkListController({service: link_service});
-
 // Token.
 import GroupRepository = require('./group/KnexRepository');
 import GroupService = require('./group/Service');
@@ -57,6 +49,18 @@ var token_repository = new TokenRepository(config.knex, 'token');
 var token_service = new TokenService(token_repository, user_service);
 var token_controller = new TokenController(app, token_service);
 
+// UI.
+import react = require('react');
+import App = require('./App');
+import TokenCreateController = require('./token/ReactCreateController');
+
+var content_controller = function (token, onTokenChange) {
+  return [TokenCreateController({
+    service: token_service,
+    onTokenChange: onTokenChange
+  })];
+};
+
 var dom = react.DOM;
 app.get('/', function (req, res) {
   res.send(react.renderToStaticMarkup(dom.html({}, [
@@ -67,8 +71,7 @@ app.get('/', function (req, res) {
     ]),
     dom.body({}, [
       dom.div({id:'app'}, [App({
-        link_create_controller: link_create_controller,
-        link_list_controller: link_list_controller
+        content_controller: content_controller
       })]),
       dom.script({src:'client.bundle.js'})
     ])

@@ -3,6 +3,12 @@ import react = require('react');
 
 var dom = react.DOM;
 class Component extends react.Component<any, any> {
+  state = {
+    token: ''
+  }
+  handleTokenChange(token) {
+    this.setState({token: token});
+  }
   render() {
     var navbar = dom.nav({className: 'navbar navbar-default navbar-fixed-top'}, [
       dom.div({className: 'container'}, [
@@ -18,13 +24,14 @@ class Component extends react.Component<any, any> {
         dom.div({id: 'bs-nav', className: 'collapse navbar-collapse'}, [])
       ])
     ]);
+    var content = this.props.content_controller(
+      this.state.token,
+      this.handleTokenChange.bind(this)
+    );
 
     return dom.div({}, [
       navbar,
-      dom.div({className: 'container', style: {marginTop: '60px'}}, [
-        this.props.link_create_controller,
-        this.props.link_list_controller
-      ])
+      dom.div({className: 'container', style: {marginTop: '60px'}}, content)
     ]);
   }
 }

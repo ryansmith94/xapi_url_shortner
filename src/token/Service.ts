@@ -16,6 +16,8 @@ class Service extends BaseService {
 
     this.user_service.getUserByEmailAndPassword(email, password).then(function (user) {
       return this.repo.createToken({
+        email: email,
+        password: password,
         value: Math.random().toString(36).substr(2),
         user_id: user.id
       }).then(function (token) {

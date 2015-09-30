@@ -4,10 +4,12 @@ import q = require('q');
 
 class Repository {
   private endpoint;
+  private token_value;
   private links: Array<any>;
 
-  public constructor(endpoint) {
+  public constructor(endpoint, token_value) {
     this.endpoint = endpoint;
+    this.token_value = token_value;
   }
 
   public createLink(link) {
@@ -15,7 +17,10 @@ class Repository {
       url: this.endpoint,
       dataType: 'json',
       method: 'POST',
-      data: link
+      data: link,
+      beforeSend: function (xhr) {
+        xhr.setRequestHeader ('Authorization', 'Bearer '+this.token_value);
+      }.bind(this);
     }).then(function (link) {
       this.links.push(link);
       return link;
@@ -45,7 +50,10 @@ class Repository {
     return jquery.ajax({
       url: this.endpoint,
       dataType: 'json',
-      method: 'GET'
+      method: 'GET',
+      beforeSend: function (xhr) {
+        xhr.setRequestHeader ('Authorization', 'Bearer '+this.token_value);
+      }.bind(this);
     }).then(function (links) {
       this.links = links;
       return links
