@@ -28,3 +28,4 @@ git pull; npm link
 ## Usage
 - To host the web service, run `NODE_ENV=local node dist/server.js`.
 - To administrate the web service, run `xus -h` to see which commands are available.
+- To track links with your own context, first host the web service, then use "example/index.html" as an example of how to create pages with short links on.
