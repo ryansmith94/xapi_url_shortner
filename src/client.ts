@@ -3,31 +3,23 @@ import react = require('react');
 import App = require('./App');
 
 // Link.
-import LinkRepository = require('./link/HttpRepository');
-import LinkService = require('./link/Service');
-import LinkCreateController = require('./link/ReactCreateController');
-import LinkListController = require('./link/ReactListController');
+import LinkRepository = require('./link/client/HttpRepository');
+import LinkService = require('./link/client/Service');
+import LinkCreateController = require('./link/client/ReactCreateController');
+import LinkListController = require('./link/client/ReactListController');
 
 // Token.
-import GroupRepository = require('./group/TestRepository');
-import GroupService = require('./group/Service');
-import UserRepository = require('./user/HttpRepository');
-import UserService = require('./user/Service');
-import TokenRepository = require('./token/HttpRepository');
-import TokenService = require('./token/Service');
-import TokenCreateController = require('./token/ReactCreateController');
-var group_repository = new GroupRepository();
-var group_service = new GroupService(group_repository);
-var user_repository = new UserRepository();
-var user_service = new UserService(user_repository, group_service);
+import TokenRepository = require('./token/client/HttpRepository');
+import TokenService = require('./token/client/Service');
+import TokenCreateController = require('./token/client/ReactCreateController');
 var token_repository = new TokenRepository('api/token');
-var token_service = new TokenService(token_repository, user_service);
+var token_service = new TokenService(token_repository);
 
 var content_controller = function (token, onTokenChange) {
   var content;
 
   if (token) {
-    var link_service = new LinkService(new LinkRepository('api/link', token.value), null);
+    var link_service = new LinkService(new LinkRepository('api/link', token.value));
     content = [
       LinkCreateController({
         service: link_service

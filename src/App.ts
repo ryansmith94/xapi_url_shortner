@@ -1,12 +1,20 @@
 /// <reference path="./definitions/references.d.ts" />
 import react = require('react');
+import docCookie = require('./docCookie');
 
 var dom = react.DOM;
 class Component extends react.Component<any, any> {
   state = {
-    token: ''
+    token: docCookie.getItem('token') || ''
   }
   handleTokenChange(token) {
+    // Saves token in cookies.
+    var current_date = new Date();
+    var expiry_date = new Date();
+    expiry_date.setMinutes(current_date.getMinutes() + 30);
+    docCookie.setItem('token', token, expiry_date);
+
+    // Updates state.
     this.setState({token: token});
   }
   render() {

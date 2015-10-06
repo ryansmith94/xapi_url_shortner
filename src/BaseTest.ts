@@ -11,7 +11,11 @@ class TestCase {
 
   public run() {
     describe(this.name, function () {
-      var keys = Object.keys(this.constructor.prototype);
+      var keys = [];
+      for (var key in this) {
+        keys.push(key);
+      }
+
       var tests = keys.filter(function (key) {
         return key.indexOf('test') === 0;
       });

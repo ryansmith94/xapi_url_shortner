@@ -5,16 +5,23 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 /// <reference path="./definitions/references.d.ts" />
 var react = require('react');
+var docCookie = require('./docCookie');
 var dom = react.DOM;
 var Component = (function (_super) {
     __extends(Component, _super);
     function Component() {
         _super.apply(this, arguments);
         this.state = {
-            token: ''
+            token: docCookie.getItem('token') || ''
         };
     }
     Component.prototype.handleTokenChange = function (token) {
+        // Saves token in cookies.
+        var current_date = new Date();
+        var expiry_date = new Date();
+        expiry_date.setMinutes(current_date.getMinutes() + 30);
+        docCookie.setItem('token', token, expiry_date);
+        // Updates state.
         this.setState({ token: token });
     };
     Component.prototype.render = function () {

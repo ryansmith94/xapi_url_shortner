@@ -3,13 +3,13 @@ import events = require('events');
 var CHANGE_EVENT = 'change';
 
 class Service extends events.EventEmitter {
-  emitChange() {
+  public emitChange() {
     this.emit(CHANGE_EVENT);
   }
-  addChangeListener(callback: Function) {
+  public addChangeListener(callback: Function) {
     this.addListener(CHANGE_EVENT, callback);
   }
-  removeChangeListener(callback: Function) {
+  public removeChangeListener(callback: Function) {
     this.removeListener(CHANGE_EVENT, callback);
   }
 }

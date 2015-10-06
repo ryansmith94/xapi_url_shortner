@@ -6,7 +6,7 @@ class Controller {
     this.constructCommands(commander);
   }
 
-  public constructCommands(commander) {
+  private constructCommands(commander) {
     commander
       .command('cg <group_name>')
       .description('Create a group')
