@@ -9,31 +9,22 @@
 - Git
 - MySQL
 
-# Installation instructions
-1. Run `git clone git@github.com:ryansmith94/xapi_url_shortner.git shortener`.
-1. Run `cd shortener`.
-1. Run `npm install --production`.
-1. Run `npm link`.
-1. Run `node dist/server.js`.
-
-One command
+# Installation
+Run the following in your terminal (make sure you have the [requirements](#requirements) first).
 ```
 git clone git@github.com:ryansmith94/xapi_url_shortner.git shortener; cd shortener; npm install --production; npm link
 ```
 
-# Configuration instructions
+# Configuration
 1. Create a copy of the ".env" file called ".local.env".
 1. Change the environment variables in ".local.env" for your environment.
 
-# Upgrade instructions
-1. Run `git pull`.
-1. Run `npm link`.
-
-One command
+# Upgrading
+Run the following in your terminal.
 ```
 git pull; npm link
 ```
 
-# Usage instructions
+# Usage
 - To host the web service, run `NODE_ENV=local node dist/server.js`.
 - To administrate the web service, run `xus -h` to see which commands are available.
