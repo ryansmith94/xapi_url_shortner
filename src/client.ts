@@ -5,8 +5,7 @@ import App = require('./App');
 // Link.
 import LinkRepository = require('./link/client/HttpRepository');
 import LinkService = require('./link/client/Service');
-import LinkCreateController = require('./link/client/ReactCreateController');
-import LinkListController = require('./link/client/ReactListController');
+import LinkController = require('./link/client/ReactController');
 
 // Token.
 import TokenRepository = require('./token/client/HttpRepository');
@@ -20,11 +19,12 @@ var content_controller = function (token, onTokenChange) {
 
   if (token) {
     var link_service = new LinkService(new LinkRepository('api/link', token.value));
+    var long_url = '';
+    var handleLongUrlChange = function (long_url) {
+      long_url: long_url;
+    };
     content = [
-      LinkCreateController({
-        service: link_service
-      }),
-      LinkListController({
+      LinkController({
         service: link_service
       })
     ];

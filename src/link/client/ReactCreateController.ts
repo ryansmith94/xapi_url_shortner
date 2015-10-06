@@ -4,13 +4,12 @@ import react = require('react');
 var dom = react.DOM;
 class Component extends react.Component<any, any> {
   public state = {
-    long_url: '',
     custom_url: ''
   };
   private handleShorten(event) {
     var custom_url = this.state.custom_url.split(document.location.host+'/');
     this.props.service.createLink(
-      this.state.long_url,
+      this.props.long_url,
       custom_url[custom_url.length - 1] || undefined
     ).then(function () {
       this.setState({custom_url: ''})
@@ -20,7 +19,7 @@ class Component extends react.Component<any, any> {
     event.preventDefault();
   }
   private handleLongUrlChange(event) {
-    this.setState({long_url: event.target.value});
+    this.props.onLongUrlChange(event.target.value);
   }
   private handleCustomUrlChange(event) {
     this.setState({custom_url: event.target.value});
@@ -35,7 +34,7 @@ class Component extends react.Component<any, any> {
   public render() {
     return dom.form({className: 'link_create', onSubmit: this.handleShorten.bind(this), style: {textAlign: 'center'}}, [
       dom.input({
-        value: this.state.long_url,
+        value: this.props.long_url,
         onChange: this.handleLongUrlChange.bind(this),
         type: 'text',
         placeholder: 'Long URL',

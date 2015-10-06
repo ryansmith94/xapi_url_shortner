@@ -11,13 +11,12 @@ var Component = (function (_super) {
     function Component() {
         _super.apply(this, arguments);
         this.state = {
-            long_url: '',
             custom_url: ''
         };
     }
     Component.prototype.handleShorten = function (event) {
         var custom_url = this.state.custom_url.split(document.location.host + '/');
-        this.props.service.createLink(this.state.long_url, custom_url[custom_url.length - 1] || undefined).then(function () {
+        this.props.service.createLink(this.props.long_url, custom_url[custom_url.length - 1] || undefined).then(function () {
             this.setState({ custom_url: '' });
         }, function (err) {
             alert(err);
@@ -25,7 +24,7 @@ var Component = (function (_super) {
         event.preventDefault();
     };
     Component.prototype.handleLongUrlChange = function (event) {
-        this.setState({ long_url: event.target.value });
+        this.props.onLongUrlChange(event.target.value);
     };
     Component.prototype.handleCustomUrlChange = function (event) {
         this.setState({ custom_url: event.target.value });
@@ -40,7 +39,7 @@ var Component = (function (_super) {
     Component.prototype.render = function () {
         return dom.form({ className: 'link_create', onSubmit: this.handleShorten.bind(this), style: { textAlign: 'center' } }, [
             dom.input({
-                value: this.state.long_url,
+                value: this.props.long_url,
                 onChange: this.handleLongUrlChange.bind(this),
                 type: 'text',
                 placeholder: 'Long URL',

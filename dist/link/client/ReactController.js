@@ -5,37 +5,41 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 /// <reference path="../../definitions/references.d.ts" />
 var react = require('react');
-var item = require('./ReactItem');
+var ReactCreateController = require('./ReactCreateController');
+var ReactListController = require('./ReactListController');
 var dom = react.DOM;
 var Component = (function (_super) {
     __extends(Component, _super);
     function Component() {
         _super.apply(this, arguments);
         this.state = {
-            links: []
+            long_url: ''
         };
     }
-    Component.prototype.getLinks = function () {
-        this.props.service.getLinks().then(function (links) {
-            this.setState({ links: links });
-        }.bind(this));
+    Component.prototype.handleLongUrlChange = function (long_url) {
+        this.setState({ long_url: long_url });
     };
-    Component.prototype.handleDataChange = function () {
-        this.getLinks();
-    };
+    Component.prototype.handleDataChange = function () { };
     Component.prototype.componentDidMount = function () {
         this.props.service.addChangeListener(this.handleDataChange.bind(this));
-        this.getLinks();
     };
     Component.prototype.componentWillUnmount = function () {
         this.props.service.removeChangeListener(this.handleDataChange.bind(this));
     };
     Component.prototype.render = function () {
-        return dom.div({ className: 'link_list' }, this.state.links.filter(function (link) {
-            return link.long_url.indexOf(this.props.long_url) !== -1;
-        }.bind(this)).reverse().map(item));
+        return dom.div({}, [
+            ReactCreateController({
+                service: this.props.service,
+                long_url: this.state.long_url,
+                onLongUrlChange: this.handleLongUrlChange.bind(this)
+            }),
+            ReactListController({
+                service: this.props.service,
+                long_url: this.state.long_url
+            })
+        ]);
     };
     return Component;
 })(react.Component);
 module.exports = react.createFactory(Component);
-//# sourceMappingURL=ReactListController.js.map
+//# sourceMappingURL=ReactController.js.map
