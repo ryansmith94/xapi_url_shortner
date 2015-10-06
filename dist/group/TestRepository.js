@@ -19,6 +19,9 @@ var Repository = (function () {
         }
         return deferred.promise;
     };
+    Repository.prototype.getGroups = function (id) {
+        return q(this.groups);
+    };
     return Repository;
 })();
 module.exports = Repository;

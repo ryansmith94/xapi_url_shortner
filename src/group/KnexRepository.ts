@@ -29,6 +29,10 @@ class Repository extends BaseRepository {
       }
     });
   }
+
+  public getGroups() {
+    return this.connect().select();
+  }
 }
 
 export = Repository;

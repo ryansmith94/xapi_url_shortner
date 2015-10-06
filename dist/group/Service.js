@@ -18,6 +18,9 @@ var Service = (function (_super) {
     Service.prototype.getGroupById = function (id) {
         return this.repo.getGroupById(id);
     };
+    Service.prototype.getGroups = function () {
+        return this.repo.getGroups();
+    };
     return Service;
 })(BaseService);
 module.exports = Service;

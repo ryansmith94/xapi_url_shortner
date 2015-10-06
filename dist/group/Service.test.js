@@ -28,6 +28,15 @@ var Test = (function (_super) {
             });
         }.bind(this)).then(done, done);
     };
+    Test.prototype.testGetGroups = function (assert, done) {
+        this.service.createGroup(NAME).then(function (created_group) {
+            return this.service.getGroups().then(function (groups) {
+                assert.equal(groups.length, 1);
+                assert.equal(groups[0].id, created_group.id);
+                assert.equal(groups[0].name, created_group.name);
+            });
+        }.bind(this)).then(done, done);
+    };
     return Test;
 })(BaseTest);
 (new Test()).run();

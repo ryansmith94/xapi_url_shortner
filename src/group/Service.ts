@@ -18,6 +18,10 @@ class Service extends BaseService {
   public getGroupById(id) {
     return this.repo.getGroupById(id);
   }
+
+  public getGroups() {
+    return this.repo.getGroups();
+  }
 }
 
 export = Service;

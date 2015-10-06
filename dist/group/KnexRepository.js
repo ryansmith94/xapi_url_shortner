@@ -31,6 +31,9 @@ var Repository = (function (_super) {
             }
         });
     };
+    Repository.prototype.getGroups = function () {
+        return this.connect().select();
+    };
     return Repository;
 })(BaseRepository);
 module.exports = Repository;

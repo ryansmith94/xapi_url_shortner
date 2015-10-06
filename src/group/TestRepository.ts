@@ -21,6 +21,10 @@ class Repository {
 
     return deferred.promise;
   }
+
+  public getGroups(id) {
+    return q(this.groups);
+  }
 }
 
 export = Repository;
