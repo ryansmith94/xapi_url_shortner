@@ -4,27 +4,27 @@
 [![Build Status](https://travis-ci.org/ryansmith94/xapi_url_shortner.svg?branch=master)](https://travis-ci.org/ryansmith94/xapi_url_shortner)
 [![License](https://img.shields.io/badge/License-GPLv3-brightgreen.svg)](http://opensource.org/licenses/GPL-3.0)
 
-# Requirements
+## Requirements
 - Node
 - Git
 - MySQL
 
-# Installation
+## Installation
 Run the following in your terminal (make sure you have the [requirements](#requirements) first).
 ```
 git clone git@github.com:ryansmith94/xapi_url_shortner.git shortener; cd shortener; npm install --production; npm link
 ```
 
-# Configuration
+## Configuration
 1. Create a copy of the ".env" file called ".local.env".
 1. Change the environment variables in ".local.env" for your environment.
 
-# Upgrading
+## Upgrading
 Run the following in your terminal.
 ```
 git pull; npm link
 ```
 
-# Usage
+## Usage
 - To host the web service, run `NODE_ENV=local node dist/server.js`.
 - To administrate the web service, run `xus -h` to see which commands are available.
