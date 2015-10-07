@@ -53,6 +53,14 @@ class Repository {
   public getLinks() {
     return q(this.links);
   }
+
+  public getLinksByGroupId(group_id) {
+    var filtered_links = this.links.filter(function (link) {
+      return link.group_id === group_id;
+    });
+
+    return q(filtered_links);
+  }
 }
 
 export = Repository;

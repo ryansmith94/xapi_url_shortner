@@ -1,20 +1,27 @@
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 /// <reference path="../../definitions/references.d.ts" />
-var jquery = require('jquery');
+var BaseRepository = require('../../BaseHttpRepository');
 var q = require('q');
-var Repository = (function () {
+var Repository = (function (_super) {
+    __extends(Repository, _super);
     function Repository(endpoint, token_value) {
-        this.endpoint = endpoint;
         this.token_value = token_value;
+        _super.call(this, endpoint);
     }
+    Repository.prototype.connect = function (opts) {
+        opts.beforeSend = function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Bearer ' + this.token_value);
+        }.bind(this);
+        return _super.prototype.connect.call(this, opts);
+    };
     Repository.prototype.createLink = function (link) {
-        return jquery.ajax({
-            url: this.endpoint,
-            dataType: 'json',
+        return this.connect({
             method: 'POST',
-            data: link,
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader('Authorization', 'Bearer ' + this.token_value);
-            }.bind(this)
+            data: link
         }).then(function (link) {
             this.links.push(link);
             return link;
@@ -39,45 +46,24 @@ var Repository = (function () {
     Repository.prototype.getLinks = function () {
         if (this.links)
             return q(this.links);
-        return jquery.ajax({
-            url: this.endpoint,
-            dataType: 'json',
-            method: 'GET',
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader('Authorization', 'Bearer ' + this.token_value);
-            }.bind(this)
+        return this.connect({
+            method: 'GET'
         }).then(function (links) {
             this.links = links;
             return links;
         }.bind(this));
     };
     Repository.prototype.getLinkById = function (id) {
-        var deferred = q.defer();
-        var filtered_links = this.links.filter(function (link) {
+        return this.filterModels(this.links, function (link) {
             return link.id === id;
         });
-        if (filtered_links.length > 0) {
-            deferred.resolve(filtered_links[0]);
-        }
-        else {
-            deferred.reject(new Error('No link'));
-        }
-        return deferred.promise;
     };
     Repository.prototype.getCustomLinkByShortUrl = function (short_url) {
-        var deferred = q.defer();
-        var filtered_links = this.links.filter(function (link) {
+        return this.filterModels(this.links, function (link) {
             return link.short_url === short_url;
         });
-        if (filtered_links.length > 0) {
-            deferred.resolve(filtered_links[0]);
-        }
-        else {
-            deferred.reject(new Error('No link'));
-        }
-        return deferred.promise;
     };
     return Repository;
-})();
+})(BaseRepository);
 module.exports = Repository;
 //# sourceMappingURL=HttpRepository.js.map

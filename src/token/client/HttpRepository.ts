@@ -1,19 +1,16 @@
 /// <reference path="../../definitions/references.d.ts" />
-import jquery = require('jquery');
+import BaseRepository = require('../../BaseHttpRepository');
 import q = require('q');
 
-class Repository {
-  private endpoint;
+class Repository extends BaseRepository {
   private tokens: Array<any> = [];
 
   public constructor(endpoint) {
-    this.endpoint = endpoint;
+    super(endpoint);
   }
 
   public createToken(token) {
-    return jquery.ajax({
-      url: this.endpoint,
-      dataType: 'json',
+    return this.connect({
       method: 'POST',
       data: token
     }).then(function (token) {
@@ -23,18 +20,9 @@ class Repository {
   }
 
   public getTokenByValue(value: string) {
-    var deferred = q.defer();
-    var filtered_tokens = this.tokens.filter(function (token) {
+    return this.filterModels(this.tokens, function (token) {
       return token.value === value;
     });
-    
-    if (filtered_tokens.length > 0) {
-      deferred.resolve(filtered_tokens[0]);
-    } else {
-      deferred.reject(new Error('No token'));
-    }
-
-    return deferred.promise;
   }
 }
 

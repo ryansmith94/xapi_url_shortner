@@ -12,7 +12,7 @@ class Component extends react.Component<any, any> {
       this.props.long_url,
       custom_url[custom_url.length - 1] || undefined
     ).then(function () {
-      this.setState({custom_url: ''})
+      this.setState({custom_url: ''});
     }, function (err) {
       alert(err);
     });

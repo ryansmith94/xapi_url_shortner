@@ -34,53 +34,11 @@ var Service = (function (_super) {
         }
         // Checks that the custom_url doesn't exist already.
         this.getLinkByShortUrl(custom_url).then(function (link) {
-            deferred.reject(new Error('Link already exists.'));
+            deferred.reject(new Error('Custom URL already exists.'));
         }, function (err) {
             deferred.resolve(true);
         });
         return deferred.promise;
-    };
-    /**
-     * Creates a new link.
-     * @param {string} long_url The long_url to be used.
-     * @param {string} custom_url The custom_url to be used (optional).
-     * @return {Future}
-     */
-    Service.prototype.createLink = function (long_url, custom_url) {
-        var self = this;
-        return self.validateLink(long_url, custom_url).then(function () {
-            return self.repo.createLink({
-                long_url: long_url,
-                short_url: custom_url
-            });
-        }).then(function (link) {
-            return self.getCustomLinkById(link.id).then(function (custom_link) {
-                link.short_url = self.idToShortUrl(custom_link.id);
-                return self.repo.updateLink(link).then(function (link) {
-                    self.emitChange();
-                    return link;
-                });
-            }, function (err) {
-                link.short_url = link.short_url || self.idToShortUrl(link.id);
-                self.emitChange();
-                return link;
-            });
-        });
-    };
-    /**
-     * Gets links.
-     * @return {Future}
-     */
-    Service.prototype.getLinks = function () {
-        return this.repo.getLinks().then(function (links) {
-            return links.map(function (link) {
-                return {
-                    id: link.id,
-                    long_url: link.long_url,
-                    short_url: link.short_url || this.idToShortUrl(link.id)
-                };
-            }.bind(this));
-        }.bind(this));
     };
     /**
      * Converts an id to a short_url.

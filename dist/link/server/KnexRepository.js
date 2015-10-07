@@ -13,14 +13,13 @@ var Repository = (function (_super) {
         table.increments('id').primary();
         table.string('long_url').notNullable();
         table.string('short_url').unique();
+        table.string('group_id').notNullable();
+        table.string('user_id').notNullable();
     };
     Repository.prototype.createLink = function (link) {
         return this.connect().insert(link, 'id').then(function (ids) {
-            return {
-                id: ids[0],
-                long_url: link.long_url,
-                short_url: link.short_url
-            };
+            link.id = ids[0];
+            return link;
         });
     };
     Repository.prototype.updateLink = function (link) {
@@ -48,8 +47,8 @@ var Repository = (function (_super) {
             }
         });
     };
-    Repository.prototype.getLinks = function () {
-        return this.connect().select();
+    Repository.prototype.getLinksByGroupId = function (group_id) {
+        return this.connect().where('group_id', group_id);
     };
     return Repository;
 })(BaseRepository);

@@ -1,26 +1,27 @@
 /// <reference path="../../definitions/references.d.ts" />
-import jquery = require('jquery');
+import BaseRepository = require('../../BaseHttpRepository');
 import q = require('q');
 
-class Repository {
-  private endpoint;
+class Repository extends BaseRepository {
   private token_value;
   private links: Array<any>;
 
   public constructor(endpoint, token_value) {
-    this.endpoint = endpoint;
     this.token_value = token_value;
+    super(endpoint);
+  }
+
+  protected connect(opts) {
+    opts.beforeSend = function (xhr) {
+      xhr.setRequestHeader ('Authorization', 'Bearer '+this.token_value);
+    }.bind(this);
+    return super.connect(opts);
   }
 
   public createLink(link) {
-    return jquery.ajax({
-      url: this.endpoint,
-      dataType: 'json',
+    return this.connect({
       method: 'POST',
-      data: link,
-      beforeSend: function (xhr) {
-        xhr.setRequestHeader ('Authorization', 'Bearer '+this.token_value);
-      }.bind(this)
+      data: link
     }).then(function (link) {
       this.links.push(link);
       return link;
@@ -47,13 +48,8 @@ class Repository {
 
   public getLinks(): any {
     if (this.links) return q(this.links);
-    return jquery.ajax({
-      url: this.endpoint,
-      dataType: 'json',
-      method: 'GET',
-      beforeSend: function (xhr) {
-        xhr.setRequestHeader ('Authorization', 'Bearer '+this.token_value);
-      }.bind(this)
+    return this.connect({
+      method: 'GET'
     }).then(function (links) {
       this.links = links;
       return links
@@ -61,33 +57,15 @@ class Repository {
   }
 
   public getLinkById(id) {
-    var deferred = q.defer();
-    var filtered_links = this.links.filter(function (link) {
+    return this.filterModels(this.links, function (link) {
       return link.id === id;
     });
-    
-    if (filtered_links.length > 0) {
-      deferred.resolve(filtered_links[0]);
-    } else {
-      deferred.reject(new Error('No link'));
-    }
-
-    return deferred.promise;
   }
 
   public getCustomLinkByShortUrl(short_url: string) {
-    var deferred = q.defer();
-    var filtered_links = this.links.filter(function (link) {
+    return this.filterModels(this.links, function (link) {
       return link.short_url === short_url;
     });
-
-    if (filtered_links.length > 0) {
-      deferred.resolve(filtered_links[0]);
-    } else {
-      deferred.reject(new Error('No link'));
-    }
-
-    return deferred.promise;
   }
 }
 

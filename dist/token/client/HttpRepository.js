@@ -1,15 +1,18 @@
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 /// <reference path="../../definitions/references.d.ts" />
-var jquery = require('jquery');
-var q = require('q');
-var Repository = (function () {
+var BaseRepository = require('../../BaseHttpRepository');
+var Repository = (function (_super) {
+    __extends(Repository, _super);
     function Repository(endpoint) {
+        _super.call(this, endpoint);
         this.tokens = [];
-        this.endpoint = endpoint;
     }
     Repository.prototype.createToken = function (token) {
-        return jquery.ajax({
-            url: this.endpoint,
-            dataType: 'json',
+        return this.connect({
             method: 'POST',
             data: token
         }).then(function (token) {
@@ -18,19 +21,11 @@ var Repository = (function () {
         }.bind(this));
     };
     Repository.prototype.getTokenByValue = function (value) {
-        var deferred = q.defer();
-        var filtered_tokens = this.tokens.filter(function (token) {
+        return this.filterModels(this.tokens, function (token) {
             return token.value === value;
         });
-        if (filtered_tokens.length > 0) {
-            deferred.resolve(filtered_tokens[0]);
-        }
-        else {
-            deferred.reject(new Error('No token'));
-        }
-        return deferred.promise;
     };
     return Repository;
-})();
+})(BaseRepository);
 module.exports = Repository;
 //# sourceMappingURL=HttpRepository.js.map

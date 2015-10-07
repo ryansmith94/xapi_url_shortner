@@ -25,14 +25,6 @@ var tracking_lrs_repository = new TrackingLrsRepository(config.lrs);
 var tracking_web_repository = new TrackingWebRepository();
 var tracking_service = new TrackingService(tracking_lrs_repository, tracking_web_repository);
 
-// Link.
-import LinkRepository = require('./link/server/KnexRepository');
-import LinkService = require('./link/server/Service');
-import LinkController = require('./link/server/ExpressController');
-var link_repository = new LinkRepository(config.knex, 'link');
-var link_service = new LinkService(link_repository, tracking_service);
-var link_controller = new LinkController(app, link_service);
-
 // Token.
 import GroupRepository = require('./group/KnexRepository');
 import GroupService = require('./group/Service');
@@ -48,6 +40,14 @@ var user_service = new UserService(user_repository, group_service);
 var token_repository = new TokenRepository(config.knex, 'token');
 var token_service = new TokenService(token_repository, user_service);
 var token_controller = new TokenController(app, token_service);
+
+// Link.
+import LinkRepository = require('./link/server/KnexRepository');
+import LinkService = require('./link/server/Service');
+import LinkController = require('./link/server/ExpressController');
+var link_repository = new LinkRepository(config.knex, 'link');
+var link_service = new LinkService(link_repository, tracking_service, token_service);
+var link_controller = new LinkController(app, link_service);
 
 // UI.
 import react = require('react');

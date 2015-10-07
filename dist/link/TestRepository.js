@@ -46,6 +46,12 @@ var Repository = (function () {
     Repository.prototype.getLinks = function () {
         return q(this.links);
     };
+    Repository.prototype.getLinksByGroupId = function (group_id) {
+        var filtered_links = this.links.filter(function (link) {
+            return link.group_id === group_id;
+        });
+        return q(filtered_links);
+    };
     return Repository;
 })();
 module.exports = Repository;
