@@ -6,7 +6,9 @@ import TestWebRepository = require('./TestWebRepository');
 var LINK = {
   id: '1',
   long_url: 'http://www.example.com',
-  short_url: '1'
+  short_url: '1',
+  user_id: '1',
+  group_id: '1'
 };
 var ACTOR = {
   account: {
@@ -30,6 +32,7 @@ class Test extends BaseTest {
     assert.equal(LINK.long_url, statement.object.id);
     assert.equal('http://localhost:3000/'+LINK.short_url, statement.object.definition.moreInfo);
     assert.equal(LINK.long_url, statement.object.definition.name['en-GB']);
+    assert.equal(LINK.user_id, statement.context.instructor.account.name);
   }
 
   public testTrackLinkNoOptions(assert, done) {
