@@ -48,6 +48,21 @@ var Repository = (function () {
         }
         return deferred.promise;
     };
+    Repository.prototype.deleteUserById = function (id) {
+        var deferred = q.defer();
+        var filtered_users = this.users.filter(function (user, index) {
+            user.index = index;
+            return user.id === id;
+        });
+        if (filtered_users.length > 0) {
+            this.users = this.users.slice(0, filtered_users[0].index).concat(this.users.slice(filtered_users[0].index + 1));
+            deferred.resolve(true);
+        }
+        else {
+            deferred.reject(new Error('No user'));
+        }
+        return deferred.promise;
+    };
     return Repository;
 })();
 module.exports = Repository;

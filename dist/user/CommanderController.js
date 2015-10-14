@@ -8,11 +8,21 @@ var Controller = (function () {
             .command('cu <user_email> <password> <group_id>')
             .description('Create a user')
             .action(this.createUser.bind(this));
+        commander
+            .command('du <user_id>')
+            .description('Delete a user')
+            .action(this.deleteUser.bind(this));
     };
     Controller.prototype.createUser = function (email, password, group_id) {
-        console.log(email);
         this.service.createUser(email, password, group_id).then(function (model) {
             console.log(model);
+        }, function (err) {
+            console.error(err.stack);
+        }).then(process.exit, process.exit);
+    };
+    Controller.prototype.deleteUser = function (id) {
+        this.service.deleteUserById(id).then(function (result) {
+            console.log('Deleted');
         }, function (err) {
             console.error(err.stack);
         }).then(process.exit, process.exit);

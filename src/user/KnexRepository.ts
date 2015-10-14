@@ -53,6 +53,16 @@ class Repository extends BaseRepository {
       }
     });
   }
+
+  public deleteUserById(id) {
+    return this.connect().where('id', id).delete().then(function (user) {
+      if (!user) {
+        throw new Error('No user');
+      } else {
+        return user;
+      }
+    });
+  }
 }
 
 export = Repository;

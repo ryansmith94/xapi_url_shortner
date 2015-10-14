@@ -55,6 +55,16 @@ var Repository = (function (_super) {
             }
         });
     };
+    Repository.prototype.deleteUserById = function (id) {
+        return this.connect().where('id', id).delete().then(function (user) {
+            if (!user) {
+                throw new Error('No user');
+            }
+            else {
+                return user;
+            }
+        });
+    };
     return Repository;
 })(BaseRepository);
 module.exports = Repository;

@@ -12,36 +12,56 @@ var Service = (function (_super) {
         this.group_service = group_service;
         _super.call(this);
     }
-    Service.prototype.validateUser = function (email, password, group_id) {
+    Service.prototype.validateEmail = function (email) {
         var deferred = q.defer();
         var email_regex = /^[A-Z0-9.\'_%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
         if (!email_regex.test(email)) {
             deferred.reject(new Error('Invalid email'));
         }
-        this.group_service.getGroupById(group_id).then(function (group) {
-            this.getUserByEmail(email).then(function (user) {
-                if (user.group_id == group_id) {
-                    deferred.reject(new Error('Email already exists in the group.'));
-                }
-                else {
-                    deferred.reject(new Error('Email already exists in another group.'));
-                }
-            }, function (err) {
-                deferred.resolve(true);
-            });
-        }.bind(this), function (err) {
-            deferred.reject(new Error('Group does not exist.'));
-        });
+        else {
+            deferred.resolve(true);
+        }
         return deferred.promise;
     };
+    Service.prototype.validateGroupId = function (group_id) {
+        return this.group_service.getGroupById(group_id).then(function (group) {
+            return group;
+        }.bind(this), function (err) {
+            throw new Error('Group does not exist.');
+        });
+    };
+    Service.prototype.validateCreateUser = function (email, password, group_id) {
+        return this.validateEmail(email).then(function () {
+            return this.validateGroupId(group_id);
+        }.bind(this)).then(function (group) {
+            return this.getUserByEmail(email).then(function (user) {
+                if (user.group_id == group_id) {
+                    throw new Error('Email already exists in the group.');
+                }
+                else {
+                    throw new Error('Email already exists in another group.');
+                }
+            }, function (err) {
+                return true;
+            });
+        }.bind(this));
+    };
+    Service.prototype.validateUser = function (email, group_id) {
+        return this.validateEmail(email).then(function () {
+            return this.validateGroupId(group_id);
+        }.bind(this));
+    };
     Service.prototype.createUser = function (email, password, group_id) {
-        return this.validateUser(email, password, group_id).then(function () {
+        return this.validateCreateUser(email, password, group_id).then(function () {
             return this.repo.createUser({
                 email: email,
                 password: password,
                 group_id: group_id
             });
         }.bind(this));
+    };
+    Service.prototype.deleteUserById = function (id) {
+        return this.repo.deleteUserById(id);
     };
     Service.prototype.getUserByEmailAndPassword = function (email, password) {
         return this.repo.getUserByEmailAndPassword(email, password);
