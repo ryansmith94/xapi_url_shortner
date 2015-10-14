@@ -1,21 +1,39 @@
-import BaseTest = require('../BaseTest');
+import BaseTest = require('../../BaseTest');
 import Service = require('./Service');
-import TestRepository = require('./TestRepository');
-import GroupService = require('../group/Service');
-import GroupTestRepository = require('../group/TestRepository');
+import TestRepository = require('../TestRepository');
+import GroupService = require('../../group/Service');
+import GroupTestRepository = require('../../group/TestRepository');
+import UserService = require('../../user/server/Service');
+import UserTestRepository = require('../../user/TestRepository');
+import TokenService = require('../../token/server/Service');
+import TokenTestRepository = require('../../token/server/TestRepository');
 
 var EMAIL = 'test@example.com';
 var PASSWORD = 'password';
 var GROUP_NAME = 'Test group';
 var GROUP_ID = 1;
 class Test extends BaseTest {
-  protected name: string = 'user/ServiceTest';
+  protected name: string = 'user/server/ServiceTest';
   protected service: Service;
   protected group_service: GroupService;
+  protected token_service: TokenService;
 
   public beforeEach() {
     this.group_service = new GroupService(new GroupTestRepository());
-    this.service = new Service(new TestRepository(), this.group_service);
+    this.token_service = new TokenService(new TokenTestRepository());
+    this.service = new Service(new TestRepository(), this.group_service, this.token_service);
+    this.token_service.setUserService(this.service);
+  }
+
+  private createToken(id = '') {
+    var user_email = id+'test@example.com';
+    var user_pass = 'test_password';
+    var group_name = 'GROUP_NAME';
+    return this.group_service.createGroup(group_name).then(function (group) {
+      return this.service.createUser(user_email, user_pass, group.id);
+    }.bind(this)).then(function (user) {
+      return this.token_service.createToken(user_email, user_pass);
+    }.bind(this));
   }
 
   public testCreateUser(assert, done) {
@@ -106,6 +124,36 @@ class Test extends BaseTest {
 
   public testDeleteUserByIdWithNoUser(assert, done) {
     this.service.deleteUserById(1).then(function (user) {
+      assert.equal(true, false);
+    }, function () {
+      assert.equal(false, false);
+    }).then(done, done);
+  }
+
+  public testCreateUserWithToken(assert, done) {
+    this.createToken('1').then(function (token: any) {
+      return this.service.createUserWithToken(EMAIL, PASSWORD, token.value);
+    }.bind(this)).then(function (user: any) {
+      assert.equal(user.email, EMAIL);
+      assert.equal(user.password, PASSWORD);
+      assert.equal(user.group_id, user.group_id);
+    }).then(done, done);
+  }
+
+  public testCreateUserWithTokenAndInvalidEmail(assert, done) {
+    this.createToken('1').then(function (token: any) {
+      return this.service.createUserWithToken('invalid email', PASSWORD, token.value);
+    }.bind(this)).then(function () {
+      assert.equal(true, false);
+    }, function () {
+      assert.equal(false, false);
+    }).then(done, done);
+  }
+
+  public testCreateUserWithTokenThatExists(assert, done) {
+    this.createToken().then(function (token: any) {
+      return this.service.createUserWithToken(EMAIL, PASSWORD, token.value);
+    }.bind(this)).then(function () {
       assert.equal(true, false);
     }, function () {
       assert.equal(false, false);

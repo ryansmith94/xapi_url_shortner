@@ -1,4 +1,4 @@
-import BaseRepository = require('../BaseKnexRepository');
+import BaseRepository = require('../../BaseKnexRepository');
 
 class Repository extends BaseRepository {
 

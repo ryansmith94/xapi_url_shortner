@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var BaseRepository = require('../BaseKnexRepository');
+var BaseRepository = require('../../BaseKnexRepository');
 var Repository = (function (_super) {
     __extends(Repository, _super);
     function Repository(config, collection) {

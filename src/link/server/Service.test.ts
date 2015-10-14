@@ -6,7 +6,7 @@ import TrackingTestLrsRepository = require('../../tracking/TestLrsRepository');
 import TrackingTestWebRepository = require('../../tracking/TestWebRepository');
 import GroupService = require('../../group/Service');
 import GroupTestRepository = require('../../group/TestRepository');
-import UserService = require('../../user/Service');
+import UserService = require('../../user/server/Service');
 import UserTestRepository = require('../../user/TestRepository');
 import TokenService = require('../../token/server/Service');
 import TokenTestRepository = require('../../token/server/TestRepository');
@@ -26,8 +26,13 @@ class Test extends BaseTest {
       new TrackingTestWebRepository()
     );
     this.group_service = new GroupService(new GroupTestRepository());
-    this.user_service = new UserService(new UserTestRepository(), this.group_service);
-    this.token_service = new TokenService(new TokenTestRepository(), this.user_service);
+    this.token_service = new TokenService(new TokenTestRepository());
+    this.user_service = new UserService(
+      new UserTestRepository(),
+      this.group_service,
+      this.token_service
+    );
+    this.token_service.setUserService(this.user_service);
     this.service = new Service(new TestRepository(), tracking_service, this.token_service);
   }
 

@@ -20,20 +20,24 @@ var tracking_lrs_repository = new TrackingLrsRepository(config.lrs);
 var tracking_web_repository = new TrackingWebRepository();
 var tracking_service = new TrackingService(tracking_lrs_repository, tracking_web_repository);
 // Token.
-var GroupRepository = require('./group/KnexRepository');
-var GroupService = require('./group/Service');
-var UserRepository = require('./user/KnexRepository');
-var UserService = require('./user/Service');
 var TokenRepository = require('./token/server/KnexRepository');
 var TokenService = require('./token/server/Service');
 var TokenController = require('./token/server/ExpressController');
+var token_repository = new TokenRepository(config.knex, 'token');
+var token_service = new TokenService(token_repository);
+var token_controller = new TokenController(app, token_service);
+// User.
+var GroupRepository = require('./group/KnexRepository');
+var GroupService = require('./group/Service');
+var UserRepository = require('./user/server/KnexRepository');
+var UserService = require('./user/server/Service');
+var UserController = require('./user/server/ExpressController');
 var group_repository = new GroupRepository(config.knex, 'group');
 var group_service = new GroupService(group_repository);
 var user_repository = new UserRepository(config.knex, 'user');
-var user_service = new UserService(user_repository, group_service);
-var token_repository = new TokenRepository(config.knex, 'token');
-var token_service = new TokenService(token_repository, user_service);
-var token_controller = new TokenController(app, token_service);
+var user_service = new UserService(user_repository, group_service, token_service);
+var user_controller = new UserController(app, user_service);
+token_service.setUserService(user_service);
 // Link.
 var LinkRepository = require('./link/server/KnexRepository');
 var LinkService = require('./link/server/Service');
@@ -53,7 +57,9 @@ app.get('/', function (req, res) {
         ]),
         dom.body({}, [
             dom.div({ id: 'app' }, []),
-            dom.script({ src: 'client.bundle.js' })
+            dom.script({ src: 'client.bundle.js' }),
+            dom.script({ src: '/node_modules/jquery/dist/jquery.min.js' }),
+            dom.script({ src: '/node_modules/bootstrap/dist/js/bootstrap.min.js' }),
         ])
     ])));
 });

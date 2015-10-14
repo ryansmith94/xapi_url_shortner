@@ -11,7 +11,7 @@ var TrackingTestLrsRepository = require('../../tracking/TestLrsRepository');
 var TrackingTestWebRepository = require('../../tracking/TestWebRepository');
 var GroupService = require('../../group/Service');
 var GroupTestRepository = require('../../group/TestRepository');
-var UserService = require('../../user/Service');
+var UserService = require('../../user/server/Service');
 var UserTestRepository = require('../../user/TestRepository');
 var TokenService = require('../../token/server/Service');
 var TokenTestRepository = require('../../token/server/TestRepository');
@@ -26,8 +26,9 @@ var Test = (function (_super) {
     Test.prototype.beforeEach = function () {
         var tracking_service = new TrackingService(new TrackingTestLrsRepository(), new TrackingTestWebRepository());
         this.group_service = new GroupService(new GroupTestRepository());
-        this.user_service = new UserService(new UserTestRepository(), this.group_service);
-        this.token_service = new TokenService(new TokenTestRepository(), this.user_service);
+        this.token_service = new TokenService(new TokenTestRepository());
+        this.user_service = new UserService(new UserTestRepository(), this.group_service, this.token_service);
+        this.token_service.setUserService(this.user_service);
         this.service = new Service(new TestRepository(), tracking_service, this.token_service);
     };
     Test.prototype.createToken = function (id) {

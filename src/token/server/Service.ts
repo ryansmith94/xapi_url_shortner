@@ -4,9 +4,12 @@ import q = require('q');
 class Service extends BaseService {
   private user_service;
 
-  public constructor(repository, user_service) {
-    this.user_service = user_service;
+  public constructor(repository) {
     super(repository);
+  }
+
+  public setUserService(user_service) {
+    this.user_service = user_service
   }
 
   public createToken(email: string, password: string) {

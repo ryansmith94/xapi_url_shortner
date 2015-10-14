@@ -13,7 +13,7 @@ class Component extends react.Component<any, any> {
       custom_url[custom_url.length - 1] || undefined
     ).then(function () {
       this.setState({custom_url: ''});
-    }, function (err) {
+    }.bind(this), function (err) {
       alert(err);
     });
     event.preventDefault();

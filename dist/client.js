@@ -11,19 +11,23 @@ var TokenService = require('./token/client/Service');
 var TokenCreateController = require('./token/client/ReactCreateController');
 var token_repository = new TokenRepository('api/token');
 var token_service = new TokenService(token_repository);
-var content_controller = function (token, onTokenChange) {
+// User.
+var UserRepository = require('./user/client/HttpRepository');
+var UserService = require('./user/client/Service');
+var UserController = require('./user/client/ReactCreateController');
+var content_controller = function (token, onTokenChange, route) {
     var content;
-    if (token) {
+    if (token && route === 'invite') {
+        var user_service = new UserService(new UserRepository('api/user', token.value));
+        content = [UserController({
+                service: user_service
+            })];
+    }
+    else if (token) {
         var link_service = new LinkService(new LinkRepository('api/link', token.value));
-        var long_url = '';
-        var handleLongUrlChange = function (long_url) {
-            long_url: long_url;
-        };
-        content = [
-            LinkController({
+        content = [LinkController({
                 service: link_service
-            })
-        ];
+            })];
     }
     else {
         content = [TokenCreateController({

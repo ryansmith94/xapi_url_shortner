@@ -6,7 +6,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 var BaseTest = require('../BaseTest');
 var Service = require('./Service');
 var TestRepository = require('./TestRepository');
-var UserService = require('../../user/Service');
+var UserService = require('../../user/server/Service');
 var UserTestRepository = require('../../user/TestRepository');
 var GroupService = require('../../group/Service');
 var GroupTestRepository = require('../../group/TestRepository');
@@ -21,8 +21,9 @@ var Test = (function (_super) {
     }
     Test.prototype.beforeEach = function () {
         this.group_service = new GroupService(new GroupTestRepository());
-        this.user_service = new UserService(new UserTestRepository(), this.group_service);
-        this.service = new Service(new TestRepository(), this.user_service);
+        this.service = new Service(new TestRepository());
+        this.user_service = new UserService(new UserTestRepository(), this.group_service, this.service);
+        this.service.setUserService(this.user_service);
     };
     Test.prototype.testCreateToken = function (assert, done) {
         this.group_service.createGroup(GROUP_NAME).then(function (group) {

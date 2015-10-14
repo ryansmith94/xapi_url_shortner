@@ -7,10 +7,12 @@ var BaseService = require('../BaseService');
 var q = require('q');
 var Service = (function (_super) {
     __extends(Service, _super);
-    function Service(repository, user_service) {
-        this.user_service = user_service;
+    function Service(repository) {
         _super.call(this, repository);
     }
+    Service.prototype.setUserService = function (user_service) {
+        this.user_service = user_service;
+    };
     Service.prototype.createToken = function (email, password) {
         var deferred = q.defer();
         this.user_service.getUserByEmailAndPassword(email, password).then(function (user) {

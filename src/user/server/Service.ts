@@ -2,26 +2,13 @@ import BaseService = require('../BaseService');
 import q = require('q');
 
 class Service extends BaseService {
-  private repo;
   private group_service;
+  private token_service;
 
-  public constructor(repository, group_service) {
-    this.repo = repository;
+  public constructor(repository, group_service, token_service) {
     this.group_service = group_service;
-    super();
-  }
-
-  private validateEmail(email: string) {
-    var deferred = q.defer();
-    var email_regex = /^[A-Z0-9.\'_%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-
-    if (!email_regex.test(email)) {
-      deferred.reject(new Error('Invalid email'));
-    } else {
-      deferred.resolve(true);
-    }
-
-    return deferred.promise;
+    this.token_service = token_service;
+    super(repository);
   }
 
   private validateGroupId(group_id) {
@@ -61,6 +48,12 @@ class Service extends BaseService {
         password: password,
         group_id: group_id
       });
+    }.bind(this));
+  }
+
+  public createUserWithToken(email: string, password: string, token: string) {
+    return this.token_service.getUserByValue(token).then(function (user) {
+      return this.createUser(email, password, user.group_id);
     }.bind(this));
   }
 

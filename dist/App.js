@@ -12,7 +12,8 @@ var Component = (function (_super) {
     function Component() {
         _super.apply(this, arguments);
         this.state = {
-            token: docCookie.getItem('token') || ''
+            token: docCookie.getItem('token') || '',
+            route: window.location.hash.replace('#', '')
         };
     }
     Component.prototype.handleTokenChange = function (token) {
@@ -24,22 +25,41 @@ var Component = (function (_super) {
         // Updates state.
         this.setState({ token: token });
     };
+    Component.prototype.handleLogout = function (e) {
+        this.setState({ token: '' });
+        e.preventDefault();
+    };
+    Component.prototype.componentDidMount = function () {
+        window.onhashchange = function (event) {
+            this.setState({ route: event.newURL.split('#').slice(1).join('#') });
+        }.bind(this);
+    };
     Component.prototype.render = function () {
         var navbar = dom.nav({ className: 'navbar navbar-default navbar-fixed-top' }, [
             dom.div({ className: 'container' }, [
                 dom.div({ className: 'navbar-header' }, [
-                    // dom.button({dataToggle: 'collapse', dataTarget: '#bs-nav', className: 'navbar-toggle collapsed'}, [
-                    //   dom.span({className: 'sr-only'}, ['Toggle navigation']),
-                    //   dom.span({className: 'icon-bar'}, []),
-                    //   dom.span({className: 'icon-bar'}, []),
-                    //   dom.span({className: 'icon-bar'}, [])
-                    // ]),
+                    dom.button({
+                        'data-toggle': 'collapse',
+                        'data-target': '#bs-nav',
+                        className: 'navbar-toggle collapsed'
+                    }, [
+                        dom.span({ className: 'sr-only' }, ['Toggle navigation']),
+                        dom.span({ className: 'icon-bar' }, []),
+                        dom.span({ className: 'icon-bar' }, []),
+                        dom.span({ className: 'icon-bar' }, [])
+                    ]),
                     dom.div({ className: 'navbar-brand' }, ['xAPI URL Shortener'])
                 ]),
-                dom.div({ id: 'bs-nav', className: 'collapse navbar-collapse' }, [])
+                dom.div({ id: 'bs-nav', className: 'collapse navbar-collapse' }, [
+                    dom.ul({ className: 'nav navbar-nav navbar-right' }, [
+                        dom.li({}, [dom.a({ href: '#' }, ['Links'])]),
+                        dom.li({}, [dom.a({ href: '#invite' }, ['Invite'])]),
+                        dom.li({}, [dom.a({ href: '#', onClick: this.handleLogout.bind(this) }, ['Logout'])])
+                    ])
+                ])
             ])
         ]);
-        var content = this.props.content_controller(this.state.token, this.handleTokenChange.bind(this));
+        var content = this.props.content_controller(this.state.token, this.handleTokenChange.bind(this), this.state.route);
         return dom.div({}, [
             navbar,
             dom.div({ className: 'container', style: { marginTop: '60px' } }, content)

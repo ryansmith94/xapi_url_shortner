@@ -1,7 +1,7 @@
 import BaseTest = require('../BaseTest');
 import Service = require('./Service');
 import TestRepository = require('./TestRepository');
-import UserService = require('../../user/Service');
+import UserService = require('../../user/server/Service');
 import UserTestRepository = require('../../user/TestRepository');
 import GroupService = require('../../group/Service');
 import GroupTestRepository = require('../../group/TestRepository');
@@ -17,8 +17,9 @@ class Test extends BaseTest {
 
   public beforeEach() {
     this.group_service = new GroupService(new GroupTestRepository());
-    this.user_service = new UserService(new UserTestRepository(), this.group_service);
-    this.service = new Service(new TestRepository(), this.user_service);
+    this.service = new Service(new TestRepository());
+    this.user_service = new UserService(new UserTestRepository(), this.group_service, this.service);
+    this.service.setUserService(this.user_service);
   }
 
   public testCreateToken(assert, done) {

@@ -4,25 +4,13 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var BaseService = require('../BaseService');
-var q = require('q');
 var Service = (function (_super) {
     __extends(Service, _super);
-    function Service(repository, group_service) {
-        this.repo = repository;
+    function Service(repository, group_service, token_service) {
         this.group_service = group_service;
-        _super.call(this);
+        this.token_service = token_service;
+        _super.call(this, repository);
     }
-    Service.prototype.validateEmail = function (email) {
-        var deferred = q.defer();
-        var email_regex = /^[A-Z0-9.\'_%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-        if (!email_regex.test(email)) {
-            deferred.reject(new Error('Invalid email'));
-        }
-        else {
-            deferred.resolve(true);
-        }
-        return deferred.promise;
-    };
     Service.prototype.validateGroupId = function (group_id) {
         return this.group_service.getGroupById(group_id).then(function (group) {
             return group;
@@ -58,6 +46,11 @@ var Service = (function (_super) {
                 password: password,
                 group_id: group_id
             });
+        }.bind(this));
+    };
+    Service.prototype.createUserWithToken = function (email, password, token) {
+        return this.token_service.getUserByValue(token).then(function (user) {
+            return this.createUser(email, password, user.group_id);
         }.bind(this));
     };
     Service.prototype.deleteUserById = function (id) {

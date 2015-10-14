@@ -24,7 +24,7 @@
   margin-right: 10px;
 }
 
-.link_create .long_url, .link_create .custom_url, .token_create input {
+.link_create input, .token_create input, .user_create input {
   width: 100%;
   display: inline-block;
   margin-right: 4px;
@@ -39,7 +39,7 @@
   .link_create .custom_url {
     width: 30%;
   }
-  .token_create input {
+  .token_create input, .user_create input {
     width: 42%;
   }
 }
