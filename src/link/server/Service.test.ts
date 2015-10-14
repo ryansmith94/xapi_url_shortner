@@ -8,8 +8,8 @@ import GroupService = require('../../group/Service');
 import GroupTestRepository = require('../../group/TestRepository');
 import UserService = require('../../user/Service');
 import UserTestRepository = require('../../user/TestRepository');
-import TokenService = require('../../token/Server/Service');
-import TokenTestRepository = require('../../token/Server/TestRepository');
+import TokenService = require('../../token/server/Service');
+import TokenTestRepository = require('../../token/server/TestRepository');
 
 var LONG_URL = 'http://www.example.com';
 var SHORT_URL = '2';
