@@ -17,16 +17,19 @@ class Service extends BaseService {
    * @return {Future}
    */
   public createLink(long_url: string, custom_url?: string) {
-    var self = this;
-    return self.validateLink(long_url, custom_url).then(function () {
-      return self.repo.createLink({
+    if (long_url.indexOf('://') === -1) {
+      long_url = 'http://'+long_url;
+    }
+
+    return this.validateLink(long_url, custom_url).then(function () {
+      return this.repo.createLink({
         long_url: long_url,
         short_url: custom_url
       });
-    }).then(function (link) {
-      self.emitChange();
+    }.bind(this)).then(function (link) {
+      this.emitChange();
       return link;
-    });
+    }.bind(this));
   }
 
   /**
