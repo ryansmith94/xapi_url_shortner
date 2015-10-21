@@ -31,7 +31,7 @@ class Component extends react.Component<any, any> {
     var navbar = dom.nav({className: 'navbar navbar-default navbar-fixed-top'}, [
       dom.div({className: 'container'}, [
         dom.div({className: 'navbar-header'}, [
-          dom.button({
+          (!this.state.token) ? null : dom.button({
             'data-toggle': 'collapse',
             'data-target': '#bs-nav',
             className: 'navbar-toggle collapsed'
@@ -43,7 +43,7 @@ class Component extends react.Component<any, any> {
           ]),
           dom.div({className: 'navbar-brand'}, ['xAPI URL Shortener'])
         ]),
-        dom.div({id: 'bs-nav', className: 'collapse navbar-collapse'}, [
+        (!this.state.token) ? null : dom.div({id: 'bs-nav', className: 'collapse navbar-collapse'}, [
           dom.ul({className: 'nav navbar-nav navbar-right'}, [
             dom.li({}, [dom.a({href: '#'}, ['Links'])]),
             dom.li({}, [dom.a({href: '#invite'}, ['Invite'])]),
