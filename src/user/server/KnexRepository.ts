@@ -63,6 +63,10 @@ class Repository extends BaseRepository {
       }
     });
   }
+
+  public getUsersByGroupId(group_id) {
+    return this.connect().where('group_id', group_id);
+  }
 }
 
 export = Repository;

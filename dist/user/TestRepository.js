@@ -63,6 +63,14 @@ var Repository = (function () {
         }
         return deferred.promise;
     };
+    Repository.prototype.getUsersByGroupId = function (group_id) {
+        var deferred = q.defer();
+        var filtered_users = this.users.filter(function (user) {
+            return user.group_id === group_id;
+        });
+        deferred.resolve(filtered_users);
+        return deferred.promise;
+    };
     return Repository;
 })();
 module.exports = Repository;

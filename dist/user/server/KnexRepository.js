@@ -65,6 +65,9 @@ var Repository = (function (_super) {
             }
         });
     };
+    Repository.prototype.getUsersByGroupId = function (group_id) {
+        return this.connect().where('group_id', group_id);
+    };
     return Repository;
 })(BaseRepository);
 module.exports = Repository;

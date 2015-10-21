@@ -69,6 +69,12 @@ class Service extends BaseService {
     return this.repo.getUserById(id);
   }
 
+  public getUsersByGroupId(group_id) {
+    return this.validateGroupId(group_id).then(function () {
+      return this.repo.getUsersByGroupId(group_id);
+    }.bind(this));
+  }
+
   private getUserByEmail(email: string) {
     return this.repo.getUserByEmail(email);
   }

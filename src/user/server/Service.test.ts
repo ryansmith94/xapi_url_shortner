@@ -159,6 +159,26 @@ class Test extends BaseTest {
       assert.equal(false, false);
     }).then(done, done);
   }
+
+  public testGetUsersWithGroupId(assert, done) {
+    this.group_service.createGroup(GROUP_NAME).then(function (group: any) {
+      return this.service.createUser(EMAIL, PASSWORD, group.id);
+    }.bind(this)).then(function (user) {
+      return this.service.getUsersByGroupId(user.group_id);
+    }.bind(this)).then(function (users) {
+      assert.equal(Array.isArray(users), true);
+      assert.equal(users.length, 1);
+      assert.equal(users[0].email, EMAIL);
+    }).then(done, done);
+  }
+
+  public testGetUsersWithInvalidGroupId(assert, done) {
+    this.service.getUsersByGroupId(GROUP_ID).then(function () {
+      assert.equal(true, false);
+    }, function () {
+      assert.equal(false, false);
+    }).then(done, done);
+  }
 }
 
 (new Test()).run();

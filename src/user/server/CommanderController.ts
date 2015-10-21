@@ -16,6 +16,11 @@ class Controller {
       .command('du <user_id>')
       .description('Delete a user')
       .action(this.deleteUser.bind(this));
+
+    commander
+      .command('lu <group_id>')
+      .description('List the users in a group')
+      .action(this.getUsersByGroupId.bind(this));
   }
 
   public createUser(email, password, group_id) {
@@ -29,6 +34,14 @@ class Controller {
   public deleteUser(id) {
     this.service.deleteUserById(id).then(function (result) {
       console.log('Deleted');
+    }, function (err) {
+      console.error(err.stack);
+    }).then(process.exit, process.exit);
+  }
+
+  public getUsersByGroupId(group_id) {
+    this.service.getUsersByGroupId(group_id).then(function (models) {
+      console.log(models);
     }, function (err) {
       console.error(err.stack);
     }).then(process.exit, process.exit);

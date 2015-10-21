@@ -62,6 +62,11 @@ var Service = (function (_super) {
     Service.prototype.getUserById = function (id) {
         return this.repo.getUserById(id);
     };
+    Service.prototype.getUsersByGroupId = function (group_id) {
+        return this.validateGroupId(group_id).then(function () {
+            return this.repo.getUsersByGroupId(group_id);
+        }.bind(this));
+    };
     Service.prototype.getUserByEmail = function (email) {
         return this.repo.getUserByEmail(email);
     };
