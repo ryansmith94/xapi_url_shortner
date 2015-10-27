@@ -9,6 +9,7 @@ class Controller {
   private constructRoutes(app) {
     app.post('/api/link', this.createLink.bind(this));
     app.get('/api/link', this.getLinks.bind(this));
+    app.delete('/api/link/:id', this.deleteLink.bind(this));
     app.get('/:short_url(\\w+)', this.visitLink.bind(this));
   }
 
@@ -40,6 +41,17 @@ class Controller {
     var token = req.get('Authorization').replace('Bearer ', '');
     this.service.getLinksByToken(token).then(function (models) {
       res.json(models);
+    }, function (err) {
+      console.error(err.stack);
+      res.status(400).send(String(err));
+    });
+  }
+
+  public deleteLink(req, res) {
+    var token = req.get('Authorization').replace('Bearer ', '');
+    var id = req.params.id;
+    this.service.deleteLinkByIdWithToken(id, token).then(function () {
+      res.json(true);
     }, function (err) {
       console.error(err.stack);
       res.status(400).send(String(err));

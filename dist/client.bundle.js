@@ -80,7 +80,7 @@ var Repository = (function () {
     }
     Repository.prototype.connect = function (opts) {
         var deferred = q.defer();
-        opts.url = this.endpoint;
+        opts.url = opts.url || this.endpoint;
         opts.dataType = 'json';
         jquery.ajax(opts).done(function (data) {
             deferred.resolve(data);
@@ -99,6 +99,14 @@ var Repository = (function () {
             deferred.reject(new Error('No model'));
         }
         return deferred.promise;
+    };
+    Repository.prototype.deleteModel = function (models, filterFn) {
+        return this.filterModels(models, function (model, index) {
+            model.index = index;
+            return filterFn(model, index);
+        }).then(function (model) {
+            return models.slice(0, model.index).concat(models.slice(model.index + 1));
+        });
     };
     return Repository;
 })();
@@ -463,6 +471,19 @@ var Repository = (function (_super) {
             return link.short_url === short_url;
         });
     };
+    Repository.prototype.deleteLinkById = function (id) {
+        return this.connect({
+            method: 'DELETE',
+            url: this.endpoint + '/' + id
+        }).then(function () {
+            return this.deleteModel(this.links, function (link) {
+                return link.id === id;
+            });
+        }.bind(this)).then(function (links) {
+            this.links = links;
+            return true;
+        }.bind(this));
+    };
     return Repository;
 })(BaseRepository);
 module.exports = Repository;
@@ -601,6 +622,9 @@ var Component = (function (_super) {
             return '';
         }
     };
+    Component.prototype.handleDelete = function () {
+        this.props.onDelete(this.props.id);
+    };
     Component.prototype.render = function () {
         var location = document.location;
         var short_url = location.protocol + '//' + location.host + '/' + this.props.short_url;
@@ -608,9 +632,14 @@ var Component = (function (_super) {
             dom.span({ className: 'col col-xs-1 link_icon_col' }, [
                 dom.img({ className: 'link_icon', src: this.getFavicon(this.props.long_url) }),
             ]),
-            dom.span({ className: 'col col-xs-11 link_info_col' }, [
+            dom.span({ className: 'col col-xs-9 link_info_col' }, [
                 dom.div({}, [dom.a({ className: 'short_url text-primary', href: short_url }, [short_url])]),
                 dom.div({}, [dom.a({ className: 'long_url small text-muted', href: this.props.long_url }, [this.props.long_url])])
+            ]),
+            dom.span({ className: 'col col-xs-1 link_action_col pull-right' }, [
+                dom.span({ className: 'delete btn dtn-danger', onClick: this.handleDelete.bind(this) }, [
+                    dom.span({ className: 'glyphicon glyphicon-remove' })
+                ])
             ])
         ]);
     };
@@ -643,7 +672,16 @@ var Component = (function (_super) {
             alert(err);
         });
     };
+    Component.prototype.handleDelete = function (id) {
+        this.props.service.deleteLinkById(id).then(function () {
+            // Deleted.
+        }, function (err) {
+            console.log(err.stack);
+            alert(err);
+        });
+    };
     Component.prototype.handleDataChange = function () {
+        console.log('Data Changed');
         this.getLinks();
     };
     Component.prototype.componentDidMount = function () {
@@ -655,6 +693,7 @@ var Component = (function (_super) {
     };
     Component.prototype.render = function () {
         return dom.div({ className: 'link_list' }, this.state.links.filter(function (link) {
+            link.onDelete = this.handleDelete.bind(this);
             return link.long_url.indexOf(this.props.long_url) !== -1;
         }.bind(this)).reverse().map(item));
     };
@@ -704,6 +743,17 @@ var Service = (function (_super) {
      */
     Service.prototype.getLinks = function () {
         return this.repo.getLinks();
+    };
+    /**
+     * Gets links.
+     * @param {string} id The id of the link to delete.
+     * @return {Future}
+     */
+    Service.prototype.deleteLinkById = function (id) {
+        return this.repo.deleteLinkById(id).then(function () {
+            this.emitChange();
+            return true;
+        }.bind(this));
     };
     return Service;
 })(BaseService);

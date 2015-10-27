@@ -52,6 +52,21 @@ var Repository = (function () {
         });
         return q(filtered_links);
     };
+    Repository.prototype.deleteLinkById = function (id) {
+        var deferred = q.defer();
+        var filtered_links = this.links.filter(function (link, index) {
+            link.index = index;
+            return link.id === id;
+        });
+        if (filtered_links.length > 0) {
+            this.links = this.links.slice(0, filtered_links[0].index).concat(this.links.slice(filtered_links[0].index + 1));
+            deferred.resolve(true);
+        }
+        else {
+            deferred.reject(new Error('No link'));
+        }
+        return deferred.promise;
+    };
     return Repository;
 })();
 module.exports = Repository;

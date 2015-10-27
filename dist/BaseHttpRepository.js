@@ -7,7 +7,7 @@ var Repository = (function () {
     }
     Repository.prototype.connect = function (opts) {
         var deferred = q.defer();
-        opts.url = this.endpoint;
+        opts.url = opts.url || this.endpoint;
         opts.dataType = 'json';
         jquery.ajax(opts).done(function (data) {
             deferred.resolve(data);
@@ -26,6 +26,14 @@ var Repository = (function () {
             deferred.reject(new Error('No model'));
         }
         return deferred.promise;
+    };
+    Repository.prototype.deleteModel = function (models, filterFn) {
+        return this.filterModels(models, function (model, index) {
+            model.index = index;
+            return filterFn(model, index);
+        }).then(function (model) {
+            return models.slice(0, model.index).concat(models.slice(model.index + 1));
+        });
     };
     return Repository;
 })();

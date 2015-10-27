@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var BaseService = require('../BaseService');
+var q = require('q');
 var Service = (function (_super) {
     __extends(Service, _super);
     function Service() {
@@ -72,16 +73,39 @@ var Service = (function (_super) {
      * @return {Future}
      */
     Service.prototype.getLinksByToken = function (token) {
-        return this.token_service.getUserByValue(token).then(function (user) {
+        var user;
+        return this.token_service.getUserByValue(token).then(function (token_user) {
+            user = token_user;
             return this.repo.getLinksByGroupId(user.group_id);
         }.bind(this)).then(function (links) {
             return links.map(function (link) {
                 return {
                     id: link.id,
                     long_url: link.long_url,
-                    short_url: link.short_url || this.idToShortUrl(link.id)
+                    short_url: link.short_url || this.idToShortUrl(link.id),
+                    owner: link.user_id == user.id
                 };
             }.bind(this));
+        }.bind(this));
+    };
+    /**
+     * Deletes a link by ID if able to with the given token.
+     * @param {string} id The ID of the link to delete.
+     * @param {string} token The token used by the user requesting the links.
+     * @return {Future}
+     */
+    Service.prototype.deleteLinkByIdWithToken = function (id, token) {
+        return q.all([
+            this.token_service.getUserByValue(token),
+            this.repo.getLinkById(id)
+        ]).spread(function (user, link) {
+            if (link.user_id == user.id) {
+                this.repo.deleteLinkById(link.id);
+                return true;
+            }
+            else {
+                throw new Error('Link cannot be deleted with that token');
+            }
         }.bind(this));
     };
     return Service;

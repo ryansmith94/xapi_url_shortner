@@ -22,7 +22,16 @@ var Component = (function (_super) {
             alert(err);
         });
     };
+    Component.prototype.handleDelete = function (id) {
+        this.props.service.deleteLinkById(id).then(function () {
+            // Deleted.
+        }, function (err) {
+            console.log(err.stack);
+            alert(err);
+        });
+    };
     Component.prototype.handleDataChange = function () {
+        console.log('Data Changed');
         this.getLinks();
     };
     Component.prototype.componentDidMount = function () {
@@ -34,6 +43,7 @@ var Component = (function (_super) {
     };
     Component.prototype.render = function () {
         return dom.div({ className: 'link_list' }, this.state.links.filter(function (link) {
+            link.onDelete = this.handleDelete.bind(this);
             return link.long_url.indexOf(this.props.long_url) !== -1;
         }.bind(this)).reverse().map(item));
     };

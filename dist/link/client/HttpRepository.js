@@ -63,6 +63,19 @@ var Repository = (function (_super) {
             return link.short_url === short_url;
         });
     };
+    Repository.prototype.deleteLinkById = function (id) {
+        return this.connect({
+            method: 'DELETE',
+            url: this.endpoint + '/' + id
+        }).then(function () {
+            return this.deleteModel(this.links, function (link) {
+                return link.id === id;
+            });
+        }.bind(this)).then(function (links) {
+            this.links = links;
+            return true;
+        }.bind(this));
+    };
     return Repository;
 })(BaseRepository);
 module.exports = Repository;

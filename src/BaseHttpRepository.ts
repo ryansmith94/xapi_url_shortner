@@ -3,7 +3,7 @@ import jquery = require('jquery');
 import q = require('q');
 
 class Repository {
-  private endpoint;
+  protected endpoint;
 
   public constructor(endpoint) {
     this.endpoint = endpoint;
@@ -11,7 +11,7 @@ class Repository {
 
   protected connect(opts) {
     var deferred = q.defer();
-    opts.url = this.endpoint;
+    opts.url = opts.url || this.endpoint;
     opts.dataType = 'json';
 
     jquery.ajax(opts).done(function (data) {
@@ -34,6 +34,17 @@ class Repository {
     }
 
     return deferred.promise;
+  }
+
+  protected deleteModel(models, filterFn) {
+    return this.filterModels(models, function (model, index) {
+      model.index = index;
+      return filterFn(model, index);
+    }).then(function (model: Array<any>) {
+      return models.slice(0, model.index).concat(
+        models.slice(model.index + 1)
+      );
+    });
   }
 }
 

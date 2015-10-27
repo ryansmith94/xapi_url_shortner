@@ -11,6 +11,9 @@ class Component extends react.Component<any, any> {
       return '';
     }
   }
+  private handleDelete() {
+    this.props.onDelete(this.props.id);
+  }
   render() {
     var location = document.location;
     var short_url = location.protocol + '//' + location.host + '/' + this.props.short_url;
@@ -18,9 +21,14 @@ class Component extends react.Component<any, any> {
       dom.span({className: 'col col-xs-1 link_icon_col'}, [
         dom.img({className: 'link_icon', src: this.getFavicon(this.props.long_url)}),
       ]),
-      dom.span({className: 'col col-xs-11 link_info_col'}, [
+      dom.span({className: 'col col-xs-9 link_info_col'}, [
         dom.div({}, [dom.a({className: 'short_url text-primary', href: short_url}, [short_url])]),
         dom.div({}, [dom.a({className: 'long_url small text-muted', href: this.props.long_url}, [this.props.long_url])])
+      ]),
+      dom.span({className: 'col col-xs-1 link_action_col pull-right'}, [
+        dom.span({className: 'delete btn dtn-danger', onClick: this.handleDelete.bind(this)}, [
+          dom.span({className: 'glyphicon glyphicon-remove'})
+        ])
       ])
     ]);
   }

@@ -50,6 +50,16 @@ class Repository extends BaseRepository {
   public getLinksByGroupId(group_id) {
     return this.connect().where('group_id', group_id);
   }
+
+  public deleteLinkById(id) {
+    return this.connect().where('id', id).delete().then(function (link) {
+      if (!link) {
+        throw new Error('No link');
+      } else {
+        return link;
+      }
+    });
+  }
 }
 
 export = Repository;

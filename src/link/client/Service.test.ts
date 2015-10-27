@@ -62,6 +62,24 @@ class Test extends BaseTest {
       });
     }.bind(this)).then(done, done);
   }
+
+  public testDeleteLinkById(assert, done) {
+    this.service.createLink(LONG_URL).then(function (link: any) {
+      return this.service.deleteLinkById(link.id);
+    }.bind(this)).then(function () {
+      assert.equal(true, true);
+    }, function (err) {
+      assert.equal(false, true);
+    }).then(done, done);
+  }
+
+  public testDeleteLinkByInvalidId(assert, done) {
+    this.service.deleteLinkById(1).then(function () {
+      assert.equal(true, false);
+    }, function (err) {
+      assert.equal(false, false);
+    }).then(done, done);
+  }
 }
 
 (new Test()).run();

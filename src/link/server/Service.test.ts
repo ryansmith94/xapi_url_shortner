@@ -124,7 +124,7 @@ class Test extends BaseTest {
     }.bind(this)).then(done, done);
   }
 
-  public testtestGetLinksByUserIdFromOtherGroup(assert, done) {
+  public testGetLinksByUserIdFromOtherGroup(assert, done) {
     this.createToken().then(function (token) {
       return this.service.createLinkWithToken(LONG_URL, token.value);
     }.bind(this)).then(function () {
@@ -137,8 +137,48 @@ class Test extends BaseTest {
     }.bind(this)).then(done, done);
   }
 
-  public testtestGetLinksByUserIdWithIncorrectId(assert, done) {
+  public testGetLinksByUserIdWithIncorrectId(assert, done) {
     this.service.createLinkWithToken(LONG_URL, '1').then(function () {
+      assert.equal(true, false);
+    }, function () {
+      assert.equal(false, false);
+    }).then(done, done);
+  }
+
+  public testDeleteLinkByIdWithToken(assert, done) {
+    var token;
+    this.createToken().then(function (created_token) {
+      token = created_token;
+      return this.service.createLinkWithToken(LONG_URL, token.value);
+    }.bind(this)).then(function (link) {
+      return this.service.deleteLinkByIdWithToken(link.id, token.value);
+    }.bind(this)).then(function () {
+      assert.equal(true, true);
+    }, function () {
+      assert.equal(false, true);
+    }).then(done, done);
+  }
+
+  public testDeleteLinkByInvalidIdWithToken(assert, done) {
+    this.createToken().then(function (token) {
+      return this.service.deleteLinkByIdWithToken(1, token.value);
+    }.bind(this)).then(function () {
+      assert.equal(true, false);
+    }, function () {
+      assert.equal(false, false);
+    }).then(done, done);
+  }
+
+  public testDeleteLinkByIdWithInvalidToken(assert, done) {
+    var link;
+    this.createToken().then(function (token) {
+      return this.service.createLinkWithToken(LONG_URL, token.value);
+    }.bind(this)).then(function (created_link) {
+      link = created_link;
+      return this.createToken('2');
+    }.bind(this)).then(function (token) {
+      return this.service.deleteLinkByIdWithToken(link.id, token.value);
+    }.bind(this)).then(function () {
       assert.equal(true, false);
     }, function () {
       assert.equal(false, false);

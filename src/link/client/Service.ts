@@ -39,6 +39,18 @@ class Service extends BaseService {
   public getLinks() {
     return this.repo.getLinks();
   }
+
+  /**
+   * Gets links.
+   * @param {string} id The id of the link to delete.
+   * @return {Future}
+   */
+  public deleteLinkById(id) {
+    return this.repo.deleteLinkById(id).then(function () {
+      this.emitChange();
+      return true;
+    }.bind(this));
+  }
 }
 
 export = Service;

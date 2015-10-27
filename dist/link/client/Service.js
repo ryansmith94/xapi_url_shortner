@@ -40,6 +40,17 @@ var Service = (function (_super) {
     Service.prototype.getLinks = function () {
         return this.repo.getLinks();
     };
+    /**
+     * Gets links.
+     * @param {string} id The id of the link to delete.
+     * @return {Future}
+     */
+    Service.prototype.deleteLinkById = function (id) {
+        return this.repo.deleteLinkById(id).then(function () {
+            this.emitChange();
+            return true;
+        }.bind(this));
+    };
     return Service;
 })(BaseService);
 module.exports = Service;

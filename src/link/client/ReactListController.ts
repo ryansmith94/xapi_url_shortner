@@ -14,7 +14,16 @@ class Component extends react.Component<any, any> {
       alert(err);
     });
   }
+  handleDelete(id) {
+    this.props.service.deleteLinkById(id).then(function () {
+      // Deleted.
+    }, function (err) {
+      console.log(err.stack);
+      alert(err);
+    });
+  }
   handleDataChange() {
+    console.log('Data Changed');
     this.getLinks();
   }
   componentDidMount() {
@@ -26,6 +35,7 @@ class Component extends react.Component<any, any> {
   }
   render() {
     return dom.div({className: 'link_list'}, this.state.links.filter(function (link) {
+      link.onDelete = this.handleDelete.bind(this);
       return link.long_url.indexOf(this.props.long_url) !== -1;
     }.bind(this)).reverse().map(item));
   }

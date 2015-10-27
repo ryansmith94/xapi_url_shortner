@@ -50,6 +50,16 @@ var Repository = (function (_super) {
     Repository.prototype.getLinksByGroupId = function (group_id) {
         return this.connect().where('group_id', group_id);
     };
+    Repository.prototype.deleteLinkById = function (id) {
+        return this.connect().where('id', id).delete().then(function (link) {
+            if (!link) {
+                throw new Error('No link');
+            }
+            else {
+                return link;
+            }
+        });
+    };
     return Repository;
 })(BaseRepository);
 module.exports = Repository;

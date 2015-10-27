@@ -14,7 +14,7 @@
   width: 20px;
 }
 
-.link_item .link_icon_col, .link_info_col {
+.link_item .link_icon_col, .link_item .link_info_col, .link_item .link_action_col {
   padding-left: 0;
   padding-right: 0;
 }
@@ -22,6 +22,15 @@
 .link_item .link_icon_col {
   width: 22px;
   margin-right: 10px;
+}
+
+.link_item .link_action_col {
+  text-align: right;
+  margin-top: 3px;
+}
+
+.link_item .link_action_col .delete {
+  text-align: center;
 }
 
 .link_create input, .token_create input, .user_create input {

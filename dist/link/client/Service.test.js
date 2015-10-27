@@ -62,6 +62,22 @@ var Test = (function (_super) {
             });
         }.bind(this)).then(done, done);
     };
+    Test.prototype.testDeleteLinkById = function (assert, done) {
+        this.service.createLink(LONG_URL).then(function (link) {
+            return this.service.deleteLinkById(link.id);
+        }.bind(this)).then(function () {
+            assert.equal(true, true);
+        }, function (err) {
+            assert.equal(false, true);
+        }).then(done, done);
+    };
+    Test.prototype.testDeleteLinkByInvalidId = function (assert, done) {
+        this.service.deleteLinkById(1).then(function () {
+            assert.equal(true, false);
+        }, function (err) {
+            assert.equal(false, false);
+        }).then(done, done);
+    };
     return Test;
 })(BaseTest);
 (new Test()).run();

@@ -61,6 +61,25 @@ class Repository {
 
     return q(filtered_links);
   }
+
+  public deleteLinkById(id) {
+    var deferred = q.defer();
+    var filtered_links = this.links.filter(function (link, index) {
+      link.index = index;
+      return link.id === id;
+    });
+
+    if (filtered_links.length > 0) {
+      this.links = this.links.slice(0, filtered_links[0].index).concat(
+        this.links.slice(filtered_links[0].index + 1)
+      );
+      deferred.resolve(true);
+    } else {
+      deferred.reject(new Error('No link'));
+    }
+
+    return deferred.promise;
+  }
 }
 
 export = Repository;

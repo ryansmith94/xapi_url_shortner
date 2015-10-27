@@ -1,4 +1,5 @@
 import BaseService = require('../BaseService');
+import q = require('q');
 
 class Service extends BaseService {
   private tracking_service;
@@ -71,16 +72,39 @@ class Service extends BaseService {
    * @return {Future}
    */
   public getLinksByToken(token) {
-    return this.token_service.getUserByValue(token).then(function (user) {
+    var user;
+    return this.token_service.getUserByValue(token).then(function (token_user) {
+      user = token_user;
       return this.repo.getLinksByGroupId(user.group_id);
     }.bind(this)).then(function (links) {
       return links.map(function (link) {
         return {
           id: link.id,
           long_url: link.long_url,
-          short_url: link.short_url || this.idToShortUrl(link.id)
+          short_url: link.short_url || this.idToShortUrl(link.id),
+          owner: link.user_id == user.id
         };
       }.bind(this));
+    }.bind(this));
+  }
+
+  /**
+   * Deletes a link by ID if able to with the given token.
+   * @param {string} id The ID of the link to delete.
+   * @param {string} token The token used by the user requesting the links.
+   * @return {Future}
+   */
+  public deleteLinkByIdWithToken(id, token) {
+    return q.all([
+      this.token_service.getUserByValue(token),
+      this.repo.getLinkById(id)
+    ]).spread(function (user, link) {
+      if (link.user_id == user.id) {
+        this.repo.deleteLinkById(link.id);
+        return true;
+      } else {
+        throw new Error('Link cannot be deleted with that token');
+      }
     }.bind(this));
   }
 }
