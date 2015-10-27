@@ -25,7 +25,9 @@ import TokenService = require('./token/server/Service');
 var token_repository = new TokenRepository(config.knex, 'token');
 var token_service = new TokenService(token_repository);
 var user_repository = new UserRepository(config.knex, 'user');
-var user_service = new UserService(user_repository, group_service, token_service);
+var user_service = new UserService(user_repository);
 var user_controller = new UserController(commander, user_service);
+user_service.setGroupService(group_service);
+user_service.setTokenService(token_service);
 
 commander.parse(process.argv);

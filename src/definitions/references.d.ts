@@ -13,3 +13,4 @@
 /// <reference path="./source-map-support.d.ts" />
 /// <reference path="./commander.d.ts" />
 /// <reference path="./dotenv.d.ts" />
+/// <reference path="./password-hash.d.ts" />

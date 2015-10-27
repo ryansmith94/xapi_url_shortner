@@ -6,17 +6,23 @@ var __extends = (this && this.__extends) || function (d, b) {
 var BaseService = require('../BaseService');
 var Service = (function (_super) {
     __extends(Service, _super);
+    function Service() {
+        _super.apply(this, arguments);
+    }
     /**
-     * Constructs a new Service.
-     * @param {any} repository A repository.
+     * Sets the tracking service.
      * @param {any} tracking_service A tracking service.
+     */
+    Service.prototype.setTrackingService = function (tracking_service) {
+        this.tracking_service = tracking_service;
+    };
+    /**
+     * Sets the token service.
      * @param {any} token_service A token service.
      */
-    function Service(repository, tracking_service, token_service) {
-        this.tracking_service = tracking_service;
+    Service.prototype.setTokenService = function (token_service) {
         this.token_service = token_service;
-        _super.call(this, repository);
-    }
+    };
     /**
      * Tracks a link.
      * @param {string} short_url The short_url to track.

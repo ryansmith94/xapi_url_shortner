@@ -21,7 +21,7 @@ var Component = (function (_super) {
         // Saves token in cookies.
         var current_date = new Date();
         var expiry_date = new Date();
-        expiry_date.setMinutes(current_date.getMinutes() + 30);
+        expiry_date.setMinutes(current_date.getMinutes() + 29);
         docCookie.setItem('token', token, expiry_date);
         // Updates state.
         this.setState({ token: token });
@@ -639,7 +639,9 @@ var Component = (function (_super) {
     Component.prototype.getLinks = function () {
         this.props.service.getLinks().then(function (links) {
             this.setState({ links: links });
-        }.bind(this));
+        }.bind(this), function (err) {
+            alert(err);
+        });
     };
     Component.prototype.handleDataChange = function () {
         this.getLinks();
@@ -834,8 +836,8 @@ var __extends = (this && this.__extends) || function (d, b) {
 var BaseService = require('../BaseService');
 var Service = (function (_super) {
     __extends(Service, _super);
-    function Service(repository) {
-        _super.call(this, repository);
+    function Service() {
+        _super.apply(this, arguments);
     }
     Service.prototype.createToken = function (email, password) {
         return this.repo.createToken({
@@ -984,8 +986,8 @@ var __extends = (this && this.__extends) || function (d, b) {
 var BaseService = require('../BaseService');
 var Service = (function (_super) {
     __extends(Service, _super);
-    function Service(repository) {
-        _super.call(this, repository);
+    function Service() {
+        _super.apply(this, arguments);
     }
     Service.prototype.createUser = function (email, password) {
         return this.validateEmail(email).then(function () {

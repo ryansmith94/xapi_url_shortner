@@ -13,6 +13,7 @@ var Repository = (function (_super) {
         table.increments('id').primary();
         table.string('value').notNullable().unique();
         table.integer('user_id').notNullable();
+        table.string('expiry').notNullable();
     };
     Repository.prototype.createToken = function (token) {
         delete token.email;
@@ -21,14 +22,15 @@ var Repository = (function (_super) {
             return {
                 id: ids[0],
                 value: token.value,
-                user_id: token.user_id
+                user_id: token.user_id,
+                expiry: token.expiry
             };
         });
     };
     Repository.prototype.getTokenByValue = function (value) {
         return this.connect().where('value', value).first().then(function (token) {
             if (!token) {
-                throw new Error('No token');
+                throw new Error('No token. Log out and log back in.');
             }
             else {
                 return token;

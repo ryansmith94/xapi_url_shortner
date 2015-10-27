@@ -35,16 +35,6 @@ var Repository = (function (_super) {
             }
         });
     };
-    Repository.prototype.getUserByEmailAndPassword = function (email, password) {
-        return this.connect().where('email', email).where('password', password).first().then(function (user) {
-            if (!user) {
-                throw new Error('No user with those credentials');
-            }
-            else {
-                return user;
-            }
-        });
-    };
     Repository.prototype.getUserById = function (id) {
         return this.connect().where('id', id).first().then(function (user) {
             if (!user) {

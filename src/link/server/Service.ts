@@ -5,15 +5,19 @@ class Service extends BaseService {
   private token_service;
 
   /**
-   * Constructs a new Service.
-   * @param {any} repository A repository.
+   * Sets the tracking service.
    * @param {any} tracking_service A tracking service.
+   */
+  public setTrackingService(tracking_service) {
+    this.tracking_service = tracking_service;
+  }
+
+  /**
+   * Sets the token service.
    * @param {any} token_service A token service.
    */
-  public constructor(repository, tracking_service, token_service) {
-    this.tracking_service = tracking_service;
+  public setTokenService(token_service) {
     this.token_service = token_service;
-    super(repository);
   }
 
   /**

@@ -4,13 +4,18 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var BaseService = require('../BaseService');
+var passhash = require('password-hash');
 var Service = (function (_super) {
     __extends(Service, _super);
-    function Service(repository, group_service, token_service) {
-        this.group_service = group_service;
-        this.token_service = token_service;
-        _super.call(this, repository);
+    function Service() {
+        _super.apply(this, arguments);
     }
+    Service.prototype.setGroupService = function (group_service) {
+        this.group_service = group_service;
+    };
+    Service.prototype.setTokenService = function (token_service) {
+        this.token_service = token_service;
+    };
     Service.prototype.validateGroupId = function (group_id) {
         return this.group_service.getGroupById(group_id).then(function (group) {
             return group;
@@ -43,7 +48,7 @@ var Service = (function (_super) {
         return this.validateCreateUser(email, password, group_id).then(function () {
             return this.repo.createUser({
                 email: email,
-                password: password,
+                password: passhash.generate(password),
                 group_id: group_id
             });
         }.bind(this));
@@ -57,7 +62,14 @@ var Service = (function (_super) {
         return this.repo.deleteUserById(id);
     };
     Service.prototype.getUserByEmailAndPassword = function (email, password) {
-        return this.repo.getUserByEmailAndPassword(email, password);
+        return this.getUserByEmail(email).then(function (user) {
+            if (passhash.verify(password, user.password)) {
+                return user;
+            }
+            else {
+                throw new Error('No User with those credentials');
+            }
+        });
     };
     Service.prototype.getUserById = function (id) {
         return this.repo.getUserById(id);

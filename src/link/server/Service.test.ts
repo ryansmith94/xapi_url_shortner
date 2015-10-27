@@ -21,19 +21,22 @@ class Test extends BaseTest {
   protected token_service: TokenService;
 
   public beforeEach() {
+    // Initialises services.
     var tracking_service = new TrackingService(
       new TrackingTestLrsRepository(),
       new TrackingTestWebRepository()
     );
     this.group_service = new GroupService(new GroupTestRepository());
     this.token_service = new TokenService(new TokenTestRepository());
-    this.user_service = new UserService(
-      new UserTestRepository(),
-      this.group_service,
-      this.token_service
-    );
+    this.user_service = new UserService(new UserTestRepository());
+    this.service = new Service(new TestRepository());
+
+    // Injects services into services.
+    this.user_service.setGroupService(this.group_service);
+    this.user_service.setTokenService(this.token_service);
     this.token_service.setUserService(this.user_service);
-    this.service = new Service(new TestRepository(), tracking_service, this.token_service);
+    this.service.setTrackingService(tracking_service);
+    this.service.setTokenService(this.token_service);
   }
 
   private createToken(id = '') {

@@ -10,7 +10,9 @@ class Component extends react.Component<any, any> {
   getLinks() {
     this.props.service.getLinks().then(function (links) {
       this.setState({links: links});
-    }.bind(this));
+    }.bind(this), function (err) {
+      alert(err);
+    });
   }
   handleDataChange() {
     this.getLinks();

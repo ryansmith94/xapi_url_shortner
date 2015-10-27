@@ -16,9 +16,14 @@ class Test extends BaseTest {
   protected user_service: UserService;
 
   public beforeEach() {
+    // Initialises services.
     this.group_service = new GroupService(new GroupTestRepository());
     this.service = new Service(new TestRepository());
-    this.user_service = new UserService(new UserTestRepository(), this.group_service, this.service);
+    this.user_service = new UserService(new UserTestRepository());
+
+    // Injects services into services.
+    this.user_service.setGroupService(this.group_service);
+    this.user_service.setTokenService(this.service);
     this.service.setUserService(this.user_service);
   }
 

@@ -18,7 +18,9 @@ var Component = (function (_super) {
     Component.prototype.getLinks = function () {
         this.props.service.getLinks().then(function (links) {
             this.setState({ links: links });
-        }.bind(this));
+        }.bind(this), function (err) {
+            alert(err);
+        });
     };
     Component.prototype.handleDataChange = function () {
         this.getLinks();

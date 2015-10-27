@@ -20,7 +20,7 @@ var Component = (function (_super) {
         // Saves token in cookies.
         var current_date = new Date();
         var expiry_date = new Date();
-        expiry_date.setMinutes(current_date.getMinutes() + 30);
+        expiry_date.setMinutes(current_date.getMinutes() + 29);
         docCookie.setItem('token', token, expiry_date);
         // Updates state.
         this.setState({ token: token });

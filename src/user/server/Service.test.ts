@@ -7,6 +7,7 @@ import UserService = require('../../user/server/Service');
 import UserTestRepository = require('../../user/TestRepository');
 import TokenService = require('../../token/server/Service');
 import TokenTestRepository = require('../../token/server/TestRepository');
+import passhash = require('password-hash');
 
 var EMAIL = 'test@example.com';
 var PASSWORD = 'password';
@@ -19,9 +20,14 @@ class Test extends BaseTest {
   protected token_service: TokenService;
 
   public beforeEach() {
+    // Initialises services.
     this.group_service = new GroupService(new GroupTestRepository());
     this.token_service = new TokenService(new TokenTestRepository());
-    this.service = new Service(new TestRepository(), this.group_service, this.token_service);
+    this.service = new Service(new TestRepository());
+
+    // Injects services into services.
+    this.service.setGroupService(this.group_service);
+    this.service.setTokenService(this.token_service);
     this.token_service.setUserService(this.service);
   }
 
@@ -40,7 +46,7 @@ class Test extends BaseTest {
     this.group_service.createGroup(GROUP_NAME).then(function (group: any) {
       return this.service.createUser(EMAIL, PASSWORD, group.id).then(function (user: any) {
         assert.equal(user.email, EMAIL);
-        assert.equal(user.password, PASSWORD);
+        assert.equal(passhash.verify(PASSWORD, user.password), true);
         assert.equal(user.group_id, group.id);
       });
     }.bind(this)).then(done, done);
@@ -82,7 +88,7 @@ class Test extends BaseTest {
         return this.service.getUserByEmailAndPassword(EMAIL, PASSWORD).then(function (user) {
           assert.equal(user.id, existing_user.id);
           assert.equal(user.email, EMAIL);
-          assert.equal(user.password, PASSWORD);
+          assert.equal(passhash.verify(PASSWORD, user.password), true);
         });
       }.bind(this));
     }.bind(this)).then(done, done);
@@ -135,7 +141,7 @@ class Test extends BaseTest {
       return this.service.createUserWithToken(EMAIL, PASSWORD, token.value);
     }.bind(this)).then(function (user: any) {
       assert.equal(user.email, EMAIL);
-      assert.equal(user.password, PASSWORD);
+      assert.equal(passhash.verify(PASSWORD, user.password), true);
       assert.equal(user.group_id, user.group_id);
     }).then(done, done);
   }

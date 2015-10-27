@@ -33,26 +33,34 @@ var token_repository = new TokenRepository(config.knex, 'token');
 var token_service = new TokenService(token_repository);
 var token_controller = new TokenController(app, token_service);
 
-// User.
+// Group.
 import GroupRepository = require('./group/KnexRepository');
 import GroupService = require('./group/Service');
+var group_repository = new GroupRepository(config.knex, 'group');
+var group_service = new GroupService(group_repository);
+
+// User.
 import UserRepository = require('./user/server/KnexRepository');
 import UserService = require('./user/server/Service');
 import UserController = require('./user/server/ExpressController');
-var group_repository = new GroupRepository(config.knex, 'group');
-var group_service = new GroupService(group_repository);
 var user_repository = new UserRepository(config.knex, 'user');
-var user_service = new UserService(user_repository, group_service, token_service);
+var user_service = new UserService(user_repository);
 var user_controller = new UserController(app, user_service);
-token_service.setUserService(user_service);
 
 // Link.
 import LinkRepository = require('./link/server/KnexRepository');
 import LinkService = require('./link/server/Service');
 import LinkController = require('./link/server/ExpressController');
 var link_repository = new LinkRepository(config.knex, 'link');
-var link_service = new LinkService(link_repository, tracking_service, token_service);
+var link_service = new LinkService(link_repository);
 var link_controller = new LinkController(app, link_service);
+
+// Injects services into services.
+user_service.setGroupService(group_service);
+user_service.setTokenService(token_service);
+token_service.setUserService(user_service);
+link_service.setTrackingService(tracking_service);
+link_service.setTokenService(token_service);
 
 // UI.
 import react = require('react');

@@ -34,16 +34,6 @@ class Repository extends BaseRepository {
     });
   }
 
-  public getUserByEmailAndPassword(email: string, password: string) {
-    return this.connect().where('email', email).where('password', password).first().then(function (user) {
-      if (!user) {
-        throw new Error('No user with those credentials');
-      } else {
-        return user;
-      }
-    });
-  }
-
   public getUserById(id) {
     return this.connect().where('id', id).first().then(function (user) {
       if (!user) {

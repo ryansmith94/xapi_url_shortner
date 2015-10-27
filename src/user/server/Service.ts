@@ -1,14 +1,17 @@
 import BaseService = require('../BaseService');
 import q = require('q');
+import passhash = require('password-hash');
 
 class Service extends BaseService {
   private group_service;
   private token_service;
 
-  public constructor(repository, group_service, token_service) {
+  public setGroupService(group_service) {
     this.group_service = group_service;
+  }
+
+  public setTokenService(token_service) {
     this.token_service = token_service;
-    super(repository);
   }
 
   private validateGroupId(group_id) {
@@ -45,7 +48,7 @@ class Service extends BaseService {
     return this.validateCreateUser(email, password, group_id).then(function () {
       return this.repo.createUser({
         email: email,
-        password: password,
+        password: passhash.generate(password),
         group_id: group_id
       });
     }.bind(this));
@@ -62,7 +65,13 @@ class Service extends BaseService {
   }
 
   public getUserByEmailAndPassword(email: string, password: string) {
-    return this.repo.getUserByEmailAndPassword(email, password);
+    return this.getUserByEmail(email).then(function (user) {
+      if (passhash.verify(password, user.password)) {
+        return user;
+      } else {
+        throw new Error('No User with those credentials');
+      }
+    });
   }
 
   public getUserById(id) {

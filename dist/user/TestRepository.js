@@ -22,19 +22,6 @@ var Repository = (function () {
         }
         return deferred.promise;
     };
-    Repository.prototype.getUserByEmailAndPassword = function (email, password) {
-        var deferred = q.defer();
-        var filtered_users = this.users.filter(function (user) {
-            return user.email === email && user.password === password;
-        });
-        if (filtered_users.length > 0) {
-            deferred.resolve(filtered_users[0]);
-        }
-        else {
-            deferred.reject(new Error('No user with those credentials'));
-        }
-        return deferred.promise;
-    };
     Repository.prototype.getUserById = function (id) {
         var deferred = q.defer();
         var filtered_users = this.users.filter(function (user) {

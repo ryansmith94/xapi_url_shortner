@@ -1,12 +1,9 @@
 import BaseService = require('../BaseService');
 import q = require('q');
 
+var EXPIRY_TIME = 30; // Minutes.
 class Service extends BaseService {
   private user_service;
-
-  public constructor(repository) {
-    super(repository);
-  }
 
   public setUserService(user_service) {
     this.user_service = user_service
@@ -16,11 +13,13 @@ class Service extends BaseService {
     var deferred = q.defer();
 
     this.user_service.getUserByEmailAndPassword(email, password).then(function (user) {
+      var expiry = new Date();
+      expiry.setMinutes(expiry.getMinutes() + EXPIRY_TIME);
+
       return this.repo.createToken({
-        email: email,
-        password: password,
         value: Math.random().toString(36).substr(2),
-        user_id: user.id
+        user_id: user.id,
+        expiry: expiry.toISOString()
       }).then(function (token) {
         return deferred.resolve(token);
       });
@@ -35,7 +34,11 @@ class Service extends BaseService {
 
   public getUserByValue(token_value: string) {
     return this.repo.getTokenByValue(token_value).then(function (token) {
-      return this.user_service.getUserById(token.user_id);
+      if ((new Date()).toISOString() < token.expiry) {
+        return this.user_service.getUserById(token.user_id);
+      } else {
+        throw new Error('No token. Log out and log back in.');
+      }
     }.bind(this));
   }
 }
