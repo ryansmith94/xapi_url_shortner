@@ -13,7 +13,7 @@ class Test extends BaseTest {
   }
 
   public testCreateLink(assert, done) {
-    this.service.createLink(LONG_URL).then(function (link) {
+    this.service.createLink(LONG_URL).then(function (link: any) {
       assert.equal(link.long_url, LONG_URL);
     }).then(done, done);
   }
@@ -27,14 +27,14 @@ class Test extends BaseTest {
   }
 
   public testCreateLinkWithShortUrl(assert, done) {
-    this.service.createLink(LONG_URL, SHORT_URL).then(function (link) {
+    this.service.createLink(LONG_URL, SHORT_URL).then(function (link: any) {
       assert.equal(link.long_url, LONG_URL);
       assert.equal(link.short_url, SHORT_URL);
     }).then(done, done);
   }
 
   public testCreateLinkWithInvalidShortUrl(assert, done) {
-    this.service.createLink(LONG_URL, 'AAA').then(function (link) {
+    this.service.createLink(LONG_URL, 'AAA').then(function (link: any) {
       assert.equal(true, false);
     }, function (err) {
       assert.equal(true, true)

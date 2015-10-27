@@ -37,15 +37,7 @@ class Service extends BaseService {
    * @return {Future}
    */
   public getLinks() {
-    return this.repo.getLinks().then(function (links) {
-      return links.map(function (link) {
-        return {
-          id: link.id,
-          long_url: link.long_url,
-          short_url: link.short_url || this.idToShortUrl(link.id)
-        };
-      }.bind(this));
-    }.bind(this));
+    return this.repo.getLinks();
   }
 }
 

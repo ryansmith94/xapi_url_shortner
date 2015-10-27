@@ -526,6 +526,8 @@ declare module __React {
         itemScope?: boolean;
         itemType?: string;
         unselectable?: boolean;
+        'data-toggle'?: string;
+        'data-target'?: string;
     }
 
     interface SVGElementAttributes extends HTMLAttributes {
