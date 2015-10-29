@@ -40,7 +40,7 @@ class Repository {
     return this.filterModels(models, function (model, index) {
       model.index = index;
       return filterFn(model, index);
-    }).then(function (model: Array<any>) {
+    }).then(function (model: any) {
       return models.slice(0, model.index).concat(
         models.slice(model.index + 1)
       );
