@@ -52,6 +52,7 @@ class Service extends BaseService {
         user_id: user.id
       });
     }).then(function (link) {
+      link.owner = true;
       return self.getCustomLinkById(link.id).then(function (custom_link) {
         link.short_url = self.idToShortUrl(custom_link.id);
         return self.repo.updateLink(link).then(function (link) {
