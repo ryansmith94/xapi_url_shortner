@@ -6,19 +6,9 @@ var __extends = (this && this.__extends) || function (d, b) {
 var BaseService = require('../BaseService');
 var Service = (function (_super) {
     __extends(Service, _super);
-    /**
-     * Constructs a new Service.
-     * @param {any} repository A repository.
-     */
     function Service(repository) {
         _super.call(this, repository);
     }
-    /**
-     * Creates a new link.
-     * @param {string} long_url The long_url to be used.
-     * @param {string} custom_url The custom_url to be used (optional).
-     * @return {Future}
-     */
     Service.prototype.createLink = function (long_url, custom_url) {
         if (long_url.indexOf('://') === -1) {
             long_url = 'http://' + long_url;
@@ -33,18 +23,9 @@ var Service = (function (_super) {
             return link;
         }.bind(this));
     };
-    /**
-     * Gets links.
-     * @return {Future}
-     */
     Service.prototype.getLinks = function () {
         return this.repo.getLinks();
     };
-    /**
-     * Gets links.
-     * @param {string} id The id of the link to delete.
-     * @return {Future}
-     */
     Service.prototype.deleteLinkById = function (id) {
         return this.repo.deleteLinkById(id).then(function () {
             this.emitChange();

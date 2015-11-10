@@ -14,7 +14,7 @@ module.exports = {
     lrs: {
         endpoint: process.env.LRS_ENDPOINT,
         username: process.env.LRS_USERNAME,
-        password: process.env.LRS_PASSWORD //'bc7e0a2edd5d1969b6d774e679d4eb4e7a35be13'
+        password: process.env.LRS_PASSWORD
     }
 };
 //# sourceMappingURL=config.js.map

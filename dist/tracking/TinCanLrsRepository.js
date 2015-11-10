@@ -25,4 +25,4 @@ var Repository = (function () {
     return Repository;
 })();
 module.exports = Repository;
-//# sourceMappingURL=TincanLrsRepository.js.map
+//# sourceMappingURL=TinCanLrsRepository.js.map

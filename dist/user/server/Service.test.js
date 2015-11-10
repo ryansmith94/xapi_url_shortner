@@ -22,11 +22,9 @@ var Test = (function (_super) {
         this.name = 'user/server/ServiceTest';
     }
     Test.prototype.beforeEach = function () {
-        // Initialises services.
         this.group_service = new GroupService(new GroupTestRepository());
         this.token_service = new TokenService(new TokenTestRepository());
         this.service = new Service(new TestRepository());
-        // Injects services into services.
         this.service.setGroupService(this.group_service);
         this.service.setTokenService(this.token_service);
         this.token_service.setUserService(this.service);

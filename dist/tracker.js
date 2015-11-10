@@ -13,5 +13,4 @@
         };
     };
 }(window));
-// Example use available at: "../example/index.html". 
 //# sourceMappingURL=tracker.js.map

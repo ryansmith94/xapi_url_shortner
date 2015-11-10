@@ -6,10 +6,6 @@ var __extends = (this && this.__extends) || function (d, b) {
 var BaseService = require('../BaseService');
 var Service = (function (_super) {
     __extends(Service, _super);
-    /**
-     * Constructs a new Service.
-     * @param {any} repository A repository.
-     */
     function Service(repository) {
         this.repo = repository;
         _super.call(this);

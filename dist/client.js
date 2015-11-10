@@ -1,17 +1,14 @@
 /// <reference path="./definitions/references.d.ts" />
 var react = require('react');
 var App = require('./App');
-// Link.
 var LinkRepository = require('./link/client/HttpRepository');
 var LinkService = require('./link/client/Service');
 var LinkController = require('./link/client/ReactController');
-// Token.
 var TokenRepository = require('./token/client/HttpRepository');
 var TokenService = require('./token/client/Service');
 var TokenCreateController = require('./token/client/ReactCreateController');
 var token_repository = new TokenRepository('api/token');
 var token_service = new TokenService(token_repository);
-// User.
 var UserRepository = require('./user/client/HttpRepository');
 var UserService = require('./user/client/Service');
 var UserController = require('./user/client/ReactCreateController');

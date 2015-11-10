@@ -30,7 +30,7 @@
   },
   "scripts": {
     "dev:ify": "watchify dist/client.js -o dist/client.bundle.js",
-    "dev:ts": "tsc src/**/**/*.ts src/**/*.ts src/*.ts --outDir dist --module commonjs -t ES5 --sourceMap --watch",
+    "dev:ts": "tsc",
     "dev:start": "nodemon dist/server.js",
     "test": "mocha dist/**/**/*.test.js dist/**/*.test.js",
     "clean": "find dist/ -type f -not -name '*.css' | xargs rm -rf; find dist/* -type d | xargs rm -rf"

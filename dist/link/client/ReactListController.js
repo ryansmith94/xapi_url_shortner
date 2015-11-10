@@ -24,7 +24,6 @@ var Component = (function (_super) {
     };
     Component.prototype.handleDelete = function (id) {
         this.props.service.deleteLinkById(id).then(function () {
-            // Deleted.
         }, function (err) {
             console.log(err.stack);
             alert(err);

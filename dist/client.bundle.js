@@ -18,12 +18,10 @@ var Component = (function (_super) {
         };
     }
     Component.prototype.handleTokenChange = function (token) {
-        // Saves token in cookies.
         var current_date = new Date();
         var expiry_date = new Date();
         expiry_date.setMinutes(current_date.getMinutes() + 29);
         docCookie.setItem('token', token, expiry_date);
-        // Updates state.
         this.setState({ token: token });
     };
     Component.prototype.handleLogout = function (e) {
@@ -143,17 +141,14 @@ module.exports = Service;
 /// <reference path="./definitions/references.d.ts" />
 var react = require('react');
 var App = require('./App');
-// Link.
 var LinkRepository = require('./link/client/HttpRepository');
 var LinkService = require('./link/client/Service');
 var LinkController = require('./link/client/ReactController');
-// Token.
 var TokenRepository = require('./token/client/HttpRepository');
 var TokenService = require('./token/client/Service');
 var TokenCreateController = require('./token/client/ReactCreateController');
 var token_repository = new TokenRepository('api/token');
 var token_service = new TokenService(token_repository);
-// User.
 var UserRepository = require('./user/client/HttpRepository');
 var UserService = require('./user/client/Service');
 var UserController = require('./user/client/ReactCreateController');
@@ -274,31 +269,18 @@ var url_regex = require('./UrlRegex');
 var q = require('q');
 var Service = (function (_super) {
     __extends(Service, _super);
-    /**
-     * Constructs a new Service.
-     * @param {any} repository A repository.
-     */
     function Service(repository) {
         this.repo = repository;
         _super.call(this);
     }
-    /**
-     * Validates the given long_url and custom_url.
-     * @param {string} long_url The long_url to validate.
-     * @param {string} custom_url The custom_url to validate (optional).
-     * @return {Future}
-     */
     Service.prototype.validateLink = function (long_url, custom_url) {
         var deferred = q.defer();
-        // Validates the long_url pattern.
         if (!url_regex.test(long_url)) {
             deferred.reject(new Error('Invalid Long URL'));
         }
-        // Validates the custom_url pattern.
         if (!/^[\da-z]+$/.test(custom_url)) {
             deferred.reject(new Error('Invalid Custom URL `' + custom_url + '`. It may only contain digits and lowercase letters.'));
         }
-        // Checks that the custom_url doesn't exist already.
         this.getLinkByShortUrl(custom_url).then(function (link) {
             deferred.reject(new Error('Custom URL already exists.'));
         }, function (err) {
@@ -306,62 +288,30 @@ var Service = (function (_super) {
         });
         return deferred.promise;
     };
-    /**
-     * Converts an id to a short_url.
-     * @param  {string} value The id to be converted.
-     * @return {string} short_url
-     */
     Service.prototype.idToShortUrl = function (value) {
         return parseInt(value, 10).toString(36);
     };
-    /**
-     * Converts a short_url to an id.
-     * @param  {string} value The short_url to be converted.
-     * @return {string} id
-     */
     Service.prototype.shortUrlToId = function (value) {
         return parseInt(value, 36).toString(10);
     };
-    /**
-     * Gets a customised link by its id.
-     * @param {number} id The id to find.
-     * @return {Future}
-     */
     Service.prototype.getCustomLinkById = function (id) {
         var short_url = this.idToShortUrl(id);
         return this.getCustomLinkByShortUrl(short_url);
     };
-    /**
-     * Gets a customised link by its short_url.
-     * @param {string} short_url The short_url to find.
-     * @return {Future}
-     */
     Service.prototype.getCustomLinkByShortUrl = function (short_url) {
         return this.repo.getCustomLinkByShortUrl(short_url);
     };
-    /**
-     * Gets a link by its short_url.
-     * @param {string} short_url The short_url to find.
-     * @return {Future}
-     */
     Service.prototype.getLinkByShortUrl = function (short_url) {
         return this.getCustomLinkByShortUrl(short_url).then(function (link) {
             return link;
         }.bind(this), function (err) {
-            // Converts the short_url to an id and searches by the id.
             var id = this.shortUrlToId(short_url);
             return this.getLinkById(id);
         }.bind(this)).then(function (link) {
-            // Returns the custom_url as the short_url or the converted id as the short_url.
             link.short_url = link.short_url || this.idToShortUrl(link.id);
             return link;
         }.bind(this));
     };
-    /**
-     * Gets a link by its id.
-     * @param {number} id The id to find.
-     * @return {Future}
-     */
     Service.prototype.getLinkById = function (id) {
         return this.repo.getLinkById(id);
     };
@@ -371,37 +321,22 @@ module.exports = Service;
 
 },{"../BaseService":3,"./UrlRegex":7,"q":23}],7:[function(require,module,exports){
 module.exports = new RegExp("^" +
-    // protocol identifier
     "(?:(?:https?|ftp)://)" +
-    // user:pass authentication
     "(?:\\S+(?::\\S*)?@)?" +
     "(?:" +
-    // IP address exclusion
-    // private & local networks
     "(?!(?:10|127)(?:\\.\\d{1,3}){3})" +
     "(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})" +
     "(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})" +
-    // IP address dotted notation octets
-    // excludes loopback network 0.0.0.0
-    // excludes reserved space >= 224.0.0.0
-    // excludes network & broacast addresses
-    // (first & last IP address of each class)
     "(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])" +
     "(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}" +
     "(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))" +
     "|" +
-    // host name
     "(?:(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)" +
-    // domain name
     "(?:\\.(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)*" +
-    // TLD identifier
     "(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))" +
-    // TLD may end with dot
     "\\.?" +
     ")" +
-    // port number
     "(?::\\d{2,5})?" +
-    // resource path
     "(?:[/?#]\\S*)?" +
     "$", "i");
 
@@ -676,7 +611,6 @@ var Component = (function (_super) {
     };
     Component.prototype.handleDelete = function (id) {
         this.props.service.deleteLinkById(id).then(function () {
-            // Deleted.
         }, function (err) {
             console.log(err.stack);
             alert(err);
@@ -712,19 +646,9 @@ var __extends = (this && this.__extends) || function (d, b) {
 var BaseService = require('../BaseService');
 var Service = (function (_super) {
     __extends(Service, _super);
-    /**
-     * Constructs a new Service.
-     * @param {any} repository A repository.
-     */
     function Service(repository) {
         _super.call(this, repository);
     }
-    /**
-     * Creates a new link.
-     * @param {string} long_url The long_url to be used.
-     * @param {string} custom_url The custom_url to be used (optional).
-     * @return {Future}
-     */
     Service.prototype.createLink = function (long_url, custom_url) {
         if (long_url.indexOf('://') === -1) {
             long_url = 'http://' + long_url;
@@ -739,18 +663,9 @@ var Service = (function (_super) {
             return link;
         }.bind(this));
     };
-    /**
-     * Gets links.
-     * @return {Future}
-     */
     Service.prototype.getLinks = function () {
         return this.repo.getLinks();
     };
-    /**
-     * Gets links.
-     * @param {string} id The id of the link to delete.
-     * @return {Future}
-     */
     Service.prototype.deleteLinkById = function (id) {
         return this.repo.deleteLinkById(id).then(function () {
             this.emitChange();
@@ -770,10 +685,6 @@ var __extends = (this && this.__extends) || function (d, b) {
 var BaseService = require('../BaseService');
 var Service = (function (_super) {
     __extends(Service, _super);
-    /**
-     * Constructs a new Service.
-     * @param {any} repository A repository.
-     */
     function Service(repository) {
         this.repo = repository;
         _super.call(this);
