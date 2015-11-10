@@ -1,5 +1,6 @@
 /// <reference path="./definitions/references.d.ts" />
 import knex = require('knex');
+import config = require('./config');
 
 class Repository {
   private config;
@@ -22,11 +23,11 @@ class Repository {
   }
 
   private logSuccess() {
-    if (process.env.debug) console.log('Success', arguments);
+    if (config.debug) console.log('Success', arguments);
   }
 
   private logError(err) {
-    if (process.env.debug) console.error('Error', err);
+    if (config.debug) console.error('Error', err);
   }
 
   protected constructSchema(table) {}

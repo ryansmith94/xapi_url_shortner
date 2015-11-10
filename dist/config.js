@@ -15,6 +15,8 @@ module.exports = {
         endpoint: process.env.LRS_ENDPOINT,
         username: process.env.LRS_USERNAME,
         password: process.env.LRS_PASSWORD
-    }
+    },
+    debug: process.env.APP_DEBUG === 'true',
+    port: Number.parseInt(process.env.APP_PORT)
 };
 //# sourceMappingURL=config.js.map

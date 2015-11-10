@@ -1,5 +1,6 @@
 /// <reference path="./definitions/references.d.ts" />
 var knex = require('knex');
+var config = require('./config');
 var Repository = (function () {
     function Repository(config, collection) {
         this.config = config;
@@ -17,11 +18,11 @@ var Repository = (function () {
         }.bind(this)).then(this.logSuccess, this.logError);
     };
     Repository.prototype.logSuccess = function () {
-        if (process.env.debug)
+        if (config.debug)
             console.log('Success', arguments);
     };
     Repository.prototype.logError = function (err) {
-        if (process.env.debug)
+        if (config.debug)
             console.error('Error', err);
     };
     Repository.prototype.constructSchema = function (table) { };

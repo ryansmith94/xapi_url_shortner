@@ -82,8 +82,7 @@ app.get('/', function (req, res) {
   ])));
 });
 
-var port = 3000;
-var server = app.listen(port);
-console.log('App running at http://localhost:'+port);
+var server = app.listen(config.port);
+console.log('App running at http://localhost:' + config.port);
 
 export = app;
