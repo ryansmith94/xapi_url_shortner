@@ -44,7 +44,7 @@ class Component extends react.Component<any, any> {
         value: this.state.custom_url,
         onChange: this.handleCustomUrlChange.bind(this),
         type: 'text',
-        placeholder: 'Custom URL',
+        placeholder: 'Custom URL (Optional)',
         className: 'custom_url form-control'
       }),
       dom.button({
