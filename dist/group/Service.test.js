@@ -4,17 +4,13 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var BaseTest = require('../BaseTest');
-var Service = require('./Service');
-var TestRepository = require('./TestRepository');
+var Factory = require('./TestFactory');
 var UserService = require('../user/server/Service');
 var UserTestRepository = require('../user/TestRepository');
 var TokenService = require('../token/server/Service');
 var TokenTestRepository = require('../token/server/TestRepository');
 var LinkService = require('../link/server/Service');
 var LinkTestRepository = require('../link/TestRepository');
-var TrackingService = require('../tracking/Service');
-var TrackingTestLrsRepository = require('../tracking/TestLrsRepository');
-var TrackingTestWebRepository = require('../tracking/TestWebRepository');
 var q = require('q');
 var NAME = 'Example';
 var Test = (function (_super) {
@@ -24,18 +20,16 @@ var Test = (function (_super) {
         this.name = 'group/ServiceTest';
     }
     Test.prototype.beforeEach = function () {
-        this.service = new Service(new TestRepository());
+        this.service = Factory();
         this.user_service = new UserService(new UserTestRepository());
         this.token_service = new TokenService(new TokenTestRepository());
         this.link_service = new LinkService(new LinkTestRepository());
-        this.tracking_service = new TrackingService(new TrackingTestLrsRepository(), new TrackingTestWebRepository());
         this.user_service.setGroupService(this.service);
         this.user_service.setTokenService(this.token_service);
         this.service.setUserService(this.user_service);
         this.service.setLinkService(this.link_service);
         this.token_service.setUserService(this.user_service);
         this.link_service.setTokenService(this.token_service);
-        this.link_service.setTrackingService(this.tracking_service);
         this.link_service.setGroupService(this.service);
     };
     Test.prototype.testCreateGroup = function () {

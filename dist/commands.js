@@ -5,13 +5,11 @@ var config = require('./config');
 source_map_support.install({
     handleUncaughtExceptions: false
 });
-var GroupRepository = require('./group/KnexRepository');
-var GroupService = require('./group/Service');
+var GroupFactory = require('./group/Factory');
 var GroupController = require('./group/CommanderController');
 var LinkRepository = require('./link/server/KnexRepository');
 var LinkService = require('./link/server/Service');
-var group_repository = new GroupRepository(config.knex, 'group');
-var group_service = new GroupService(group_repository);
+var group_service = GroupFactory(config.knex, 'group');
 var group_controller = new GroupController(commander, group_service);
 var link_repository = new LinkRepository(config.knex, 'link');
 var link_service = new LinkService(link_repository);

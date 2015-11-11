@@ -1,9 +1,7 @@
 import BaseTest = require('../BaseTest');
 import Service = require('./Service');
 import TestRepository = require('../TestRepository');
-import TrackingService = require('../../tracking/Service');
-import TrackingTestLrsRepository = require('../../tracking/TestLrsRepository');
-import TrackingTestWebRepository = require('../../tracking/TestWebRepository');
+import TrackingFactory = require('../../tracking/TestFactory');
 import GroupService = require('../../group/Service');
 import GroupTestRepository = require('../../group/TestRepository');
 import UserService = require('../../user/server/Service');
@@ -19,14 +17,11 @@ class Test extends BaseTest {
   protected group_service: GroupService;
   protected user_service: UserService;
   protected token_service: TokenService;
-  protected tracking_service: TrackingService;
+  protected tracking_service;
 
   public beforeEach() {
     // Initialises services.
-    this.tracking_service = new TrackingService(
-      new TrackingTestLrsRepository(),
-      new TrackingTestWebRepository()
-    );
+    this.tracking_service = TrackingFactory();
     this.group_service = new GroupService(new GroupTestRepository());
     this.token_service = new TokenService(new TokenTestRepository());
     this.user_service = new UserService(new UserTestRepository());

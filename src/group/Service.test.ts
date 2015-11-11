@@ -1,35 +1,26 @@
 import BaseTest = require('../BaseTest');
-import Service = require('./Service');
-import TestRepository = require('./TestRepository');
+import Factory = require('./TestFactory');
 import UserService = require('../user/server/Service');
 import UserTestRepository = require('../user/TestRepository');
 import TokenService = require('../token/server/Service');
 import TokenTestRepository = require('../token/server/TestRepository');
 import LinkService = require('../link/server/Service');
 import LinkTestRepository = require('../link/TestRepository');
-import TrackingService = require('../tracking/Service');
-import TrackingTestLrsRepository = require('../tracking/TestLrsRepository');
-import TrackingTestWebRepository = require('../tracking/TestWebRepository');
 import q = require('q');
 
 var NAME = 'Example'
 class Test extends BaseTest {
   protected name: string = 'group/ServiceTest';
-  protected service: Service;
+  protected service;
   protected user_service: UserService;
   protected token_service: TokenService;
   protected link_service: LinkService;
-  protected tracking_service: TrackingService;
 
   public beforeEach() {
-    this.service = new Service(new TestRepository());
+    this.service = Factory();
     this.user_service = new UserService(new UserTestRepository());
     this.token_service = new TokenService(new TokenTestRepository());
     this.link_service = new LinkService(new LinkTestRepository());
-    this.tracking_service = new TrackingService(
-      new TrackingTestLrsRepository(),
-      new TrackingTestWebRepository()
-    );
 
     this.user_service.setGroupService(this.service);
     this.user_service.setTokenService(this.token_service);
@@ -37,7 +28,6 @@ class Test extends BaseTest {
     this.service.setLinkService(this.link_service);
     this.token_service.setUserService(this.user_service);
     this.link_service.setTokenService(this.token_service);
-    this.link_service.setTrackingService(this.tracking_service);
     this.link_service.setGroupService(this.service);
   }
 

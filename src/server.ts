@@ -30,10 +30,8 @@ var token_service = new TokenService(token_repository);
 var token_controller = new TokenController(app, token_service);
 
 // Group.
-import GroupRepository = require('./group/KnexRepository');
-import GroupService = require('./group/Service');
-var group_repository = new GroupRepository(config.knex, 'group');
-var group_service = new GroupService(group_repository);
+import GroupFactory = require('./group/Factory');
+var group_service = GroupFactory(config.knex, 'group');
 
 // User.
 import UserRepository = require('./user/server/KnexRepository');

@@ -9,13 +9,11 @@ source_map_support.install({
 });
 
 // Group.
-import GroupRepository = require('./group/KnexRepository');
-import GroupService = require('./group/Service');
+import GroupFactory = require('./group/Factory');
 import GroupController = require('./group/CommanderController');
 import LinkRepository = require('./link/server/KnexRepository');
 import LinkService = require('./link/server/Service');
-var group_repository = new GroupRepository(config.knex, 'group');
-var group_service = new GroupService(group_repository);
+var group_service = GroupFactory(config.knex, 'group');
 var group_controller = new GroupController(commander, group_service);
 var link_repository = new LinkRepository(config.knex, 'link');
 var link_service = new LinkService(link_repository);
