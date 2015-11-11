@@ -38,164 +38,149 @@ var Test = (function (_super) {
         this.service.setGroupService(this.group_service);
     };
     Test.prototype.createToken = function (id) {
+        var _this = this;
         if (id === void 0) { id = ''; }
         var user_email = id + 'test@example.com';
         var user_pass = 'test_password';
         var group_name = 'GROUP_NAME';
         return this.group_service.createGroup(group_name).then(function (group) {
-            return this.user_service.createUser(user_email, user_pass, group.id);
-        }.bind(this)).then(function (user) {
-            return this.token_service.createToken(user_email, user_pass);
-        }.bind(this));
+            return _this.user_service.createUser(user_email, user_pass, group.id);
+        }).then(function (user) {
+            return _this.token_service.createToken(user_email, user_pass);
+        });
     };
-    Test.prototype.testTrackLinkNoOptions = function (assert, done) {
-        this.createToken().then(function (token) {
-            return this.service.createLinkWithToken(LONG_URL, token.value);
-        }.bind(this)).then(function (link) {
-            return this.service.trackLink(link.short_url);
-        }.bind(this)).then(function () { }).then(done, done);
+    Test.prototype.testTrackLinkNoOptions = function () {
+        var _this = this;
+        return this.createToken().then(function (token) {
+            return _this.service.createLinkWithToken(LONG_URL, token.value);
+        }).then(function (link) {
+            return _this.service.trackLink(link.short_url);
+        }).then(function () { return null; });
     };
-    Test.prototype.testCreateLink = function (assert, done) {
+    Test.prototype.testCreateLink = function () {
+        var _this = this;
         var token;
-        this.createToken().then(function (new_token) {
+        return this.createToken().then(function (new_token) {
             token = new_token;
-            return this.service.createLinkWithToken(LONG_URL, token.value);
-        }.bind(this)).then(function (link) {
-            assert.equal(link.long_url, LONG_URL);
-            assert.equal(link.user_id, token.user_id);
-        }).then(done, done);
+            return _this.service.createLinkWithToken(LONG_URL, token.value);
+        }).then(function (link) {
+            _this.assert(link.long_url === LONG_URL);
+            _this.assert(link.user_id === token.user_id);
+        });
     };
-    Test.prototype.testCreateLinkInvalidLongUrl = function (assert, done) {
-        this.createToken().then(function (token) {
-            return this.service.createLinkWithToken('', token.value);
-        }.bind(this)).then(function (link) {
-            assert.equal(true, false);
-        }, function (err) {
-            assert.equal(true, true);
-        }).then(done, done);
+    Test.prototype.testCreateLinkInvalidLongUrl = function () {
+        var _this = this;
+        return this.createToken().then(function (token) {
+            return _this.service.createLinkWithToken('', token.value);
+        }).then(this.fail(), this.pass());
     };
-    Test.prototype.testCreateLinkWithShortUrl = function (assert, done) {
-        this.createToken().then(function (token) {
-            return this.service.createLinkWithToken(LONG_URL, token.value, SHORT_URL);
-        }.bind(this)).then(function (link) {
-            assert.equal(link.long_url, LONG_URL);
-            assert.equal(link.short_url, SHORT_URL);
-        }).then(done, done);
+    Test.prototype.testCreateLinkWithShortUrl = function () {
+        var _this = this;
+        return this.createToken().then(function (token) {
+            return _this.service.createLinkWithToken(LONG_URL, token.value, SHORT_URL);
+        }).then(function (link) {
+            _this.assert(link.long_url === LONG_URL);
+            _this.assert(link.short_url === SHORT_URL);
+        });
     };
-    Test.prototype.testCreateLinkWithExistingShortUrl = function (assert, done) {
-        this.createToken().then(function (token) {
-            return this.service.createLinkWithToken(LONG_URL, token.value, '2').then(function (first_link) {
-                return this.service.createLinkWithToken(LONG_URL + '/2', token.value).then(function (second_link) {
-                    assert.equal(second_link.short_url, first_link.id);
+    Test.prototype.testCreateLinkWithExistingShortUrl = function () {
+        var _this = this;
+        return this.createToken().then(function (token) {
+            return _this.service.createLinkWithToken(LONG_URL, token.value, '2').then(function (first_link) {
+                return _this.service.createLinkWithToken(LONG_URL + '/2', token.value).then(function (second_link) {
+                    _this.assert(second_link.short_url === String(first_link.id));
                 });
-            }.bind(this));
-        }.bind(this)).then(done, done);
+            });
+        });
     };
-    Test.prototype.testCreateLinkWithShortUrlOfExistingId = function (assert, done) {
-        this.createToken().then(function (token) {
-            return this.service.createLinkWithToken(LONG_URL, token.value).then(function (first_link) {
-                return this.service.createLinkWithToken(LONG_URL + '/2', token.value, '' + first_link.id).then(function () {
-                    assert.equal(true, false);
-                }, function () {
-                    assert.equal(true, true);
+    Test.prototype.testCreateLinkWithShortUrlOfExistingId = function () {
+        var _this = this;
+        return this.createToken().then(function (token) {
+            return _this.service.createLinkWithToken(LONG_URL, token.value).then(function (first_link) {
+                return _this.service.createLinkWithToken(LONG_URL + '/2', token.value, '' + first_link.id).then(_this.fail(), _this.pass());
+            });
+        });
+    };
+    Test.prototype.testGetLinksByUserId = function () {
+        var _this = this;
+        return this.createToken().then(function (token) {
+            return _this.service.createLinkWithToken(LONG_URL, token.value, '2').then(function (link) {
+                return _this.service.getLinksByToken(token.value).then(function (links) {
+                    _this.assert(Array.isArray(links));
+                    _this.assert(links.length === 1);
+                    _this.assert(links[0].id === link.id);
+                    _this.assert(links[0].long_url === link.long_url);
+                    _this.assert(links[0].short_url === link.short_url);
                 });
-            }.bind(this));
-        }.bind(this)).then(done, done);
+            });
+        });
     };
-    Test.prototype.testGetLinksByUserId = function (assert, done) {
-        this.createToken().then(function (token) {
-            return this.service.createLinkWithToken(LONG_URL, token.value, '2').then(function (link) {
-                return this.service.getLinksByToken(token.value).then(function (links) {
-                    assert.equal(Array.isArray(links), true);
-                    assert.equal(links.length, 1);
-                    assert.equal(links[0].id, link.id);
-                    assert.equal(links[0].long_url, link.long_url);
-                    assert.equal(links[0].short_url, link.short_url);
-                });
-            }.bind(this));
-        }.bind(this)).then(done, done);
+    Test.prototype.testGetLinksByUserIdFromOtherGroup = function () {
+        var _this = this;
+        return this.createToken().then(function (token) {
+            return _this.service.createLinkWithToken(LONG_URL, token.value);
+        }).then(function () {
+            return _this.createToken('2');
+        }).then(function (token) {
+            return _this.service.getLinksByToken(token.value);
+        }).then(function (links) {
+            _this.assert(Array.isArray(links));
+            _this.assert(links.length === 0);
+        });
     };
-    Test.prototype.testGetLinksByUserIdFromOtherGroup = function (assert, done) {
-        this.createToken().then(function (token) {
-            return this.service.createLinkWithToken(LONG_URL, token.value);
-        }.bind(this)).then(function () {
-            return this.createToken('2');
-        }.bind(this)).then(function (token) {
-            return this.service.getLinksByToken(token.value);
-        }.bind(this)).then(function (links) {
-            assert.equal(Array.isArray(links), true);
-            assert.equal(links.length, 0);
-        }.bind(this)).then(done, done);
+    Test.prototype.testGetLinksByUserIdWithIncorrectId = function () {
+        return this.service.createLinkWithToken(LONG_URL, '1').then(this.fail(), this.pass());
     };
-    Test.prototype.testGetLinksByUserIdWithIncorrectId = function (assert, done) {
-        this.service.createLinkWithToken(LONG_URL, '1').then(function () {
-            assert.equal(true, false);
-        }, function () {
-            assert.equal(false, false);
-        }).then(done, done);
-    };
-    Test.prototype.testDeleteLinkByIdWithToken = function (assert, done) {
+    Test.prototype.testDeleteLinkByIdWithToken = function () {
+        var _this = this;
         var token;
-        this.createToken().then(function (created_token) {
+        return this.createToken().then(function (created_token) {
             token = created_token;
-            return this.service.createLinkWithToken(LONG_URL, token.value);
-        }.bind(this)).then(function (link) {
-            return this.service.deleteLinkByIdWithToken(link.id, token.value);
-        }.bind(this)).then(function () {
-            assert.equal(true, true);
-        }, function () {
-            assert.equal(false, true);
-        }).then(done, done);
+            return _this.service.createLinkWithToken(LONG_URL, token.value);
+        }).then(function (link) {
+            return _this.service.deleteLinkByIdWithToken(link.id, token.value);
+        }).then(this.pass(), this.fail());
     };
-    Test.prototype.testDeleteLinkByInvalidIdWithToken = function (assert, done) {
-        this.createToken().then(function (token) {
-            return this.service.deleteLinkByIdWithToken(1, token.value);
-        }.bind(this)).then(function () {
-            assert.equal(true, false);
-        }, function () {
-            assert.equal(false, false);
-        }).then(done, done);
+    Test.prototype.testDeleteLinkByInvalidIdWithToken = function () {
+        var _this = this;
+        return this.createToken().then(function (token) {
+            return _this.service.deleteLinkByIdWithToken(1, token.value);
+        }).then(this.fail(), this.pass());
     };
-    Test.prototype.testDeleteLinkByIdWithInvalidToken = function (assert, done) {
+    Test.prototype.testDeleteLinkByIdWithInvalidToken = function () {
+        var _this = this;
         var link;
-        this.createToken().then(function (token) {
-            return this.service.createLinkWithToken(LONG_URL, token.value);
-        }.bind(this)).then(function (created_link) {
+        return this.createToken().then(function (token) {
+            return _this.service.createLinkWithToken(LONG_URL, token.value);
+        }).then(function (created_link) {
             link = created_link;
-            return this.createToken('2');
-        }.bind(this)).then(function (token) {
-            return this.service.deleteLinkByIdWithToken(link.id, token.value);
-        }.bind(this)).then(function () {
-            assert.equal(true, false);
-        }, function () {
-            assert.equal(false, false);
-        }).then(done, done);
+            return _this.createToken('2');
+        }).then(function (token) {
+            return _this.service.deleteLinkByIdWithToken(link.id, token.value);
+        }).then(this.fail(), this.pass());
     };
-    Test.prototype.testDeleteLinksByGroupId = function (assert, done) {
+    Test.prototype.testDeleteLinksByGroupId = function () {
+        var _this = this;
         var token;
         var user_email = 'test@example.com';
         var user_pass = 'test_password';
-        this.group_service.createGroup('GROUP_NAME').then(function (group) {
-            return this.user_service.createUser(user_email, user_pass, group.id);
-        }.bind(this)).then(function (user) {
-            return this.token_service.createToken(user_email, user_pass);
-        }.bind(this)).then(function (created_token) {
+        return this.group_service.createGroup('GROUP_NAME').then(function (group) {
+            return _this.user_service.createUser(user_email, user_pass, group.id);
+        }).then(function (user) {
+            return _this.token_service.createToken(user_email, user_pass);
+        }).then(function (created_token) {
             token = created_token;
-            return this.service.createLinkWithToken(LONG_URL, token.value);
-        }.bind(this)).then(function (link) {
-            return this.service.deleteLinksByGroupId(link.group_id);
-        }.bind(this)).then(function () {
-            return this.service.getLinksByToken(token.value);
-        }.bind(this)).then(function (links) {
-            assert.equal(links.length, 0);
-        }).then(done, done);
+            return _this.service.createLinkWithToken(LONG_URL, token.value);
+        }).then(function (link) {
+            return _this.service.deleteLinksByGroupId(link.group_id);
+        }).then(function () {
+            return _this.service.getLinksByToken(token.value);
+        }).then(function (links) {
+            _this.assert(links.length === 0);
+        });
     };
-    Test.prototype.testDeleteLinksByInvalidGroupId = function (assert, done) {
-        this.service.deleteLinksByGroupId(1).then(function () {
-            assert.equal(true, false);
-        }, function () {
-            assert.equal(false, false);
-        }).then(done, done);
+    Test.prototype.testDeleteLinksByInvalidGroupId = function () {
+        return this.service.deleteLinksByGroupId(1).then(this.fail(), this.pass());
     };
     return Test;
 })(BaseTest);

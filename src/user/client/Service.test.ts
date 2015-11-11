@@ -12,19 +12,15 @@ class Test extends BaseTest {
     this.service = new Service(new TestRepository());
   }
 
-  public testCreateUser(assert, done) {
-    return this.service.createUser(EMAIL, PASSWORD).then(function (user: any) {
-      assert.equal(user.email, EMAIL);
-      assert.equal(user.password, PASSWORD);
-    }).then(done, done);
+  public testCreateUser() {
+    return this.service.createUser(EMAIL, PASSWORD).then((user: any) => {
+      this.assert(user.email === EMAIL);
+      this.assert(user.password === PASSWORD);
+    });
   }
 
-  public testCreateUserWithInvalidEmail(assert, done) {
-    return this.service.createUser('invalid_email', PASSWORD).then(function (user) {
-      assert.equal(true, false);
-    }, function () {
-      assert.equal(false, false);
-    }).then(done, done);
+  public testCreateUserWithInvalidEmail() {
+    return this.service.createUser('invalid_email', PASSWORD).then(this.fail(), this.pass());
   }
 }
 

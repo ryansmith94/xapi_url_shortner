@@ -17,10 +17,8 @@ var Test = (function (_super) {
     Test.prototype.beforeEach = function () {
         this.service = new Service(new TestRepository());
     };
-    Test.prototype.testCreateToken = function (assert, done) {
-        return this.service.createToken(EMAIL, PASSWORD).then(function (token) {
-            assert.equal(true, true);
-        }).then(done, done);
+    Test.prototype.testCreateToken = function () {
+        return this.service.createToken(EMAIL, PASSWORD).then(this.pass());
     };
     return Test;
 })(BaseTest);

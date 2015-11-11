@@ -27,35 +27,31 @@ class Test extends BaseTest {
     this.service.setUserService(this.user_service);
   }
 
-  public testCreateToken(assert, done) {
-    this.group_service.createGroup(GROUP_NAME).then(function (group: any) {
-      return this.user_service.createUser(EMAIL, PASSWORD, group.id).then(function (user: any) {
-        return this.service.createToken(EMAIL, PASSWORD).then(function (token) {
-          assert.equal(typeof token.value, 'string');
-          assert.equal(token.user_id, user.id);
-        }.bind(this));
-      }.bind(this));
-    }.bind(this)).then(done, done);
+  public testCreateToken() {
+    return this.group_service.createGroup(GROUP_NAME).then((group: any) => {
+      return this.user_service.createUser(EMAIL, PASSWORD, group.id);
+    }).then((user: any) => {
+      return this.service.createToken(EMAIL, PASSWORD).then((token) => {
+        this.assert(typeof token.value === 'string');
+        this.assert(token.user_id === user.id);
+      });
+    });
   }
 
-  public testCreateTokenWithInvalidUser(assert, done) {
-    this.service.createToken(EMAIL, PASSWORD).then(function (token) {
-      assert.equal(true, false);
-    }, function () {
-      assert.equal(false, false);
-    }).then(done, done);
+  public testCreateTokenWithInvalidUser() {
+    return this.service.createToken(EMAIL, PASSWORD).then(this.fail(), this.pass());
   }
 
-  public testGetUserByValue(assert, done) {
-    this.group_service.createGroup(GROUP_NAME).then(function (group: any) {
-      return this.user_service.createUser(EMAIL, PASSWORD, group.id).then(function (user: any) {
-        return this.service.createToken(EMAIL, PASSWORD).then(function (token) {
-          return this.service.getUserByValue(token.value).then(function (token_user) {
-            assert.equal(token_user.id, token.user_id);
-          });
-        }.bind(this));
-      }.bind(this));
-    }.bind(this)).then(done, done);
+  public testGetUserByValue() {
+    return this.group_service.createGroup(GROUP_NAME).then((group: any) => {
+      return this.user_service.createUser(EMAIL, PASSWORD, group.id);
+    }).then((user: any) => {
+      return this.service.createToken(EMAIL, PASSWORD).then((token) => {
+        return this.service.getUserByValue(token.value).then((token_user) => {
+          this.assert(token_user.id === token.user_id);
+        });
+      });
+    });
   }
 }
 

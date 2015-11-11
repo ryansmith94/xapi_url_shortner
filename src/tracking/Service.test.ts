@@ -39,14 +39,14 @@ class Test extends BaseTest {
     this.service.setGroupService(this.group_service);
   }
 
-  private assertStatement(assert, statement) {
-    assert.equal(LINK.long_url, statement.object.id);
-    assert.equal('http://localhost:3000/'+LINK.short_url, statement.object.definition.moreInfo);
-    assert.equal(LINK.long_url, statement.object.definition.name['en-GB']);
-    assert.equal(LINK.user_id, statement.context.instructor.account.name);
-    assert.equal(GROUP.verb_id, statement.verb.id);
-    assert.equal(!statement.verb.display[GROUP.verb_lang], false);
-    assert.equal(GROUP.verb_display, statement.verb.display[GROUP.verb_lang]);
+  private assertStatement(statement) {
+    this.assert(LINK.long_url === statement.object.id);
+    this.assert('http://localhost:3000/' + LINK.short_url === statement.object.definition.moreInfo);
+    this.assert(LINK.long_url === statement.object.definition.name['en-GB']);
+    this.assert(String(LINK.user_id) === statement.context.instructor.account.name);
+    this.assert(GROUP.verb_id === statement.verb.id);
+    this.assert(!!statement.verb.display[GROUP.verb_lang]);
+    this.assert(GROUP.verb_display === statement.verb.display[GROUP.verb_lang]);
   }
 
   private createGroup() {
@@ -58,44 +58,42 @@ class Test extends BaseTest {
     );
   }
 
-  public testTrackLinkNoOptions(assert, done) {
-    this.createGroup().then(function (group) {
+  public testTrackLinkNoOptions() {
+    return this.createGroup().then((group) => {
       LINK.group_id = group.id;
       return this.service.trackLink(LINK, null);
-    }.bind(this)).then(function (statement) {
-      this.assertStatement(assert, statement);
-    }.bind(this)).then(done, done);
+    }).then(this.assertStatement.bind(this));
   }
 
-  public testTrackLinkWithActor(assert, done) {
-    this.createGroup().then(function(group) {
+  public testTrackLinkWithActor() {
+    return this.createGroup().then((group) => {
       LINK.group_id = group.id;
       return this.service.trackLink(LINK, { actor: ACTOR });
-    }.bind(this)).then(function(statement) {
-      assert.equal(ACTOR, statement.actor);
-      this.assertStatement(assert, statement);
-    }.bind(this)).then(done, done);
+    }).then((statement) => {
+      this.assert(ACTOR === statement.actor);
+      this.assertStatement(statement);
+    });
   }
 
-  public testTrackLinkWithContext(assert, done) {
-    this.createGroup().then(function(group) {
+  public testTrackLinkWithContext() {
+    return this.createGroup().then((group) => {
       LINK.group_id = group.id;
       return this.service.trackLink(LINK, { context: CONTEXT });
-    }.bind(this)).then(function(statement) {
-      assert.equal(CONTEXT, statement.context);
-      this.assertStatement(assert, statement);
-    }.bind(this)).then(done, done);
+    }).then((statement) => {
+      this.assert(CONTEXT === statement.context);
+      this.assertStatement(statement);
+    });
   }
 
-  public testTrackLinkWithActorAndContext(assert, done) {
-    this.createGroup().then(function(group) {
+  public testTrackLinkWithActorAndContext() {
+    return this.createGroup().then((group) => {
       LINK.group_id = group.id;
       return this.service.trackLink(LINK, { actor: ACTOR, context: CONTEXT });
-    }.bind(this)).then(function (statement) {
-      assert.equal(ACTOR, statement.actor);
-      assert.equal(CONTEXT, statement.context);
-      this.assertStatement(assert, statement);
-    }.bind(this)).then(done, done);
+    }).then((statement) => {
+      this.assert(ACTOR === statement.actor);
+      this.assert(CONTEXT === statement.context);
+      this.assertStatement(statement);
+    });
   }
 }
 

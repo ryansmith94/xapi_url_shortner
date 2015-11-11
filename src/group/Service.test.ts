@@ -41,90 +41,82 @@ class Test extends BaseTest {
     this.link_service.setGroupService(this.service);
   }
 
-  public testCreateGroup(assert, done) {
-    this.service.createGroup(NAME).then(function (group) {
-      assert.equal(group.name, NAME);
-      assert.equal(group.verb_id, 'http://adlnet.gov/expapi/verbs/launched');
-      assert.equal(group.verb_lang, 'en');
-      assert.equal(group.verb_display, 'launched');
-    }).then(done, done);
+  public testCreateGroup() {
+    return this.service.createGroup(NAME).then((group) => {
+      this.assert(group.name === NAME);
+      this.assert(group.verb_id === 'http://adlnet.gov/expapi/verbs/launched');
+      this.assert(group.verb_lang === 'en');
+      this.assert(group.verb_display === 'launched');
+    });
   }
 
-  public testCreateGroupWithVerbOptions(assert, done) {
+  public testCreateGroupWithVerbOptions() {
     var VERB_ID = 'http://www.example.com/verb_id';
     var VERB_LANG = 'en-GB';
     var VERB_DISPLAY = 'verb_display';
-    this.service.createGroup(NAME, VERB_ID, VERB_LANG, VERB_DISPLAY).then(function(group) {
-      assert.equal(group.name, NAME);
-      assert.equal(group.verb_id, VERB_ID);
-      assert.equal(group.verb_lang, VERB_LANG);
-      assert.equal(group.verb_display, VERB_DISPLAY);
-    }).then(done, done);
+    return this.service.createGroup(NAME, VERB_ID, VERB_LANG, VERB_DISPLAY).then((group) => {
+      this.assert(group.name === NAME);
+      this.assert(group.verb_id === VERB_ID);
+      this.assert(group.verb_lang === VERB_LANG);
+      this.assert(group.verb_display === VERB_DISPLAY);
+    });
   }
 
-  public testGetGroupById(assert, done) {
-    this.service.createGroup(NAME).then(function (created_group) {
-      return this.service.getGroupById(created_group.id).then(function (group) {
-        assert.equal(group.id, created_group.id);
+  public testGetGroupById() {
+    return this.service.createGroup(NAME).then((created_group) => {
+      return this.service.getGroupById(created_group.id).then((group) => {
+        this.assert(group.id === created_group.id);
       });
-    }.bind(this)).then(done, done);
+    });
   }
 
-  public testGetGroupByInvalidId(assert, done) {
-    this.service.getGroupById(1).then(function() {
-      assert.equal(true, false);
-    }, function () {
-      assert.equal(false, false);
-    }).then(done, done);
+  public testGetGroupByInvalidId() {
+    return this.service.getGroupById(1).then(this.fail(), this.pass());
   }
 
-  public testGetGroups(assert, done) {
-    this.service.createGroup(NAME).then(function (created_group) {
-      return this.service.getGroups().then(function (groups) {
-        assert.equal(groups.length, 1);
-        assert.equal(groups[0].id, created_group.id);
-        assert.equal(groups[0].name, created_group.name);
+  public testGetGroups() {
+    return this.service.createGroup(NAME).then((created_group) => {
+      return this.service.getGroups().then((groups) => {
+        this.assert(groups.length === 1);
+        this.assert(groups[0].id === created_group.id);
+        this.assert(groups[0].name === created_group.name);
       });
-    }.bind(this)).then(done, done);
+    });
   }
 
-  public testDeleteGroupById(assert, done) {
+  public testDeleteGroupById() {
     var models;
-    this.createGroup().then(function (created_models) {
+    return this.createGroup().then((created_models) => {
       models = created_models;
       return this.service.deleteGroupById(models.group.id);
-    }.bind(this)).then(function (result) {
-      assert.equal(result, true);
+    }).then((result) => {
+      this.assert(result === true);
       return q.allSettled([
         this.user_service.getUserById(models.user.id),
         this.service.getGroupById(models.group.id)
       ]);
-    }.bind(this)).then(function (results) {
-      results.forEach(function(result) {
-        assert.equal(result.state === 'fulfilled', false);
+    }).then((results) => {
+      results.forEach((result) => {
+        this.assert(result.state !== 'fulfilled');
       });
-    }).then(done, done);
+    });
   }
 
-  public testDeleteGroupByInvalidId(assert, done) {
-    this.service.deleteGroupById(1).then(function() {
-      assert.equal(true, false);
-    }, function() {
-      assert.equal(false, false);
-    }).then(done, done);
+  public testDeleteGroupByInvalidId() {
+    return this.service.deleteGroupById(1).then(this.fail(), this.pass());
   }
 
   private createGroup() {
     var group, user;
-    return this.service.createGroup(NAME).then(function (created_group) {
+    return this.service.createGroup(NAME).then((created_group) => {
       group = created_group;
       return this.user_service.createUser('test@example.com', 'pass', group.id);
-    }.bind(this)).then(function(created_user) {
+    }).then((created_user) => {
       user = created_user;
       return this.token_service.createToken(user.email, 'pass');
-    }.bind(this)).then(function(token) {
+    }).then((token) => {
       return this.link_service.createLinkWithToken('http://example.com', token.value);
-    }.bind(this)).then(function(link) {
+    }).then((link) => {
       return { group: group, user: user, link: link };
     });
   }

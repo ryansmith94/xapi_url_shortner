@@ -27,33 +27,31 @@ var Test = (function (_super) {
         this.user_service.setTokenService(this.service);
         this.service.setUserService(this.user_service);
     };
-    Test.prototype.testCreateToken = function (assert, done) {
-        this.group_service.createGroup(GROUP_NAME).then(function (group) {
-            return this.user_service.createUser(EMAIL, PASSWORD, group.id).then(function (user) {
-                return this.service.createToken(EMAIL, PASSWORD).then(function (token) {
-                    assert.equal(typeof token.value, 'string');
-                    assert.equal(token.user_id, user.id);
-                }.bind(this));
-            }.bind(this));
-        }.bind(this)).then(done, done);
+    Test.prototype.testCreateToken = function () {
+        var _this = this;
+        return this.group_service.createGroup(GROUP_NAME).then(function (group) {
+            return _this.user_service.createUser(EMAIL, PASSWORD, group.id);
+        }).then(function (user) {
+            return _this.service.createToken(EMAIL, PASSWORD).then(function (token) {
+                _this.assert(typeof token.value === 'string');
+                _this.assert(token.user_id === user.id);
+            });
+        });
     };
-    Test.prototype.testCreateTokenWithInvalidUser = function (assert, done) {
-        this.service.createToken(EMAIL, PASSWORD).then(function (token) {
-            assert.equal(true, false);
-        }, function () {
-            assert.equal(false, false);
-        }).then(done, done);
+    Test.prototype.testCreateTokenWithInvalidUser = function () {
+        return this.service.createToken(EMAIL, PASSWORD).then(this.fail(), this.pass());
     };
-    Test.prototype.testGetUserByValue = function (assert, done) {
-        this.group_service.createGroup(GROUP_NAME).then(function (group) {
-            return this.user_service.createUser(EMAIL, PASSWORD, group.id).then(function (user) {
-                return this.service.createToken(EMAIL, PASSWORD).then(function (token) {
-                    return this.service.getUserByValue(token.value).then(function (token_user) {
-                        assert.equal(token_user.id, token.user_id);
-                    });
-                }.bind(this));
-            }.bind(this));
-        }.bind(this)).then(done, done);
+    Test.prototype.testGetUserByValue = function () {
+        var _this = this;
+        return this.group_service.createGroup(GROUP_NAME).then(function (group) {
+            return _this.user_service.createUser(EMAIL, PASSWORD, group.id);
+        }).then(function (user) {
+            return _this.service.createToken(EMAIL, PASSWORD).then(function (token) {
+                return _this.service.getUserByValue(token.value).then(function (token_user) {
+                    _this.assert(token_user.id === token.user_id);
+                });
+            });
+        });
     };
     return Test;
 })(BaseTest);

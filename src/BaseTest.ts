@@ -6,11 +6,14 @@ source_map_support.install({
   handleUncaughtExceptions: false
 });
 
-class TestCase {
+abstract class TestCase {
   protected name: string = 'TestCase';
 
+  /**
+   * Runs the tests.
+   */
   public run() {
-    describe(this.name, function () {
+    describe(this.name, () => {
       var keys = [];
       for (var key in this) {
         keys.push(key);
@@ -20,26 +23,53 @@ class TestCase {
         return key.indexOf('test') === 0;
       });
 
-      tests.forEach(function (test) {
-        beforeEach(this.beforeEach.bind(this));
-        it(test, function (done) {
-          return this[test](chai.assert, done);
-        }.bind(this));
-        afterEach(this.afterEach.bind(this));
-      }.bind(this));
-    }.bind(this));
+      tests.forEach(this.runTest.bind(this));
+    });
   }
 
+  /**
+   * Runs a single test.
+   * @param {string} test Name of the test to run.
+   */
+  private runTest(test: string) {
+    beforeEach(this.beforeEach.bind(this));
+    it(test, (done) => {
+      return this[test]().then(done, done);
+    });
+    afterEach(this.afterEach.bind(this));
+  }
+
+  /**
+   * Defines things to be done before each test.
+   */
   public beforeEach() {}
+
+  /**
+   * Defines things to be done after each test.
+   */
   public afterEach() {}
 
-  protected match(act: Array<any>, exp: Array<any>) {
-    act.forEach(function (val: any, index: number) {
-      chai.assert.equal(act[index], exp[index]);
-    });
-    exp.forEach(function (val: any, index: number) {
-      chai.assert.equal(act[index], exp[index]);
-    });
+  /**
+   * Asserts that a condition is true.
+   * @param {boolean} condition The condition to assert.
+   * @param {string} message The message to display when the condition is false.
+   */
+  protected assert(condition: boolean, message?: string) {
+    chai.assert.equal(condition == true, true, message);
+  }
+
+  /**
+   * Passes an assertion.
+   */
+  protected pass() {
+    return () => this.assert(true);
+  }
+
+  /**
+   * Fails an assertion.
+   */
+  protected fail() {
+    return () => this.assert(false, 'Fail');
   }
 }
 

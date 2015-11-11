@@ -17,18 +17,15 @@ var Test = (function (_super) {
     Test.prototype.beforeEach = function () {
         this.service = new Service(new TestRepository());
     };
-    Test.prototype.testCreateUser = function (assert, done) {
+    Test.prototype.testCreateUser = function () {
+        var _this = this;
         return this.service.createUser(EMAIL, PASSWORD).then(function (user) {
-            assert.equal(user.email, EMAIL);
-            assert.equal(user.password, PASSWORD);
-        }).then(done, done);
+            _this.assert(user.email === EMAIL);
+            _this.assert(user.password === PASSWORD);
+        });
     };
-    Test.prototype.testCreateUserWithInvalidEmail = function (assert, done) {
-        return this.service.createUser('invalid_email', PASSWORD).then(function (user) {
-            assert.equal(true, false);
-        }, function () {
-            assert.equal(false, false);
-        }).then(done, done);
+    Test.prototype.testCreateUserWithInvalidEmail = function () {
+        return this.service.createUser('invalid_email', PASSWORD).then(this.fail(), this.pass());
     };
     return Test;
 })(BaseTest);

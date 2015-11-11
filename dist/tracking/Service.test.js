@@ -42,53 +42,55 @@ var Test = (function (_super) {
         this.service = new Service(new TestLrsRepository(), new TestWebRepository());
         this.service.setGroupService(this.group_service);
     };
-    Test.prototype.assertStatement = function (assert, statement) {
-        assert.equal(LINK.long_url, statement.object.id);
-        assert.equal('http://localhost:3000/' + LINK.short_url, statement.object.definition.moreInfo);
-        assert.equal(LINK.long_url, statement.object.definition.name['en-GB']);
-        assert.equal(LINK.user_id, statement.context.instructor.account.name);
-        assert.equal(GROUP.verb_id, statement.verb.id);
-        assert.equal(!statement.verb.display[GROUP.verb_lang], false);
-        assert.equal(GROUP.verb_display, statement.verb.display[GROUP.verb_lang]);
+    Test.prototype.assertStatement = function (statement) {
+        this.assert(LINK.long_url === statement.object.id);
+        this.assert('http://localhost:3000/' + LINK.short_url === statement.object.definition.moreInfo);
+        this.assert(LINK.long_url === statement.object.definition.name['en-GB']);
+        this.assert(String(LINK.user_id) === statement.context.instructor.account.name);
+        this.assert(GROUP.verb_id === statement.verb.id);
+        this.assert(!!statement.verb.display[GROUP.verb_lang]);
+        this.assert(GROUP.verb_display === statement.verb.display[GROUP.verb_lang]);
     };
     Test.prototype.createGroup = function () {
         return this.group_service.createGroup(GROUP.name, GROUP.verb_id, GROUP.verb_lang, GROUP.verb_display);
     };
-    Test.prototype.testTrackLinkNoOptions = function (assert, done) {
-        this.createGroup().then(function (group) {
+    Test.prototype.testTrackLinkNoOptions = function () {
+        var _this = this;
+        return this.createGroup().then(function (group) {
             LINK.group_id = group.id;
-            return this.service.trackLink(LINK, null);
-        }.bind(this)).then(function (statement) {
-            this.assertStatement(assert, statement);
-        }.bind(this)).then(done, done);
+            return _this.service.trackLink(LINK, null);
+        }).then(this.assertStatement.bind(this));
     };
-    Test.prototype.testTrackLinkWithActor = function (assert, done) {
-        this.createGroup().then(function (group) {
+    Test.prototype.testTrackLinkWithActor = function () {
+        var _this = this;
+        return this.createGroup().then(function (group) {
             LINK.group_id = group.id;
-            return this.service.trackLink(LINK, { actor: ACTOR });
-        }.bind(this)).then(function (statement) {
-            assert.equal(ACTOR, statement.actor);
-            this.assertStatement(assert, statement);
-        }.bind(this)).then(done, done);
+            return _this.service.trackLink(LINK, { actor: ACTOR });
+        }).then(function (statement) {
+            _this.assert(ACTOR === statement.actor);
+            _this.assertStatement(statement);
+        });
     };
-    Test.prototype.testTrackLinkWithContext = function (assert, done) {
-        this.createGroup().then(function (group) {
+    Test.prototype.testTrackLinkWithContext = function () {
+        var _this = this;
+        return this.createGroup().then(function (group) {
             LINK.group_id = group.id;
-            return this.service.trackLink(LINK, { context: CONTEXT });
-        }.bind(this)).then(function (statement) {
-            assert.equal(CONTEXT, statement.context);
-            this.assertStatement(assert, statement);
-        }.bind(this)).then(done, done);
+            return _this.service.trackLink(LINK, { context: CONTEXT });
+        }).then(function (statement) {
+            _this.assert(CONTEXT === statement.context);
+            _this.assertStatement(statement);
+        });
     };
-    Test.prototype.testTrackLinkWithActorAndContext = function (assert, done) {
-        this.createGroup().then(function (group) {
+    Test.prototype.testTrackLinkWithActorAndContext = function () {
+        var _this = this;
+        return this.createGroup().then(function (group) {
             LINK.group_id = group.id;
-            return this.service.trackLink(LINK, { actor: ACTOR, context: CONTEXT });
-        }.bind(this)).then(function (statement) {
-            assert.equal(ACTOR, statement.actor);
-            assert.equal(CONTEXT, statement.context);
-            this.assertStatement(assert, statement);
-        }.bind(this)).then(done, done);
+            return _this.service.trackLink(LINK, { actor: ACTOR, context: CONTEXT });
+        }).then(function (statement) {
+            _this.assert(ACTOR === statement.actor);
+            _this.assert(CONTEXT === statement.context);
+            _this.assertStatement(statement);
+        });
     };
     return Test;
 })(BaseTest);

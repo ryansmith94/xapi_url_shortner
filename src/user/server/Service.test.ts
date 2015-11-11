@@ -35,181 +35,133 @@ class Test extends BaseTest {
     var user_email = id+'test@example.com';
     var user_pass = 'test_password';
     var group_name = 'GROUP_NAME';
-    return this.group_service.createGroup(group_name).then(function (group) {
+    return this.group_service.createGroup(group_name).then((group) => {
       return this.service.createUser(user_email, user_pass, group.id);
-    }.bind(this)).then(function (user) {
+    }).then((user) => {
       return this.token_service.createToken(user_email, user_pass);
-    }.bind(this));
+    });
   }
 
-  public testCreateUser(assert, done) {
-    this.group_service.createGroup(GROUP_NAME).then(function (group: any) {
-      return this.service.createUser(EMAIL, PASSWORD, group.id).then(function (user: any) {
-        assert.equal(user.email, EMAIL);
-        assert.equal(passhash.verify(PASSWORD, user.password), true);
-        assert.equal(user.group_id, group.id);
+  public testCreateUser() {
+    return this.group_service.createGroup(GROUP_NAME).then((group: any) => {
+      return this.service.createUser(EMAIL, PASSWORD, group.id).then((user: any) => {
+        this.assert(user.email === EMAIL);
+        this.assert(passhash.verify(PASSWORD, user.password));
+        this.assert(user.group_id === group.id);
       });
-    }.bind(this)).then(done, done);
+    });
   }
 
-  public testCreateUserWithInvalidEmail(assert, done) {
-    this.group_service.createGroup(GROUP_NAME).then(function (group: any) {
-      return this.service.createUser('invalid_email', PASSWORD, group.id).then(function (user) {
-        assert.equal(true, false);
-      }, function () {
-        assert.equal(false, false);
+  public testCreateUserWithInvalidEmail() {
+    return this.group_service.createGroup(GROUP_NAME).then((group: any) => {
+      return this.service.createUser('invalid_email', PASSWORD, group.id);
+    }).then(this.fail(), this.pass());
+  }
+
+  public testCreateUserWithInvalidGroupId() {
+    return this.service.createUser(EMAIL, PASSWORD, GROUP_ID).then(this.fail(), this.pass());
+  }
+
+  public testCreateUserThatExistsInGroup() {
+    return this.group_service.createGroup(GROUP_NAME).then((group: any) => {
+      return this.service.createUser(EMAIL, PASSWORD, group.id).then((existing_user) => {
+        return this.service.createUser(EMAIL, PASSWORD, group.id).then(this.fail(), this.pass());
       });
-    }.bind(this)).then(done, done);
+    });
   }
 
-  public testCreateUserWithInvalidGroupId(assert, done) {
-    this.service.createUser(EMAIL, PASSWORD, GROUP_ID).then(function (user) {
-      assert.equal(true, false);
-    }, function () {
-      assert.equal(false, false);
-    }).then(done, done);
-  }
-
-  public testCreateUserThatExistsInGroup(assert, done) {
-    this.group_service.createGroup(GROUP_NAME).then(function (group: any) {
-      return this.service.createUser(EMAIL, PASSWORD, group.id).then(function (existing_user) {
-        return this.service.createUser(EMAIL, PASSWORD, group.id).then(function (user) {
-          assert.equal(true, false);
-        }, function () {
-          assert.equal(false, false);
+  public testGetUserByEmailAndPassword() {
+    return this.group_service.createGroup(GROUP_NAME).then((group: any) => {
+      return this.service.createUser(EMAIL, PASSWORD, group.id).then((existing_user) => {
+        return this.service.getUserByEmailAndPassword(EMAIL, PASSWORD).then((user) => {
+          this.assert(user.id === existing_user.id);
+          this.assert(user.email === EMAIL);
+          this.assert(passhash.verify(PASSWORD, user.password));
         });
-      }.bind(this));
-    }.bind(this)).then(done, done);
+      });
+    });
   }
 
-  public testGetUserByEmailAndPassword(assert, done) {
-    this.group_service.createGroup(GROUP_NAME).then(function (group: any) {
-      return this.service.createUser(EMAIL, PASSWORD, group.id).then(function (existing_user) {
-        return this.service.getUserByEmailAndPassword(EMAIL, PASSWORD).then(function (user) {
-          assert.equal(user.id, existing_user.id);
-          assert.equal(user.email, EMAIL);
-          assert.equal(passhash.verify(PASSWORD, user.password), true);
-        });
-      }.bind(this));
-    }.bind(this)).then(done, done);
+  public testGetUserByEmailAndPasswordWithNoUser() {
+    return this.service.getUserByEmailAndPassword(EMAIL, PASSWORD).then(this.fail(), this.pass());
   }
 
-  public testGetUserByEmailAndPasswordWithNoUser(assert, done) {
-    this.service.getUserByEmailAndPassword(EMAIL, PASSWORD).then(function (user) {
-      assert.equal(true, false);
-    }, function () {
-      assert.equal(false, false);
-    }).then(done, done);
+  public testGetUserByIdWithNoUser() {
+    return this.service.getUserById(1).then(this.fail(), this.pass());
   }
 
-  public testGetUserByIdWithNoUser(assert, done) {
-    this.service.getUserById(1).then(function (user) {
-      assert.equal(true, false);
-    }, function () {
-      assert.equal(false, false);
-    }).then(done, done);
-  }
-
-  public testDeleteUserById(assert, done) {
+  public testDeleteUserById() {
     var group_id, user_id;
 
-    this.group_service.createGroup(GROUP_NAME).then(function (group: any) {
+    return this.group_service.createGroup(GROUP_NAME).then((group: any) => {
       group_id = group.id
       return this.service.createUser(EMAIL, PASSWORD, group_id);
-    }.bind(this)).then(function (user) {
+    }).then((user) => {
       user_id = user.id
       return this.service.deleteUserById(user_id);
-    }.bind(this)).then(function () {
+    }).then(() => {
       return this.service.getUserById(user_id);
-    }.bind(this)).then(function () {
-      assert.equal(true, false);
-    }, function () {
-      assert.equal(false, false);
-    }).then(done, done);
+    }).then(this.fail(), this.pass());
   }
 
-  public testDeleteUserByIdWithNoUser(assert, done) {
-    this.service.deleteUserById(1).then(function (user) {
-      assert.equal(true, false);
-    }, function () {
-      assert.equal(false, false);
-    }).then(done, done);
+  public testDeleteUserByIdWithNoUser() {
+    return this.service.deleteUserById(1).then(this.fail(), this.pass());
   }
 
-  public testCreateUserWithToken(assert, done) {
-    this.createToken('1').then(function (token: any) {
+  public testCreateUserWithToken() {
+    return this.createToken('1').then((token: any) => {
       return this.service.createUserWithToken(EMAIL, PASSWORD, token.value);
-    }.bind(this)).then(function (user: any) {
-      assert.equal(user.email, EMAIL);
-      assert.equal(passhash.verify(PASSWORD, user.password), true);
-      assert.equal(user.group_id, user.group_id);
-    }).then(done, done);
+    }).then((user: any) => {
+      this.assert(user.email === EMAIL);
+      this.assert(passhash.verify(PASSWORD, user.password));
+      this.assert(user.group_id === user.group_id);
+    });
   }
 
-  public testCreateUserWithTokenAndInvalidEmail(assert, done) {
-    this.createToken('1').then(function (token: any) {
+  public testCreateUserWithTokenAndInvalidEmail() {
+    return this.createToken('1').then((token: any) => {
       return this.service.createUserWithToken('invalid email', PASSWORD, token.value);
-    }.bind(this)).then(function () {
-      assert.equal(true, false);
-    }, function () {
-      assert.equal(false, false);
-    }).then(done, done);
+    }).then(this.fail(), this.pass());
   }
 
-  public testCreateUserWithTokenThatExists(assert, done) {
-    this.createToken().then(function (token: any) {
+  public testCreateUserWithTokenThatExists() {
+    return this.createToken().then((token: any) => {
       return this.service.createUserWithToken(EMAIL, PASSWORD, token.value);
-    }.bind(this)).then(function () {
-      assert.equal(true, false);
-    }, function () {
-      assert.equal(false, false);
-    }).then(done, done);
+    }).then(this.fail(), this.pass());
   }
 
-  public testGetUsersWithGroupId(assert, done) {
-    this.group_service.createGroup(GROUP_NAME).then(function (group: any) {
+  public testGetUsersWithGroupId() {
+    return this.group_service.createGroup(GROUP_NAME).then((group: any) => {
       return this.service.createUser(EMAIL, PASSWORD, group.id);
-    }.bind(this)).then(function (user) {
+    }).then((user) => {
       return this.service.getUsersByGroupId(user.group_id);
-    }.bind(this)).then(function (users) {
-      assert.equal(Array.isArray(users), true);
-      assert.equal(users.length, 1);
-      assert.equal(users[0].email, EMAIL);
-    }).then(done, done);
+    }).then((users) => {
+      this.assert(Array.isArray(users));
+      this.assert(users.length === 1);
+      this.assert(users[0].email === EMAIL);
+    });
   }
 
-  public testGetUsersWithInvalidGroupId(assert, done) {
-    this.service.getUsersByGroupId(GROUP_ID).then(function () {
-      assert.equal(true, false);
-    }, function () {
-      assert.equal(false, false);
-    }).then(done, done);
+  public testGetUsersWithInvalidGroupId() {
+    return this.service.getUsersByGroupId(GROUP_ID).then(this.fail(), this.pass());
   }
 
-  public testDeleteUsersByGroupId(assert, done) {
+  public testDeleteUsersByGroupId() {
     var group_id, user_id;
 
-    this.group_service.createGroup(GROUP_NAME).then(function(group: any) {
+    return this.group_service.createGroup(GROUP_NAME).then((group: any) => {
       group_id = group.id
       return this.service.createUser(EMAIL, PASSWORD, group_id);
-    }.bind(this)).then(function(user) {
+    }).then((user) => {
       user_id = user.id
       return this.service.deleteUsersByGroupId(group_id);
-    }.bind(this)).then(function() {
+    }).then(() => {
       return this.service.getUserById(user_id);
-    }.bind(this)).then(function() {
-      assert.equal(true, false);
-    }, function() {
-      assert.equal(false, false);
-    }).then(done, done);
+    }).then(this.fail(), this.pass());
   }
 
-  public testDeleteUsersByInvalidGroupId(assert, done) {
-    this.service.deleteUsersByGroupId(1).then(function() {
-      assert.equal(true, false);
-    }, function() {
-      assert.equal(false, false);
-    }).then(done, done);
+  public testDeleteUsersByInvalidGroupId() {
+    return this.service.deleteUsersByGroupId(1).then(this.fail(), this.pass());
   }
 }
 

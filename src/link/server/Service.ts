@@ -35,7 +35,7 @@ class Service extends BaseService {
    * @param {string} short_url The short_url to track.
    * @param {any} tracking_options The options to be used by the tracking service.
    */
-  public trackLink(short_url: string, tracking_options) {
+  public trackLink(short_url: string, tracking_options?) {
     return this.getLinkByShortUrl(short_url).then(function (link) {
       this.tracking_service.trackLink(link, tracking_options);
       return link;
