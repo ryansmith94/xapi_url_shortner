@@ -34,6 +34,7 @@ var Test = (function (_super) {
         this.token_service.setUserService(this.user_service);
         this.service.setTrackingService(tracking_service);
         this.service.setTokenService(this.token_service);
+        this.service.setGroupService(this.group_service);
     };
     Test.prototype.createToken = function (id) {
         if (id === void 0) { id = ''; }
@@ -164,6 +165,32 @@ var Test = (function (_super) {
         }.bind(this)).then(function (token) {
             return this.service.deleteLinkByIdWithToken(link.id, token.value);
         }.bind(this)).then(function () {
+            assert.equal(true, false);
+        }, function () {
+            assert.equal(false, false);
+        }).then(done, done);
+    };
+    Test.prototype.testDeleteLinksByGroupId = function (assert, done) {
+        var token;
+        var user_email = 'test@example.com';
+        var user_pass = 'test_password';
+        this.group_service.createGroup('GROUP_NAME').then(function (group) {
+            return this.user_service.createUser(user_email, user_pass, group.id);
+        }.bind(this)).then(function (user) {
+            return this.token_service.createToken(user_email, user_pass);
+        }.bind(this)).then(function (created_token) {
+            token = created_token;
+            return this.service.createLinkWithToken(LONG_URL, token.value);
+        }.bind(this)).then(function (link) {
+            return this.service.deleteLinksByGroupId(link.group_id);
+        }.bind(this)).then(function () {
+            return this.service.getLinksByToken(token.value);
+        }.bind(this)).then(function (links) {
+            assert.equal(links.length, 0);
+        }).then(done, done);
+    };
+    Test.prototype.testDeleteLinksByInvalidGroupId = function (assert, done) {
+        this.service.deleteLinksByGroupId(1).then(function () {
             assert.equal(true, false);
         }, function () {
             assert.equal(false, false);

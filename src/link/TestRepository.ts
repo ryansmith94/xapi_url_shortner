@@ -80,6 +80,15 @@ class Repository {
 
     return deferred.promise;
   }
+
+  public deleteLinksByGroupId(group_id) {
+    var deferred = q.defer();
+    this.links = this.links.filter(function(link) {
+      return link.group_id !== group_id;
+    });
+    deferred.resolve(true);
+    return deferred.promise;
+  }
 }
 
 export = Repository;

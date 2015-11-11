@@ -26,6 +26,7 @@ var Component = (function (_super) {
     };
     Component.prototype.handleLogout = function (e) {
         this.setState({ token: '' });
+        docCookie.removeItem('token');
         e.preventDefault();
     };
     Component.prototype.componentDidMount = function () {

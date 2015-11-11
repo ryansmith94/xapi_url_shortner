@@ -69,6 +69,15 @@ class Repository {
     return deferred.promise;
   }
 
+  public deleteUsersByGroupId(group_id) {
+    var deferred = q.defer();
+    this.users = this.users.filter(function (user) {
+      return user.group_id !== group_id;
+    });
+
+    deferred.resolve(true);
+    return deferred.promise;
+  }
 }
 
 export = Repository;

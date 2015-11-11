@@ -33,6 +33,16 @@ class Repository extends BaseRepository {
   public getGroups() {
     return this.connect().select();
   }
+
+  public deleteGroupById(id) {
+    return this.connect().where('id', id).delete().then(function (group) {
+      if (!group) {
+        throw new Error('No group');
+      } else {
+        return true;
+      }
+    });
+  }
 }
 
 export = Repository;

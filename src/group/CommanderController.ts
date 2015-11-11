@@ -16,6 +16,11 @@ class Controller {
       .command('lg')
       .description('List all groups')
       .action(this.getGroups.bind(this));
+
+    commander
+      .command('dg <id>')
+      .description('Delete a group by id')
+      .action(this.deleteGroupById.bind(this));
   }
 
   public createGroup(group_name) {
@@ -31,6 +36,14 @@ class Controller {
       console.log(models.map(function (model) {
         return model.id + ' - ' + model.name;
       }).join('\n'));
+    }, function (err) {
+      console.error(err.stack);
+    }).then(process.exit, process.exit);
+  }
+
+  public deleteGroupById(id) {
+    this.service.deleteGroupById(id).then(function () {
+      console.log('Deleted');
     }, function (err) {
       console.error(err.stack);
     }).then(process.exit, process.exit);

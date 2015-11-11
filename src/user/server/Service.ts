@@ -84,6 +84,14 @@ class Service extends BaseService {
     }.bind(this));
   }
 
+  public deleteUsersByGroupId(group_id) {
+    return this.validateGroupId(group_id).then(function() {
+      return this.repo.deleteUsersByGroupId(group_id);
+    }.bind(this)).then(function () {
+      return true;
+    }); 
+  }
+
   private getUserByEmail(email: string) {
     return this.repo.getUserByEmail(email);
   }

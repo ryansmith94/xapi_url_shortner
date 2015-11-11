@@ -4,6 +4,7 @@ import q = require('q');
 class Service extends BaseService {
   private tracking_service;
   private token_service;
+  private group_service;
 
   /**
    * Sets the tracking service.
@@ -19,6 +20,14 @@ class Service extends BaseService {
    */
   public setTokenService(token_service) {
     this.token_service = token_service;
+  }
+
+  /**
+   * Sets the group service.
+   * @param {any} group_service A token service.
+   */
+  public setGroupService(group_service) {
+    this.group_service = group_service;
   }
 
   /**
@@ -106,6 +115,17 @@ class Service extends BaseService {
       } else {
         throw new Error('Link cannot be deleted with that token');
       }
+    }.bind(this));
+  }
+
+  /**
+   * Deletes links by group ID.
+   * @param {string} group_id The ID of the group.
+   * @return {Future}
+   */
+  public deleteLinksByGroupId(group_id) {
+    return this.group_service.getGroupById(group_id).then(function() {
+      return this.repo.deleteLinksByGroupId(group_id);
     }.bind(this));
   }
 }

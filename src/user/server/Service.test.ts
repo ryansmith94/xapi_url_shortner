@@ -185,6 +185,32 @@ class Test extends BaseTest {
       assert.equal(false, false);
     }).then(done, done);
   }
+
+  public testDeleteUsersByGroupId(assert, done) {
+    var group_id, user_id;
+
+    this.group_service.createGroup(GROUP_NAME).then(function(group: any) {
+      group_id = group.id
+      return this.service.createUser(EMAIL, PASSWORD, group_id);
+    }.bind(this)).then(function(user) {
+      user_id = user.id
+      return this.service.deleteUsersByGroupId(group_id);
+    }.bind(this)).then(function() {
+      return this.service.getUserById(user_id);
+    }.bind(this)).then(function() {
+      assert.equal(true, false);
+    }, function() {
+      assert.equal(false, false);
+    }).then(done, done);
+  }
+
+  public testDeleteUsersByInvalidGroupId(assert, done) {
+    this.service.deleteUsersByGroupId(1).then(function() {
+      assert.equal(true, false);
+    }, function() {
+      assert.equal(false, false);
+    }).then(done, done);
+  }
 }
 
 (new Test()).run();

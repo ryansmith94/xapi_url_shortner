@@ -60,6 +60,11 @@ var Repository = (function (_super) {
             }
         });
     };
+    Repository.prototype.deleteLinksByGroupId = function (group_id) {
+        return this.connect().where('group_id', group_id).delete().then(function () {
+            return true;
+        });
+    };
     return Repository;
 })(BaseRepository);
 module.exports = Repository;

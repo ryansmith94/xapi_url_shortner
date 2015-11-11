@@ -34,6 +34,16 @@ var Repository = (function (_super) {
     Repository.prototype.getGroups = function () {
         return this.connect().select();
     };
+    Repository.prototype.deleteGroupById = function (id) {
+        return this.connect().where('id', id).delete().then(function (group) {
+            if (!group) {
+                throw new Error('No group');
+            }
+            else {
+                return true;
+            }
+        });
+    };
     return Repository;
 })(BaseRepository);
 module.exports = Repository;

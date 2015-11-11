@@ -58,6 +58,14 @@ var Repository = (function () {
         deferred.resolve(filtered_users);
         return deferred.promise;
     };
+    Repository.prototype.deleteUsersByGroupId = function (group_id) {
+        var deferred = q.defer();
+        this.users = this.users.filter(function (user) {
+            return user.group_id !== group_id;
+        });
+        deferred.resolve(true);
+        return deferred.promise;
+    };
     return Repository;
 })();
 module.exports = Repository;

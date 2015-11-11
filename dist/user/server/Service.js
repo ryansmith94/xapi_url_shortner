@@ -79,6 +79,13 @@ var Service = (function (_super) {
             return this.repo.getUsersByGroupId(group_id);
         }.bind(this));
     };
+    Service.prototype.deleteUsersByGroupId = function (group_id) {
+        return this.validateGroupId(group_id).then(function () {
+            return this.repo.deleteUsersByGroupId(group_id);
+        }.bind(this)).then(function () {
+            return true;
+        });
+    };
     Service.prototype.getUserByEmail = function (email) {
         return this.repo.getUserByEmail(email);
     };

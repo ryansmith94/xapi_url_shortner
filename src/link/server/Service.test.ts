@@ -17,7 +17,7 @@ class Test extends BaseTest {
   protected name: string = 'link/server/ServiceTest';
   protected service: Service;
   protected group_service: GroupService;
-  protected user_service: UserService
+  protected user_service: UserService;
   protected token_service: TokenService;
 
   public beforeEach() {
@@ -37,6 +37,7 @@ class Test extends BaseTest {
     this.token_service.setUserService(this.user_service);
     this.service.setTrackingService(tracking_service);
     this.service.setTokenService(this.token_service);
+    this.service.setGroupService(this.group_service);
   }
 
   private createToken(id = '') {
@@ -181,6 +182,35 @@ class Test extends BaseTest {
     }.bind(this)).then(function () {
       assert.equal(true, false);
     }, function () {
+      assert.equal(false, false);
+    }).then(done, done);
+  }
+
+  public testDeleteLinksByGroupId(assert, done) {
+    var token;
+    var user_email = 'test@example.com';
+    var user_pass = 'test_password';
+
+    this.group_service.createGroup('GROUP_NAME').then(function(group) {
+      return this.user_service.createUser(user_email, user_pass, group.id);
+    }.bind(this)).then(function(user) {
+      return this.token_service.createToken(user_email, user_pass);
+    }.bind(this)).then(function(created_token) {
+      token = created_token;
+      return this.service.createLinkWithToken(LONG_URL, token.value);
+    }.bind(this)).then(function(link) {
+      return this.service.deleteLinksByGroupId(link.group_id);
+    }.bind(this)).then(function() {
+      return this.service.getLinksByToken(token.value);
+    }.bind(this)).then(function(links) {
+      assert.equal(links.length, 0);
+    }).then(done, done);
+  }
+
+  public testDeleteLinksByInvalidGroupId(assert, done) {
+    this.service.deleteLinksByGroupId(1).then(function() {
+      assert.equal(true, false);
+    }, function() {
       assert.equal(false, false);
     }).then(done, done);
   }

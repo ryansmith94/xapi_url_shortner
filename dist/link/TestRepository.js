@@ -67,6 +67,14 @@ var Repository = (function () {
         }
         return deferred.promise;
     };
+    Repository.prototype.deleteLinksByGroupId = function (group_id) {
+        var deferred = q.defer();
+        this.links = this.links.filter(function (link) {
+            return link.group_id !== group_id;
+        });
+        deferred.resolve(true);
+        return deferred.promise;
+    };
     return Repository;
 })();
 module.exports = Repository;

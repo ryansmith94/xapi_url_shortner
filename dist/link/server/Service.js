@@ -16,6 +16,9 @@ var Service = (function (_super) {
     Service.prototype.setTokenService = function (token_service) {
         this.token_service = token_service;
     };
+    Service.prototype.setGroupService = function (group_service) {
+        this.group_service = group_service;
+    };
     Service.prototype.trackLink = function (short_url, tracking_options) {
         return this.getLinkByShortUrl(short_url).then(function (link) {
             this.tracking_service.trackLink(link, tracking_options);
@@ -76,6 +79,11 @@ var Service = (function (_super) {
             else {
                 throw new Error('Link cannot be deleted with that token');
             }
+        }.bind(this));
+    };
+    Service.prototype.deleteLinksByGroupId = function (group_id) {
+        return this.group_service.getGroupById(group_id).then(function () {
+            return this.repo.deleteLinksByGroupId(group_id);
         }.bind(this));
     };
     return Service;

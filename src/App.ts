@@ -20,6 +20,7 @@ class Component extends react.Component<any, any> {
   }
   handleLogout(e) {
     this.setState({token: ''});
+    docCookie.removeItem('token');
     e.preventDefault();
   }
   componentDidMount() {

@@ -45,6 +45,9 @@ user_service.setTokenService(token_service);
 token_service.setUserService(user_service);
 link_service.setTrackingService(tracking_service);
 link_service.setTokenService(token_service);
+link_service.setGroupService(group_service);
+group_service.setUserService(user_service);
+group_service.setLinkService(link_service);
 var react = require('react');
 var dom = react.DOM;
 app.get('/', function (req, res) {

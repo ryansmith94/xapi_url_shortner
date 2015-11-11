@@ -12,9 +12,13 @@ source_map_support.install({
 import GroupRepository = require('./group/KnexRepository');
 import GroupService = require('./group/Service');
 import GroupController = require('./group/CommanderController');
+import LinkRepository = require('./link/server/KnexRepository');
+import LinkService = require('./link/server/Service');
 var group_repository = new GroupRepository(config.knex, 'group');
 var group_service = new GroupService(group_repository);
 var group_controller = new GroupController(commander, group_service);
+var link_repository = new LinkRepository(config.knex, 'link');
+var link_service = new LinkService(link_repository);
 
 // User.
 import UserRepository = require('./user/server/KnexRepository');
@@ -27,7 +31,11 @@ var token_service = new TokenService(token_repository);
 var user_repository = new UserRepository(config.knex, 'user');
 var user_service = new UserService(user_repository);
 var user_controller = new UserController(commander, user_service);
+
 user_service.setGroupService(group_service);
 user_service.setTokenService(token_service);
+group_service.setLinkService(link_service);
+group_service.setUserService(user_service);
+link_service.setGroupService(group_service);
 
 commander.parse(process.argv);
