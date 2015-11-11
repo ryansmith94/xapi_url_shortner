@@ -19,9 +19,12 @@ class Service extends BaseService {
     this.link_service = link_service;
   }
 
-  public createGroup(name: string) {
+  public createGroup(name: string, verb_id?: string, verb_lang?: string, verb_display?: string) {
     return this.repo.createGroup({
-      name: name
+      name: name,
+      verb_id: verb_id || 'http://adlnet.gov/expapi/verbs/launched',
+      verb_lang: verb_lang || 'en',
+      verb_display: verb_display || 'launched'
     });
   }
 

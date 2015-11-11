@@ -9,13 +9,19 @@ class Repository extends BaseRepository {
   protected constructSchema(table) {
     table.increments('id').primary();
     table.string('name');
+    table.string('verb_id');
+    table.string('verb_lang');
+    table.string('verb_display');
   }
 
   public createGroup(group) {
     return this.connect().insert(group, 'id').then(function (ids) {
       return {
         id: ids[0],
-        name: group.name
+        name: group.name,
+        verb_id: group.verb_id,
+        verb_lang: group.verb_lang,
+        verb_display: group.verb_display
       };
     });
   }

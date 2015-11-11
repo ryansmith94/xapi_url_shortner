@@ -17,9 +17,12 @@ var Service = (function (_super) {
     Service.prototype.setLinkService = function (link_service) {
         this.link_service = link_service;
     };
-    Service.prototype.createGroup = function (name) {
+    Service.prototype.createGroup = function (name, verb_id, verb_lang, verb_display) {
         return this.repo.createGroup({
-            name: name
+            name: name,
+            verb_id: verb_id || 'http://adlnet.gov/expapi/verbs/launched',
+            verb_lang: verb_lang || 'en',
+            verb_display: verb_display || 'launched'
         });
     };
     Service.prototype.getGroupById = function (id) {

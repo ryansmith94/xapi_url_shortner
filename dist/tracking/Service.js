@@ -5,6 +5,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 /// <reference path="../definitions/references.d.ts" />
 var BaseService = require('../BaseService');
+var q = require('q');
 var Service = (function (_super) {
     __extends(Service, _super);
     function Service(lrs_repository, web_repository) {
@@ -12,9 +13,15 @@ var Service = (function (_super) {
         this.web_repo = web_repository;
         _super.call(this);
     }
+    Service.prototype.setGroupService = function (group_service) {
+        this.group_service = group_service;
+    };
     Service.prototype.trackLink = function (link, tracking_options) {
         tracking_options = tracking_options || {};
-        return this.web_repo.getTitle(link.long_url).then(function (page_title) {
+        return q.all([
+            this.group_service.getGroupById(link.group_id),
+            this.web_repo.getTitle(link.long_url)
+        ]).spread(function (group, page_title) {
             var statement = {
                 actor: tracking_options.actor || {
                     account: {
@@ -23,10 +30,8 @@ var Service = (function (_super) {
                     }
                 },
                 verb: {
-                    id: 'http://adlnet.gov/expapi/verbs/launched',
-                    display: {
-                        'en-GB': 'launched'
-                    }
+                    id: group.verb_id,
+                    display: {}
                 },
                 object: {
                     id: link.long_url,
@@ -50,6 +55,7 @@ var Service = (function (_super) {
                     homePage: 'https://github.com/ryansmith94/xapi_url_shortner/users'
                 }
             };
+            statement.verb.display[group.verb_lang] = group.verb_display;
             return this.lrs_repo.createStatement(statement);
         }.bind(this));
     };

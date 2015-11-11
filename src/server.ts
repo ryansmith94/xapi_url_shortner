@@ -64,6 +64,7 @@ link_service.setTokenService(token_service);
 link_service.setGroupService(group_service);
 group_service.setUserService(user_service);
 group_service.setLinkService(link_service);
+tracking_service.setGroupService(group_service);
 
 // UI.
 import react = require('react');

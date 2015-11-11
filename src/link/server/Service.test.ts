@@ -19,10 +19,11 @@ class Test extends BaseTest {
   protected group_service: GroupService;
   protected user_service: UserService;
   protected token_service: TokenService;
+  protected tracking_service: TrackingService;
 
   public beforeEach() {
     // Initialises services.
-    var tracking_service = new TrackingService(
+    this.tracking_service = new TrackingService(
       new TrackingTestLrsRepository(),
       new TrackingTestWebRepository()
     );
@@ -35,7 +36,8 @@ class Test extends BaseTest {
     this.user_service.setGroupService(this.group_service);
     this.user_service.setTokenService(this.token_service);
     this.token_service.setUserService(this.user_service);
-    this.service.setTrackingService(tracking_service);
+    this.tracking_service.setGroupService(this.group_service);
+    this.service.setTrackingService(this.tracking_service);
     this.service.setTokenService(this.token_service);
     this.service.setGroupService(this.group_service);
   }

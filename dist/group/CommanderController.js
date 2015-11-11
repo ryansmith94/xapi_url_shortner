@@ -6,6 +6,9 @@ var Controller = (function () {
     Controller.prototype.constructCommands = function (commander) {
         commander
             .command('cg <group_name>')
+            .option('-i --verb_id <verb_id>', 'Verb ID')
+            .option('-l --verb_lang <verb_lang>', 'Verb Language')
+            .option('-d --verb_display <verb_display>', 'Verb Display')
             .description('Create a group')
             .action(this.createGroup.bind(this));
         commander
@@ -17,8 +20,8 @@ var Controller = (function () {
             .description('Delete a group by id')
             .action(this.deleteGroupById.bind(this));
     };
-    Controller.prototype.createGroup = function (group_name) {
-        this.service.createGroup(group_name).then(function (model) {
+    Controller.prototype.createGroup = function (group_name, command) {
+        this.service.createGroup(group_name, command.verb_id, command.verb_lang, command.verb_display).then(function (model) {
             console.log(model);
         }, function (err) {
             console.error(err.stack);

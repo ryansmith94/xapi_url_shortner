@@ -1,5 +1,6 @@
 /// <reference path="../definitions/references.d.ts" />
 import BaseService = require('../BaseService');
+import q = require('q');
 
 interface TrackingOptions {
   actor?: any,
@@ -14,6 +15,7 @@ interface Statement {
 class Service extends BaseService {
   private lrs_repo;
   private web_repo;
+  private group_service;
 
   public constructor(lrs_repository, web_repository) {
     this.lrs_repo = lrs_repository;
@@ -21,9 +23,17 @@ class Service extends BaseService {
     super();
   }
 
+  public setGroupService(group_service) {
+    this.group_service = group_service;
+  }
+
   public trackLink(link, tracking_options: TrackingOptions) {
     tracking_options = tracking_options || {};
-    return this.web_repo.getTitle(link.long_url).then(function (page_title) {
+
+    return q.all([
+      this.group_service.getGroupById(link.group_id),
+      this.web_repo.getTitle(link.long_url)
+    ]).spread(function (group, page_title) {
       var statement: Statement = {
         actor: tracking_options.actor || {
           account: {
@@ -32,10 +42,8 @@ class Service extends BaseService {
           }
         },
         verb: {
-          id: 'http://adlnet.gov/expapi/verbs/launched',
-          display: {
-            'en-GB': 'launched'
-          }
+          id: group.verb_id,
+          display: {}
         },
         object: {
           id: link.long_url,
@@ -60,6 +68,7 @@ class Service extends BaseService {
           homePage: 'https://github.com/ryansmith94/xapi_url_shortner/users'
         }
       };
+      statement.verb.display[group.verb_lang] = group.verb_display;
 
       return this.lrs_repo.createStatement(statement);
     }.bind(this));

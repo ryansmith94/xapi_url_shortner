@@ -41,6 +41,20 @@ var Test = (function (_super) {
     Test.prototype.testCreateGroup = function (assert, done) {
         this.service.createGroup(NAME).then(function (group) {
             assert.equal(group.name, NAME);
+            assert.equal(group.verb_id, 'http://adlnet.gov/expapi/verbs/launched');
+            assert.equal(group.verb_lang, 'en');
+            assert.equal(group.verb_display, 'launched');
+        }).then(done, done);
+    };
+    Test.prototype.testCreateGroupWithVerbOptions = function (assert, done) {
+        var VERB_ID = 'http://www.example.com/verb_id';
+        var VERB_LANG = 'en-GB';
+        var VERB_DISPLAY = 'verb_display';
+        this.service.createGroup(NAME, VERB_ID, VERB_LANG, VERB_DISPLAY).then(function (group) {
+            assert.equal(group.name, NAME);
+            assert.equal(group.verb_id, VERB_ID);
+            assert.equal(group.verb_lang, VERB_LANG);
+            assert.equal(group.verb_display, VERB_DISPLAY);
         }).then(done, done);
     };
     Test.prototype.testGetGroupById = function (assert, done) {
