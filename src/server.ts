@@ -18,12 +18,8 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 // Tracking.
-import TrackingLrsRepository = require('./tracking/TinCanLrsRepository');
-import TrackingWebRepository = require('./tracking/CheerioWebRepository');
-import TrackingService = require('./tracking/Service');
-var tracking_lrs_repository = new TrackingLrsRepository(config.lrs);
-var tracking_web_repository = new TrackingWebRepository();
-var tracking_service = new TrackingService(tracking_lrs_repository, tracking_web_repository);
+import TrackingFactory = require('./tracking/Factory');
+var tracking_service = TrackingFactory(config.lrs);
 
 // Token.
 import TokenRepository = require('./token/server/KnexRepository');

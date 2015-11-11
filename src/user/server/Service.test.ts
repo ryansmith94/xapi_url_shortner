@@ -72,7 +72,7 @@ class Test extends BaseTest {
 
   public testGetUserByEmailAndPassword() {
     return this.group_service.createGroup(GROUP_NAME).then((group: any) => {
-      return this.service.createUser(EMAIL, PASSWORD, group.id).then((existing_user) => {
+      return this.service.createUser(EMAIL, PASSWORD, group.id).then((existing_user: any) => {
         return this.service.getUserByEmailAndPassword(EMAIL, PASSWORD).then((user) => {
           this.assert(user.id === existing_user.id);
           this.assert(user.email === EMAIL);

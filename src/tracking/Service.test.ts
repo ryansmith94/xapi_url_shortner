@@ -1,7 +1,5 @@
 import BaseTest = require('../BaseTest');
-import Service = require('./Service');
-import TestLrsRepository = require('./TestLrsRepository');
-import TestWebRepository = require('./TestWebRepository');
+import TestFactory = require('./TestFactory');
 import GroupService = require('../group/Service');
 import GroupTestRepository = require('../group/TestRepository');
 
@@ -30,12 +28,12 @@ var CONTEXT = {
 
 class Test extends BaseTest {
   protected name: string = 'tracking/ServiceTest';
-  protected service: Service;
+  protected service;
   protected group_service: GroupService;
 
   public beforeEach() {
     this.group_service = new GroupService(new GroupTestRepository());
-    this.service = new Service(new TestLrsRepository(), new TestWebRepository());
+    this.service = TestFactory();
     this.service.setGroupService(this.group_service);
   }
 
