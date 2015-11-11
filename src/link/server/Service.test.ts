@@ -2,8 +2,7 @@ import BaseTest = require('../BaseTest');
 import Service = require('./Service');
 import TestRepository = require('../TestRepository');
 import TrackingFactory = require('../../tracking/TestFactory');
-import GroupService = require('../../group/Service');
-import GroupTestRepository = require('../../group/TestRepository');
+import GroupFactory = require('../../group/TestFactory');
 import UserService = require('../../user/server/Service');
 import UserTestRepository = require('../../user/TestRepository');
 import TokenService = require('../../token/server/Service');
@@ -14,7 +13,7 @@ var SHORT_URL = '2';
 class Test extends BaseTest {
   protected name: string = 'link/server/ServiceTest';
   protected service: Service;
-  protected group_service: GroupService;
+  protected group_service;
   protected user_service: UserService;
   protected token_service: TokenService;
   protected tracking_service;
@@ -22,7 +21,7 @@ class Test extends BaseTest {
   public beforeEach() {
     // Initialises services.
     this.tracking_service = TrackingFactory();
-    this.group_service = new GroupService(new GroupTestRepository());
+    this.group_service = GroupFactory();
     this.token_service = new TokenService(new TokenTestRepository());
     this.user_service = new UserService(new UserTestRepository());
     this.service = new Service(new TestRepository());

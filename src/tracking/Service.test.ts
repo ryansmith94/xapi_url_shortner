@@ -1,7 +1,6 @@
 import BaseTest = require('../BaseTest');
-import TestFactory = require('./TestFactory');
-import GroupService = require('../group/Service');
-import GroupTestRepository = require('../group/TestRepository');
+import Factory = require('./TestFactory');
+import GroupFactory = require('../group/TestFactory');
 
 var LINK = {
   id: 1,
@@ -29,11 +28,11 @@ var CONTEXT = {
 class Test extends BaseTest {
   protected name: string = 'tracking/ServiceTest';
   protected service;
-  protected group_service: GroupService;
+  protected group_service;
 
   public beforeEach() {
-    this.group_service = new GroupService(new GroupTestRepository());
-    this.service = TestFactory();
+    this.group_service = GroupFactory();
+    this.service = Factory();
     this.service.setGroupService(this.group_service);
   }
 

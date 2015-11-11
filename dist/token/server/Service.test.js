@@ -8,8 +8,7 @@ var Service = require('./Service');
 var TestRepository = require('./TestRepository');
 var UserService = require('../../user/server/Service');
 var UserTestRepository = require('../../user/TestRepository');
-var GroupService = require('../../group/Service');
-var GroupTestRepository = require('../../group/TestRepository');
+var GroupFactory = require('../../group/TestFactory');
 var EMAIL = 'test@example.com';
 var PASSWORD = 'password';
 var GROUP_NAME = 'Test group';
@@ -20,7 +19,7 @@ var Test = (function (_super) {
         this.name = 'token/server/ServiceTest';
     }
     Test.prototype.beforeEach = function () {
-        this.group_service = new GroupService(new GroupTestRepository());
+        this.group_service = GroupFactory();
         this.service = new Service(new TestRepository());
         this.user_service = new UserService(new UserTestRepository());
         this.user_service.setGroupService(this.group_service);

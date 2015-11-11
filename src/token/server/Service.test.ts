@@ -3,8 +3,7 @@ import Service = require('./Service');
 import TestRepository = require('./TestRepository');
 import UserService = require('../../user/server/Service');
 import UserTestRepository = require('../../user/TestRepository');
-import GroupService = require('../../group/Service');
-import GroupTestRepository = require('../../group/TestRepository');
+import GroupFactory = require('../../group/TestFactory');
 
 var EMAIL = 'test@example.com';
 var PASSWORD = 'password';
@@ -12,12 +11,12 @@ var GROUP_NAME = 'Test group';
 class Test extends BaseTest {
   protected name: string = 'token/server/ServiceTest';
   protected service: Service;
-  protected group_service: GroupService;
+  protected group_service;
   protected user_service: UserService;
 
   public beforeEach() {
     // Initialises services.
-    this.group_service = new GroupService(new GroupTestRepository());
+    this.group_service = GroupFactory();
     this.service = new Service(new TestRepository());
     this.user_service = new UserService(new UserTestRepository());
 

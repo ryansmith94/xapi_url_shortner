@@ -4,9 +4,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var BaseTest = require('../BaseTest');
-var TestFactory = require('./TestFactory');
-var GroupService = require('../group/Service');
-var GroupTestRepository = require('../group/TestRepository');
+var Factory = require('./TestFactory');
+var GroupFactory = require('../group/TestFactory');
 var LINK = {
     id: 1,
     long_url: 'http://www.example.com',
@@ -36,8 +35,8 @@ var Test = (function (_super) {
         this.name = 'tracking/ServiceTest';
     }
     Test.prototype.beforeEach = function () {
-        this.group_service = new GroupService(new GroupTestRepository());
-        this.service = TestFactory();
+        this.group_service = GroupFactory();
+        this.service = Factory();
         this.service.setGroupService(this.group_service);
     };
     Test.prototype.assertStatement = function (statement) {

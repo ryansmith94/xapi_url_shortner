@@ -6,8 +6,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 var BaseTest = require('../../BaseTest');
 var Service = require('./Service');
 var TestRepository = require('../TestRepository');
-var GroupService = require('../../group/Service');
-var GroupTestRepository = require('../../group/TestRepository');
+var GroupFactory = require('../../group/TestFactory');
 var TokenService = require('../../token/server/Service');
 var TokenTestRepository = require('../../token/server/TestRepository');
 var passhash = require('password-hash');
@@ -22,7 +21,7 @@ var Test = (function (_super) {
         this.name = 'user/server/ServiceTest';
     }
     Test.prototype.beforeEach = function () {
-        this.group_service = new GroupService(new GroupTestRepository());
+        this.group_service = GroupFactory();
         this.token_service = new TokenService(new TokenTestRepository());
         this.service = new Service(new TestRepository());
         this.service.setGroupService(this.group_service);

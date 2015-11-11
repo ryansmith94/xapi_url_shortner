@@ -1,8 +1,7 @@
 import BaseTest = require('../../BaseTest');
 import Service = require('./Service');
 import TestRepository = require('../TestRepository');
-import GroupService = require('../../group/Service');
-import GroupTestRepository = require('../../group/TestRepository');
+import GroupFactory = require('../../group/TestFactory');
 import UserService = require('../../user/server/Service');
 import UserTestRepository = require('../../user/TestRepository');
 import TokenService = require('../../token/server/Service');
@@ -16,12 +15,12 @@ var GROUP_ID = 1;
 class Test extends BaseTest {
   protected name: string = 'user/server/ServiceTest';
   protected service: Service;
-  protected group_service: GroupService;
+  protected group_service;
   protected token_service: TokenService;
 
   public beforeEach() {
     // Initialises services.
-    this.group_service = new GroupService(new GroupTestRepository());
+    this.group_service = GroupFactory();
     this.token_service = new TokenService(new TokenTestRepository());
     this.service = new Service(new TestRepository());
 
