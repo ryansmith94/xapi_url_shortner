@@ -4,13 +4,13 @@ interface Window {
 declare var window:Window;
 
 (function (scope: Window) {
-  scope.track = function (actor, context) {
+  scope.track = function (href, actor, context) {
     document.onclick = function (e) {
       var target: any = e.target;
       if (
         target &&
         target.href &&
-        target.href.indexOf('http://localhost:3000/') === 0 &&
+        target.href.indexOf(href) === 0 &&
         target.tagName === 'A'
       ) {
         var options = encodeURIComponent(JSON.stringify({actor: actor, context: context}));

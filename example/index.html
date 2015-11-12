@@ -5,7 +5,8 @@
   <script src="http://localhost:3000/tracker.js"></script>
   <script>
     console.log('Initialising tracking...');
-    window.track({
+    var href = document.location.protocol + '//' + document.location.host;
+    window.track(href, {
       account: {
         name: '1',
         homePage: document.URL
