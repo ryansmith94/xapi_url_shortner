@@ -1,15 +1,15 @@
 import BaseTest = require('../BaseTest');
-import Service = require('./Service');
+import Factory = require('./TestFactory');
 import TestRepository = require('../TestRepository');
 
 var LONG_URL = 'http://www.example.com';
 var SHORT_URL = '2';
 class Test extends BaseTest {
   protected name: string = 'link/client/ServiceTest';
-  protected service: Service;
+  protected service;
 
   public beforeEach() {
-    this.service = new Service(new TestRepository());
+    this.service = Factory();
   }
 
   public testCreateLink() {

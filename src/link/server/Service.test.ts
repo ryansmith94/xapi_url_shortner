@@ -1,30 +1,27 @@
 import BaseTest = require('../BaseTest');
-import Service = require('./Service');
-import TestRepository = require('../TestRepository');
+import Factory = require('./TestFactory');
 import TrackingFactory = require('../../tracking/TestFactory');
 import GroupFactory = require('../../group/TestFactory');
-import UserService = require('../../user/server/Service');
-import UserTestRepository = require('../../user/TestRepository');
-import TokenService = require('../../token/server/Service');
-import TokenTestRepository = require('../../token/server/TestRepository');
+import UserFactory = require('../../user/server/TestFactory');
+import TokenFactory = require('../../token/server/TestFactory');
 
 var LONG_URL = 'http://www.example.com';
 var SHORT_URL = '2';
 class Test extends BaseTest {
   protected name: string = 'link/server/ServiceTest';
-  protected service: Service;
+  protected service;
   protected group_service;
-  protected user_service: UserService;
-  protected token_service: TokenService;
+  protected user_service;
+  protected token_service;
   protected tracking_service;
 
   public beforeEach() {
     // Initialises services.
     this.tracking_service = TrackingFactory();
     this.group_service = GroupFactory();
-    this.token_service = new TokenService(new TokenTestRepository());
-    this.user_service = new UserService(new UserTestRepository());
-    this.service = new Service(new TestRepository());
+    this.token_service = TokenFactory();
+    this.user_service = UserFactory();
+    this.service = Factory();
 
     // Injects services into services.
     this.user_service.setGroupService(this.group_service);

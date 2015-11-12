@@ -1,11 +1,7 @@
 import BaseTest = require('../../BaseTest');
-import Service = require('./Service');
-import TestRepository = require('../TestRepository');
+import Factory = require('./TestFactory');
 import GroupFactory = require('../../group/TestFactory');
-import UserService = require('../../user/server/Service');
-import UserTestRepository = require('../../user/TestRepository');
-import TokenService = require('../../token/server/Service');
-import TokenTestRepository = require('../../token/server/TestRepository');
+import TokenFactory = require('../../token/server/TestFactory');
 import passhash = require('password-hash');
 
 var EMAIL = 'test@example.com';
@@ -14,15 +10,15 @@ var GROUP_NAME = 'Test group';
 var GROUP_ID = 1;
 class Test extends BaseTest {
   protected name: string = 'user/server/ServiceTest';
-  protected service: Service;
+  protected service;
   protected group_service;
-  protected token_service: TokenService;
+  protected token_service;
 
   public beforeEach() {
     // Initialises services.
     this.group_service = GroupFactory();
-    this.token_service = new TokenService(new TokenTestRepository());
-    this.service = new Service(new TestRepository());
+    this.token_service = TokenFactory();
+    this.service = Factory();
 
     // Injects services into services.
     this.service.setGroupService(this.group_service);

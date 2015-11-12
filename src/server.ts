@@ -22,11 +22,9 @@ import TrackingFactory = require('./tracking/Factory');
 var tracking_service = TrackingFactory(config.lrs);
 
 // Token.
-import TokenRepository = require('./token/server/KnexRepository');
-import TokenService = require('./token/server/Service');
+import TokenFactory = require('./token/server/Factory');
 import TokenController = require('./token/server/ExpressController');
-var token_repository = new TokenRepository(config.knex, 'token');
-var token_service = new TokenService(token_repository);
+var token_service = TokenFactory(config.knex, 'token');
 var token_controller = new TokenController(app, token_service);
 
 // Group.
@@ -34,19 +32,15 @@ import GroupFactory = require('./group/Factory');
 var group_service = GroupFactory(config.knex, 'group');
 
 // User.
-import UserRepository = require('./user/server/KnexRepository');
-import UserService = require('./user/server/Service');
+import UserFactory = require('./user/server/Factory');
 import UserController = require('./user/server/ExpressController');
-var user_repository = new UserRepository(config.knex, 'user');
-var user_service = new UserService(user_repository);
+var user_service = UserFactory(config.knex, 'user');
 var user_controller = new UserController(app, user_service);
 
 // Link.
-import LinkRepository = require('./link/server/KnexRepository');
-import LinkService = require('./link/server/Service');
+import LinkFactory = require('./link/server/Factory');
 import LinkController = require('./link/server/ExpressController');
-var link_repository = new LinkRepository(config.knex, 'link');
-var link_service = new LinkService(link_repository);
+var link_service = LinkFactory(config.knex, 'link');
 var link_controller = new LinkController(app, link_service);
 
 // Injects services into services.

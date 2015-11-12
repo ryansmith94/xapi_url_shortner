@@ -4,14 +4,11 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var BaseTest = require('../BaseTest');
-var Service = require('./Service');
-var TestRepository = require('../TestRepository');
+var Factory = require('./TestFactory');
 var TrackingFactory = require('../../tracking/TestFactory');
 var GroupFactory = require('../../group/TestFactory');
-var UserService = require('../../user/server/Service');
-var UserTestRepository = require('../../user/TestRepository');
-var TokenService = require('../../token/server/Service');
-var TokenTestRepository = require('../../token/server/TestRepository');
+var UserFactory = require('../../user/server/TestFactory');
+var TokenFactory = require('../../token/server/TestFactory');
 var LONG_URL = 'http://www.example.com';
 var SHORT_URL = '2';
 var Test = (function (_super) {
@@ -23,9 +20,9 @@ var Test = (function (_super) {
     Test.prototype.beforeEach = function () {
         this.tracking_service = TrackingFactory();
         this.group_service = GroupFactory();
-        this.token_service = new TokenService(new TokenTestRepository());
-        this.user_service = new UserService(new UserTestRepository());
-        this.service = new Service(new TestRepository());
+        this.token_service = TokenFactory();
+        this.user_service = UserFactory();
+        this.service = Factory();
         this.user_service.setGroupService(this.group_service);
         this.user_service.setTokenService(this.token_service);
         this.token_service.setUserService(this.user_service);

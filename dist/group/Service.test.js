@@ -5,12 +5,9 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var BaseTest = require('../BaseTest');
 var Factory = require('./TestFactory');
-var UserService = require('../user/server/Service');
-var UserTestRepository = require('../user/TestRepository');
-var TokenService = require('../token/server/Service');
-var TokenTestRepository = require('../token/server/TestRepository');
-var LinkService = require('../link/server/Service');
-var LinkTestRepository = require('../link/TestRepository');
+var UserFactory = require('../user/server/TestFactory');
+var TokenFactory = require('../token/server/TestFactory');
+var LinkFactory = require('../link/server/TestFactory');
 var q = require('q');
 var NAME = 'Example';
 var Test = (function (_super) {
@@ -21,9 +18,9 @@ var Test = (function (_super) {
     }
     Test.prototype.beforeEach = function () {
         this.service = Factory();
-        this.user_service = new UserService(new UserTestRepository());
-        this.token_service = new TokenService(new TokenTestRepository());
-        this.link_service = new LinkService(new LinkTestRepository());
+        this.user_service = UserFactory();
+        this.token_service = TokenFactory();
+        this.link_service = LinkFactory();
         this.user_service.setGroupService(this.service);
         this.user_service.setTokenService(this.token_service);
         this.service.setUserService(this.user_service);

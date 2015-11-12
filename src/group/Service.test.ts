@@ -1,26 +1,23 @@
 import BaseTest = require('../BaseTest');
 import Factory = require('./TestFactory');
-import UserService = require('../user/server/Service');
-import UserTestRepository = require('../user/TestRepository');
-import TokenService = require('../token/server/Service');
-import TokenTestRepository = require('../token/server/TestRepository');
-import LinkService = require('../link/server/Service');
-import LinkTestRepository = require('../link/TestRepository');
+import UserFactory = require('../user/server/TestFactory');
+import TokenFactory = require('../token/server/TestFactory');
+import LinkFactory = require('../link/server/TestFactory');
 import q = require('q');
 
 var NAME = 'Example'
 class Test extends BaseTest {
   protected name: string = 'group/ServiceTest';
   protected service;
-  protected user_service: UserService;
-  protected token_service: TokenService;
-  protected link_service: LinkService;
+  protected user_service;
+  protected token_service;
+  protected link_service;
 
   public beforeEach() {
     this.service = Factory();
-    this.user_service = new UserService(new UserTestRepository());
-    this.token_service = new TokenService(new TokenTestRepository());
-    this.link_service = new LinkService(new LinkTestRepository());
+    this.user_service = UserFactory();
+    this.token_service = TokenFactory();
+    this.link_service = LinkFactory();
 
     this.user_service.setGroupService(this.service);
     this.user_service.setTokenService(this.token_service);

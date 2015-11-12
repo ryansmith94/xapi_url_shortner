@@ -4,10 +4,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var BaseTest = require('../BaseTest');
-var Service = require('./Service');
-var TestRepository = require('./TestRepository');
-var UserService = require('../../user/server/Service');
-var UserTestRepository = require('../../user/TestRepository');
+var Factory = require('./TestFactory');
+var UserFactory = require('../../user/server/TestFactory');
 var GroupFactory = require('../../group/TestFactory');
 var EMAIL = 'test@example.com';
 var PASSWORD = 'password';
@@ -20,8 +18,8 @@ var Test = (function (_super) {
     }
     Test.prototype.beforeEach = function () {
         this.group_service = GroupFactory();
-        this.service = new Service(new TestRepository());
-        this.user_service = new UserService(new UserTestRepository());
+        this.service = Factory();
+        this.user_service = UserFactory();
         this.user_service.setGroupService(this.group_service);
         this.user_service.setTokenService(this.service);
         this.service.setUserService(this.user_service);

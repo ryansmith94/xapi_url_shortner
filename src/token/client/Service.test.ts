@@ -1,15 +1,14 @@
 import BaseTest = require('../BaseTest');
-import Service = require('./Service');
-import TestRepository = require('./TestRepository');
+import Factory = require('./TestFactory');
 
 var EMAIL = 'test@example.com';
 var PASSWORD = 'password';
 class Test extends BaseTest {
   protected name: string = 'token/client/ServiceTest';
-  protected service: Service;
+  protected service;
 
   public beforeEach() {
-    this.service = new Service(new TestRepository());
+    this.service = Factory();
   }
 
   public testCreateToken() {
