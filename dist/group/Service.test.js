@@ -14,7 +14,7 @@ var Test = (function (_super) {
     __extends(Test, _super);
     function Test() {
         _super.apply(this, arguments);
-        this.name = 'group/ServiceTest';
+        this.name = __filename;
     }
     Test.prototype.beforeEach = function () {
         this.service = Factory();

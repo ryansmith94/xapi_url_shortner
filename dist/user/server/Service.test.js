@@ -16,7 +16,7 @@ var Test = (function (_super) {
     __extends(Test, _super);
     function Test() {
         _super.apply(this, arguments);
-        this.name = 'user/server/ServiceTest';
+        this.name = __filename;
     }
     Test.prototype.beforeEach = function () {
         this.group_service = GroupFactory();

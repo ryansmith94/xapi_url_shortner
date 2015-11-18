@@ -4,7 +4,7 @@ import Factory = require('./TestFactory');
 var EMAIL = 'test@example.com';
 var PASSWORD = 'password';
 class Test extends BaseTest {
-  protected name: string = 'token/client/ServiceTest';
+  protected name: string = __filename;
   protected service;
 
   public beforeEach() {

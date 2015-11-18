@@ -7,7 +7,7 @@ var EMAIL = 'test@example.com';
 var PASSWORD = 'password';
 var GROUP_NAME = 'Test group';
 class Test extends BaseTest {
-  protected name: string = 'token/server/ServiceTest';
+  protected name: string = __filename;
   protected service;
   protected group_service;
   protected user_service;

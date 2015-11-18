@@ -41,9 +41,7 @@ class Controller {
 
   public getGroups() {
     this.service.getGroups().then(function (models) {
-      console.log(models.map(function (model) {
-        return model.id + ' - ' + model.name;
-      }).join('\n'));
+      console.log(models.map(function(model) { return JSON.stringify(model); }).join('\n'));
     }, function (err) {
       console.error(err.stack);
     }).then(process.exit, process.exit);

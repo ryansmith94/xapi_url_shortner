@@ -26,7 +26,7 @@ var CONTEXT = {
 };
 
 class Test extends BaseTest {
-  protected name: string = 'tracking/ServiceTest';
+  protected name: string = __filename;
   protected service;
   protected group_service;
 

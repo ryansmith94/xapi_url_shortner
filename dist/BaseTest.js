@@ -6,7 +6,7 @@ source_map_support.install({
 });
 var TestCase = (function () {
     function TestCase() {
-        this.name = 'TestCase';
+        this.name = __filename;
     }
     TestCase.prototype.run = function () {
         var _this = this;

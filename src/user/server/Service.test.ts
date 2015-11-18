@@ -9,7 +9,7 @@ var PASSWORD = 'password';
 var GROUP_NAME = 'Test group';
 var GROUP_ID = 1;
 class Test extends BaseTest {
-  protected name: string = 'user/server/ServiceTest';
+  protected name: string = __filename;
   protected service;
   protected group_service;
   protected token_service;

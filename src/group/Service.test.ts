@@ -7,7 +7,7 @@ import q = require('q');
 
 var NAME = 'Example'
 class Test extends BaseTest {
-  protected name: string = 'group/ServiceTest';
+  protected name: string = __filename;
   protected service;
   protected user_service;
   protected token_service;

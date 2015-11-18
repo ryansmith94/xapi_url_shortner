@@ -7,7 +7,7 @@ source_map_support.install({
 });
 
 abstract class TestCase {
-  protected name: string = 'TestCase';
+  protected name: string = __filename;
 
   /**
    * Runs the tests.

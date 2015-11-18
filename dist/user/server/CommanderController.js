@@ -33,7 +33,7 @@ var Controller = (function () {
     };
     Controller.prototype.getUsersByGroupId = function (group_id) {
         this.service.getUsersByGroupId(group_id).then(function (models) {
-            console.log(models);
+            console.log(models.map(function (model) { return JSON.stringify(model); }).join('\n'));
         }, function (err) {
             console.error(err.stack);
         }).then(process.exit, process.exit);
