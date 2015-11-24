@@ -5,7 +5,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var BaseService = require('../BaseService');
 var q = require('q');
-var EXPIRY_TIME = 30;
+var EXPIRY_TIME = 120;
 var Service = (function (_super) {
     __extends(Service, _super);
     function Service() {

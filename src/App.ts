@@ -12,7 +12,7 @@ class Component extends react.Component<any, any> {
     // Saves token in cookies.
     var current_date = new Date();
     var expiry_date = new Date();
-    expiry_date.setMinutes(current_date.getMinutes() + 29);
+    expiry_date.setMinutes(current_date.getMinutes() + 119);
     docCookie.setItem('token', token, expiry_date);
 
     // Updates state.

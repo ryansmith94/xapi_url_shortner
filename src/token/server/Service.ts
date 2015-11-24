@@ -1,7 +1,7 @@
 import BaseService = require('../BaseService');
 import q = require('q');
 
-var EXPIRY_TIME = 30; // Minutes.
+var EXPIRY_TIME = 120; // Minutes.
 class Service extends BaseService {
   private user_service;
 

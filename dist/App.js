@@ -19,7 +19,7 @@ var Component = (function (_super) {
     Component.prototype.handleTokenChange = function (token) {
         var current_date = new Date();
         var expiry_date = new Date();
-        expiry_date.setMinutes(current_date.getMinutes() + 29);
+        expiry_date.setMinutes(current_date.getMinutes() + 119);
         docCookie.setItem('token', token, expiry_date);
         this.setState({ token: token });
     };
