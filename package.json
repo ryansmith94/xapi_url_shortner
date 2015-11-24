@@ -23,6 +23,7 @@
     "browserify": "^11.0.1",
     "chai": "^3.2.0",
     "mocha": "^2.3.1",
+    "mocha-text-cov": "^0.1.0",
     "sassify": "^0.9.1",
     "source-map-support": "^0.3.2",
     "tsify": "^0.11.11",
@@ -35,7 +36,8 @@
     "dev:start": "nodemon dist/server.js",
     "test": "mocha dist/**/**/*.test.js dist/**/*.test.js",
     "clean": "find dist/ -type f -not -name '*.css' | xargs rm -rf; find dist/* -type d | xargs rm -rf",
-    "cover": "mocha dist/**/**/*.test.js dist/**/*.test.js --require blanket -R html-cov > coverage.html"
+    "cover:text": "mocha dist/**/**/*.test.js dist/**/*.test.js --require blanket -R mocha-text-cov",
+    "cover:html": "mocha dist/**/**/*.test.js dist/**/*.test.js --require blanket -R html-cov > coverage.html"
   },
   "bin": {
     "xus": "./dist/commands.js"
