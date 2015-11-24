@@ -19,6 +19,7 @@
     "tincanjs": "^0.34.1"
   },
   "devDependencies": {
+    "blanket": "^1.2.1",
     "browserify": "^11.0.1",
     "chai": "^3.2.0",
     "mocha": "^2.3.1",
@@ -33,10 +34,22 @@
     "dev:ts": "tsc",
     "dev:start": "nodemon dist/server.js",
     "test": "mocha dist/**/**/*.test.js dist/**/*.test.js",
-    "clean": "find dist/ -type f -not -name '*.css' | xargs rm -rf; find dist/* -type d | xargs rm -rf"
+    "clean": "find dist/ -type f -not -name '*.css' | xargs rm -rf; find dist/* -type d | xargs rm -rf",
+    "cover": "mocha dist/**/**/*.test.js dist/**/*.test.js --require blanket -R html-cov > coverage.html"
   },
   "bin": {
     "xus": "./dist/commands.js"
   },
-  "license": "GPLv3"
+  "license": "GPLv3",
+  "config": {
+    "blanket": {
+      "pattern": [
+        "dist"
+      ],
+      "data-cover-never": [
+        "node_modules",
+        "tests"
+      ]
+    }
+  }
 }
