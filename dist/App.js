@@ -3,16 +3,15 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/// <reference path="./definitions/references.d.ts" />
-var react = require('react');
-var docCookie = require('./docCookie');
-var dom = react.DOM;
+var React = require('react');
+var docCookie_1 = require('./docCookie');
+var dom = React.DOM;
 var Component = (function (_super) {
     __extends(Component, _super);
     function Component() {
         _super.apply(this, arguments);
         this.state = {
-            token: docCookie.getItem('token') || '',
+            token: docCookie_1.default.getItem('token') || '',
             route: window.location.hash.replace('#', '')
         };
     }
@@ -20,12 +19,12 @@ var Component = (function (_super) {
         var current_date = new Date();
         var expiry_date = new Date();
         expiry_date.setMinutes(current_date.getMinutes() + 119);
-        docCookie.setItem('token', token, expiry_date);
+        docCookie_1.default.setItem('token', token, expiry_date);
         this.setState({ token: token });
     };
     Component.prototype.handleLogout = function (e) {
         this.setState({ token: '' });
-        docCookie.removeItem('token');
+        docCookie_1.default.removeItem('token');
         e.preventDefault();
     };
     Component.prototype.componentDidMount = function () {
@@ -65,6 +64,7 @@ var Component = (function (_super) {
         ]);
     };
     return Component;
-})(react.Component);
-module.exports = react.createFactory(Component);
+})(React.Component);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = React.createFactory(Component);
 //# sourceMappingURL=App.js.map

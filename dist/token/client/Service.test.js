@@ -3,8 +3,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var BaseTest = require('../BaseTest');
-var Factory = require('./TestFactory');
+var BaseTest_1 = require('../BaseTest');
+var TestFactory_1 = require('./TestFactory');
 var EMAIL = 'test@example.com';
 var PASSWORD = 'password';
 var Test = (function (_super) {
@@ -14,13 +14,14 @@ var Test = (function (_super) {
         this.name = __filename;
     }
     Test.prototype.beforeEach = function () {
-        this.service = Factory();
+        this.service = TestFactory_1.default();
     };
     Test.prototype.testCreateToken = function () {
         return this.service.createToken(EMAIL, PASSWORD).then(this.pass());
     };
     return Test;
-})(BaseTest);
+})(BaseTest_1.default);
 (new Test()).run();
-module.exports = Test;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Test;
 //# sourceMappingURL=Service.test.js.map

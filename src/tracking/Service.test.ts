@@ -1,6 +1,6 @@
-import BaseTest = require('../BaseTest');
-import Factory = require('./TestFactory');
-import GroupFactory = require('../group/TestFactory');
+import BaseTest from '../BaseTest';
+import Factory from './TestFactory';
+import GroupFactory from '../group/TestFactory';
 
 var LINK = {
   id: 1,
@@ -95,4 +95,4 @@ class Test extends BaseTest {
 }
 
 (new Test()).run();
-export = Test;
+export default Test;

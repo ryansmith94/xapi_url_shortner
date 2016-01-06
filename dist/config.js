@@ -1,7 +1,7 @@
-/// <reference path="./definitions/references.d.ts" />
 var dotenv = require('dotenv');
 dotenv.load();
-module.exports = {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = {
     knex: {
         client: process.env.DB_CLIENT,
         connection: {
@@ -17,6 +17,6 @@ module.exports = {
         password: process.env.LRS_PASSWORD
     },
     debug: process.env.APP_DEBUG === 'true',
-    port: Number.parseInt(process.env.APP_PORT)
+    port: parseInt(process.env.APP_PORT)
 };
 //# sourceMappingURL=config.js.map

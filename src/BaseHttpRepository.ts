@@ -1,6 +1,5 @@
-/// <reference path="./definitions/references.d.ts" />
-import jquery = require('jquery');
-import q = require('q');
+import * as jquery from 'jquery';
+import * as q from 'q';
 
 class Repository {
   protected endpoint;
@@ -48,4 +47,4 @@ class Repository {
   }
 }
 
-export = Repository;
+export default Repository;

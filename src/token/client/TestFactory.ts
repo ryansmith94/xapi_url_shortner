@@ -1,7 +1,7 @@
-import Repository = require('./TestRepository');
-import Service = require('./Service');
+import Repository from './TestRepository';
+import Service from './Service';
 
-export = function(): Service {
+export default function(): Service {
     var repo = new Repository();
     return new Service(repo);
 };

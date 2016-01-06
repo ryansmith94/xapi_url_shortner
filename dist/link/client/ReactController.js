@@ -3,11 +3,10 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/// <reference path="../../definitions/references.d.ts" />
-var react = require('react');
-var ReactCreateController = require('./ReactCreateController');
-var ReactListController = require('./ReactListController');
-var dom = react.DOM;
+var React = require('react');
+var ReactCreateController_1 = require('./ReactCreateController');
+var ReactListController_1 = require('./ReactListController');
+var dom = React.DOM;
 var Component = (function (_super) {
     __extends(Component, _super);
     function Component() {
@@ -28,18 +27,19 @@ var Component = (function (_super) {
     };
     Component.prototype.render = function () {
         return dom.div({}, [
-            ReactCreateController({
+            ReactCreateController_1.default({
                 service: this.props.service,
                 long_url: this.state.long_url,
                 onLongUrlChange: this.handleLongUrlChange.bind(this)
             }),
-            ReactListController({
+            ReactListController_1.default({
                 service: this.props.service,
                 long_url: this.state.long_url
             })
         ]);
     };
     return Component;
-})(react.Component);
-module.exports = react.createFactory(Component);
+})(React.Component);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = React.createFactory(Component);
 //# sourceMappingURL=ReactController.js.map

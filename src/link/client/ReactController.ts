@@ -1,10 +1,9 @@
-/// <reference path="../../definitions/references.d.ts" />
-import react = require('react');
-import ReactCreateController = require('./ReactCreateController');
-import ReactListController = require('./ReactListController');
+import * as React from 'react';
+import ReactCreateController from './ReactCreateController';
+import ReactListController from './ReactListController';
 
-var dom = react.DOM;
-class Component extends react.Component<any, any> {
+var dom = React.DOM;
+class Component extends React.Component<any, any> {
   public state = {
     long_url: ''
   };
@@ -33,4 +32,4 @@ class Component extends react.Component<any, any> {
   }
 }
 
-export = react.createFactory(Component);
+export default React.createFactory(Component);

@@ -1,5 +1,4 @@
-/// <reference path="./definitions/references.d.ts" />
-import events = require('events');
+import * as events from 'events';
 var CHANGE_EVENT = 'change';
 
 class Service extends events.EventEmitter {
@@ -14,4 +13,4 @@ class Service extends events.EventEmitter {
   }
 }
 
-export = Service;
+export default Service;

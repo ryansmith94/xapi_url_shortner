@@ -1,12 +1,11 @@
-/// <reference path="../definitions/references.d.ts" />
-var Tincan = require('tincanjs');
+var tincanjs_1 = require('tincanjs');
 var q = require('q');
 var Repository = (function () {
     function Repository(config) {
         this.config = config;
     }
     Repository.prototype.connect = function () {
-        return new Tincan({ recordStores: [this.config] });
+        return new tincanjs_1.default({ recordStores: [this.config] });
     };
     Repository.prototype.createStatement = function (statement) {
         var deferred = q.defer();
@@ -24,5 +23,6 @@ var Repository = (function () {
     };
     return Repository;
 })();
-module.exports = Repository;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Repository;
 //# sourceMappingURL=TinCanLrsRepository.js.map

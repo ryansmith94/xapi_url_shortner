@@ -1,6 +1,5 @@
-/// <reference path="../../definitions/references.d.ts" />
-import BaseRepository = require('../../BaseHttpRepository');
-import q = require('q');
+import BaseRepository from '../../BaseHttpRepository';
+import * as q from 'q';
 
 class Repository extends BaseRepository {
   private tokens: Array<any> = [];
@@ -26,4 +25,4 @@ class Repository extends BaseRepository {
   }
 }
 
-export = Repository;
+export default Repository;

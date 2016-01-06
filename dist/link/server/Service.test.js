@@ -3,12 +3,12 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var BaseTest = require('../BaseTest');
-var Factory = require('./TestFactory');
-var TrackingFactory = require('../../tracking/TestFactory');
-var GroupFactory = require('../../group/TestFactory');
-var UserFactory = require('../../user/server/TestFactory');
-var TokenFactory = require('../../token/server/TestFactory');
+var BaseTest_1 = require('../BaseTest');
+var TestFactory_1 = require('./TestFactory');
+var TestFactory_2 = require('../../tracking/TestFactory');
+var TestFactory_3 = require('../../group/TestFactory');
+var TestFactory_4 = require('../../user/server/TestFactory');
+var TestFactory_5 = require('../../token/server/TestFactory');
 var LONG_URL = 'http://www.example.com';
 var SHORT_URL = '2';
 var Test = (function (_super) {
@@ -18,11 +18,11 @@ var Test = (function (_super) {
         this.name = __filename;
     }
     Test.prototype.beforeEach = function () {
-        this.tracking_service = TrackingFactory();
-        this.group_service = GroupFactory();
-        this.token_service = TokenFactory();
-        this.user_service = UserFactory();
-        this.service = Factory();
+        this.tracking_service = TestFactory_2.default();
+        this.group_service = TestFactory_3.default();
+        this.token_service = TestFactory_5.default();
+        this.user_service = TestFactory_4.default();
+        this.service = TestFactory_1.default();
         this.user_service.setGroupService(this.group_service);
         this.user_service.setTokenService(this.token_service);
         this.token_service.setUserService(this.user_service);
@@ -177,7 +177,8 @@ var Test = (function (_super) {
         return this.service.deleteLinksByGroupId(1).then(this.fail(), this.pass());
     };
     return Test;
-})(BaseTest);
+})(BaseTest_1.default);
 (new Test()).run();
-module.exports = Test;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Test;
 //# sourceMappingURL=Service.test.js.map

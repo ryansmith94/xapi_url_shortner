@@ -1,9 +1,8 @@
-/// <reference path="../../definitions/references.d.ts" />
-import react = require('react');
-import item = require('./ReactItem');
+import * as React from 'react';
+import item from './ReactItem';
 
-var dom = react.DOM;
-class Component extends react.Component<any, any> {
+var dom = React.DOM;
+class Component extends React.Component<any, any> {
   state = {
     links: []
   };
@@ -41,4 +40,4 @@ class Component extends react.Component<any, any> {
   }
 }
 
-export = react.createFactory(Component);
+export default React.createFactory(Component);

@@ -1,6 +1,5 @@
-/// <reference path="../definitions/references.d.ts" />
-import BaseService = require('../BaseService');
-import q = require('q');
+import BaseService from '../BaseService';
+import * as q from 'q';
 
 interface TrackingOptions {
   actor?: any,
@@ -75,4 +74,4 @@ class Service extends BaseService {
   }
 }
 
-export = Service;
+export default Service;

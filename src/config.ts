@@ -1,8 +1,7 @@
-/// <reference path="./definitions/references.d.ts" />
-import dotenv = require('dotenv');
+import * as dotenv from 'dotenv';
 dotenv.load();
 
-export = {
+export default {
   knex: {
     client: process.env.DB_CLIENT,
     connection: {
@@ -18,5 +17,5 @@ export = {
     password: process.env.LRS_PASSWORD
   },
   debug: process.env.APP_DEBUG === 'true',
-  port: Number.parseInt(process.env.APP_PORT)
+  port: parseInt(process.env.APP_PORT)
 };

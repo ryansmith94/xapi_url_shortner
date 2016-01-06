@@ -1,8 +1,8 @@
-import BaseTest = require('../../BaseTest');
-import Factory = require('./TestFactory');
-import GroupFactory = require('../../group/TestFactory');
-import TokenFactory = require('../../token/server/TestFactory');
-import passhash = require('password-hash');
+import BaseTest from '../../BaseTest';
+import Factory from './TestFactory';
+import GroupFactory from '../../group/TestFactory';
+import TokenFactory from '../../token/server/TestFactory';
+import * as passhash from 'password-hash';
 
 var EMAIL = 'test@example.com';
 var PASSWORD = 'password';
@@ -161,4 +161,4 @@ class Test extends BaseTest {
 }
 
 (new Test()).run();
-export = Test;
+export default Test;

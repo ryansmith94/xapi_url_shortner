@@ -1,7 +1,7 @@
-import BaseTest = require('../BaseTest');
-import Factory = require('./TestFactory');
-import UserFactory = require('../../user/server/TestFactory');
-import GroupFactory = require('../../group/TestFactory');
+import BaseTest from '../BaseTest';
+import Factory from './TestFactory';
+import UserFactory from '../../user/server/TestFactory';
+import GroupFactory from '../../group/TestFactory';
 
 var EMAIL = 'test@example.com';
 var PASSWORD = 'password';
@@ -53,4 +53,4 @@ class Test extends BaseTest {
 }
 
 (new Test()).run();
-export = Test;
+export default Test;

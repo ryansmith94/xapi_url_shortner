@@ -1,6 +1,6 @@
-import BaseService = require('../BaseService');
-import q = require('q');
-import passhash = require('password-hash');
+import BaseService from '../BaseService';
+import * as q from 'q';
+import * as passhash from 'password-hash';
 
 class Service extends BaseService {
   private group_service;
@@ -97,4 +97,4 @@ class Service extends BaseService {
   }
 }
 
-export = Service;
+export default Service;

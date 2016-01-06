@@ -16,5 +16,6 @@ var Controller = (function () {
     };
     return Controller;
 })();
-module.exports = Controller;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Controller;
 //# sourceMappingURL=ExpressController.js.map

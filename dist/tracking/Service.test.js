@@ -3,9 +3,9 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var BaseTest = require('../BaseTest');
-var Factory = require('./TestFactory');
-var GroupFactory = require('../group/TestFactory');
+var BaseTest_1 = require('../BaseTest');
+var TestFactory_1 = require('./TestFactory');
+var TestFactory_2 = require('../group/TestFactory');
 var LINK = {
     id: 1,
     long_url: 'http://www.example.com',
@@ -35,8 +35,8 @@ var Test = (function (_super) {
         this.name = __filename;
     }
     Test.prototype.beforeEach = function () {
-        this.group_service = GroupFactory();
-        this.service = Factory();
+        this.group_service = TestFactory_2.default();
+        this.service = TestFactory_1.default();
         this.service.setGroupService(this.group_service);
     };
     Test.prototype.assertStatement = function (statement) {
@@ -90,7 +90,8 @@ var Test = (function (_super) {
         });
     };
     return Test;
-})(BaseTest);
+})(BaseTest_1.default);
 (new Test()).run();
-module.exports = Test;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Test;
 //# sourceMappingURL=Service.test.js.map

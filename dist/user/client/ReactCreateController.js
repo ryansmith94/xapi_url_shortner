@@ -3,9 +3,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/// <reference path="../../definitions/references.d.ts" />
-var react = require('react');
-var dom = react.DOM;
+var React = require('react');
+var dom = React.DOM;
 var Component = (function (_super) {
     __extends(Component, _super);
     function Component() {
@@ -63,6 +62,7 @@ var Component = (function (_super) {
         ]);
     };
     return Component;
-})(react.Component);
-module.exports = react.createFactory(Component);
+})(React.Component);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = React.createFactory(Component);
 //# sourceMappingURL=ReactCreateController.js.map

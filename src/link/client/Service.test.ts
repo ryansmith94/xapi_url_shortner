@@ -1,6 +1,6 @@
-import BaseTest = require('../BaseTest');
-import Factory = require('./TestFactory');
-import TestRepository = require('../TestRepository');
+import BaseTest from '../BaseTest';
+import Factory from './TestFactory';
+import TestRepository from '../TestRepository';
 
 var LONG_URL = 'http://www.example.com';
 var SHORT_URL = '2';
@@ -63,4 +63,4 @@ class Test extends BaseTest {
 }
 
 (new Test()).run();
-export = Test;
+export default Test;

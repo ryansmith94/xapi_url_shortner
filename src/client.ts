@@ -1,19 +1,18 @@
-/// <reference path="./definitions/references.d.ts" />
-import react = require('react');
-import App = require('./App');
+import * as React from 'react';
+import App from './App';
 
 // Link.
-import LinkFactory = require('./link/client/Factory');
-import LinkController = require('./link/client/ReactController');
+import LinkFactory from './link/client/Factory';
+import LinkController from './link/client/ReactController';
 
 // Token.
-import TokenFactory = require('./token/client/Factory');
-import TokenCreateController = require('./token/client/ReactCreateController');
+import TokenFactory from './token/client/Factory';
+import TokenCreateController from './token/client/ReactCreateController';
 var token_service = TokenFactory('api/token');
 
 // User.
-import UserFactory = require('./user/client/Factory');
-import UserController = require('./user/client/ReactCreateController');
+import UserFactory from './user/client/Factory';
+import UserController from './user/client/ReactCreateController';
 
 var content_controller = function (token, onTokenChange, route) {
   var content;
@@ -38,6 +37,6 @@ var content_controller = function (token, onTokenChange, route) {
   return content;
 };
 
-react.render(App({
+React.render(App({
   content_controller: content_controller
 }), document.getElementById('app'));

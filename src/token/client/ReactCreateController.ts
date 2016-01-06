@@ -1,8 +1,7 @@
-/// <reference path="../../definitions/references.d.ts" />
-import react = require('react');
+import * as React from 'react';
 
-var dom = react.DOM;
-class Component extends react.Component<any, any> {
+var dom = React.DOM;
+class Component extends React.Component<any, any> {
   public state = {
     email: '',
     password: ''
@@ -55,4 +54,4 @@ class Component extends react.Component<any, any> {
   }
 }
 
-export = react.createFactory(Component);
+export default React.createFactory(Component);

@@ -3,8 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/// <reference path="../definitions/references.d.ts" />
-var BaseService = require('../BaseService');
+var BaseService_1 = require('../BaseService');
 var q = require('q');
 var Service = (function (_super) {
     __extends(Service, _super);
@@ -60,6 +59,7 @@ var Service = (function (_super) {
         }.bind(this));
     };
     return Service;
-})(BaseService);
-module.exports = Service;
+})(BaseService_1.default);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Service;
 //# sourceMappingURL=Service.js.map

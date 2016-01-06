@@ -3,8 +3,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var BaseService = require('../BaseService');
-var url_regex = require('./UrlRegex');
+var BaseService_1 = require('../BaseService');
+var UrlRegex_1 = require('./UrlRegex');
 var q = require('q');
 var Service = (function (_super) {
     __extends(Service, _super);
@@ -14,7 +14,7 @@ var Service = (function (_super) {
     }
     Service.prototype.validateLink = function (long_url, custom_url) {
         var deferred = q.defer();
-        if (!url_regex.test(long_url)) {
+        if (!UrlRegex_1.default.test(long_url)) {
             deferred.reject(new Error('Invalid Long URL'));
         }
         if (!/^[\da-z]+$/.test(custom_url)) {
@@ -55,6 +55,7 @@ var Service = (function (_super) {
         return this.repo.getLinkById(id);
     };
     return Service;
-})(BaseService);
-module.exports = Service;
+})(BaseService_1.default);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Service;
 //# sourceMappingURL=BaseService.js.map

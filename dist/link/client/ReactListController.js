@@ -3,10 +3,9 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/// <reference path="../../definitions/references.d.ts" />
-var react = require('react');
-var item = require('./ReactItem');
-var dom = react.DOM;
+var React = require('react');
+var ReactItem_1 = require('./ReactItem');
+var dom = React.DOM;
 var Component = (function (_super) {
     __extends(Component, _super);
     function Component() {
@@ -44,9 +43,10 @@ var Component = (function (_super) {
         return dom.div({ className: 'link_list' }, this.state.links.filter(function (link) {
             link.onDelete = this.handleDelete.bind(this);
             return link.long_url.indexOf(this.props.long_url) !== -1;
-        }.bind(this)).reverse().map(item));
+        }.bind(this)).reverse().map(ReactItem_1.default));
     };
     return Component;
-})(react.Component);
-module.exports = react.createFactory(Component);
+})(React.Component);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = React.createFactory(Component);
 //# sourceMappingURL=ReactListController.js.map

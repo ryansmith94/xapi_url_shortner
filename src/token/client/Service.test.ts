@@ -1,5 +1,5 @@
-import BaseTest = require('../BaseTest');
-import Factory = require('./TestFactory');
+import BaseTest from '../BaseTest';
+import Factory from './TestFactory';
 
 var EMAIL = 'test@example.com';
 var PASSWORD = 'password';
@@ -17,4 +17,4 @@ class Test extends BaseTest {
 }
 
 (new Test()).run();
-export = Test;
+export default Test;

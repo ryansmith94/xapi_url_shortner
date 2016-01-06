@@ -1,6 +1,5 @@
-/// <reference path="./definitions/references.d.ts" />
-import knex = require('knex');
-import config = require('./config');
+import * as knex from 'knex';
+import config from './config';
 
 class Repository {
   private config;
@@ -37,4 +36,4 @@ class Repository {
   }
 }
 
-export = Repository;
+export default Repository;

@@ -1,4 +1,5 @@
-module.exports = new RegExp("^" +
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = new RegExp("^" +
     "(?:(?:https?|ftp)://)" +
     "(?:\\S+(?::\\S*)?@)?" +
     "(?:" +

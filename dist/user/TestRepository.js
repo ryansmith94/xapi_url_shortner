@@ -1,4 +1,3 @@
-/// <reference path="../definitions/references.d.ts" />
 var q = require('q');
 var Repository = (function () {
     function Repository() {
@@ -68,5 +67,6 @@ var Repository = (function () {
     };
     return Repository;
 })();
-module.exports = Repository;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Repository;
 //# sourceMappingURL=TestRepository.js.map

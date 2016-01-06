@@ -3,11 +3,11 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var BaseTest = require('../BaseTest');
-var Factory = require('./TestFactory');
-var UserFactory = require('../user/server/TestFactory');
-var TokenFactory = require('../token/server/TestFactory');
-var LinkFactory = require('../link/server/TestFactory');
+var BaseTest_1 = require('../BaseTest');
+var TestFactory_1 = require('./TestFactory');
+var TestFactory_2 = require('../user/server/TestFactory');
+var TestFactory_3 = require('../token/server/TestFactory');
+var TestFactory_4 = require('../link/server/TestFactory');
 var q = require('q');
 var NAME = 'Example';
 var Test = (function (_super) {
@@ -17,10 +17,10 @@ var Test = (function (_super) {
         this.name = __filename;
     }
     Test.prototype.beforeEach = function () {
-        this.service = Factory();
-        this.user_service = UserFactory();
-        this.token_service = TokenFactory();
-        this.link_service = LinkFactory();
+        this.service = TestFactory_1.default();
+        this.user_service = TestFactory_2.default();
+        this.token_service = TestFactory_3.default();
+        this.link_service = TestFactory_4.default();
         this.user_service.setGroupService(this.service);
         this.user_service.setTokenService(this.token_service);
         this.service.setUserService(this.user_service);
@@ -108,7 +108,8 @@ var Test = (function (_super) {
         });
     };
     return Test;
-})(BaseTest);
+})(BaseTest_1.default);
 (new Test()).run();
-module.exports = Test;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Test;
 //# sourceMappingURL=Service.test.js.map

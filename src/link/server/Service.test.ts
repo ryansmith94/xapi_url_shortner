@@ -1,9 +1,9 @@
-import BaseTest = require('../BaseTest');
-import Factory = require('./TestFactory');
-import TrackingFactory = require('../../tracking/TestFactory');
-import GroupFactory = require('../../group/TestFactory');
-import UserFactory = require('../../user/server/TestFactory');
-import TokenFactory = require('../../token/server/TestFactory');
+import BaseTest from '../BaseTest';
+import Factory from './TestFactory';
+import TrackingFactory from '../../tracking/TestFactory';
+import GroupFactory from '../../group/TestFactory';
+import UserFactory from '../../user/server/TestFactory';
+import TokenFactory from '../../token/server/TestFactory';
 
 var LONG_URL = 'http://www.example.com';
 var SHORT_URL = '2';
@@ -184,4 +184,4 @@ class Test extends BaseTest {
 }
 
 (new Test()).run();
-export = Test;
+export default Test;

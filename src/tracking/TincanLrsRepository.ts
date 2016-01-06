@@ -1,6 +1,5 @@
-/// <reference path="../definitions/references.d.ts" />
-import Tincan = require('tincanjs');
-import q = require('q');
+import Tincan from 'tincanjs';
+import * as q from 'q';
 
 class Repository {
   private config;
@@ -29,4 +28,4 @@ class Repository {
   }
 }
 
-export = Repository;
+export default Repository;

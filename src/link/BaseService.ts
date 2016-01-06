@@ -1,6 +1,6 @@
-import BaseService = require('../BaseService');
-import url_regex = require('./UrlRegex');
-import q = require('q');
+import BaseService from '../BaseService';
+import url_regex from './UrlRegex';
+import * as q from 'q';
 
 class Service extends BaseService {
   protected repo;
@@ -109,4 +109,4 @@ class Service extends BaseService {
   }
 }
 
-export = Service;
+export default Service;

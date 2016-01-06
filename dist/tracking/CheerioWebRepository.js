@@ -1,4 +1,3 @@
-/// <reference path="../definitions/references.d.ts" />
 var request = require('request');
 var cheerio = require('cheerio');
 var q = require('q');
@@ -18,5 +17,6 @@ var Repository = (function () {
     };
     return Repository;
 })();
-module.exports = Repository;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Repository;
 //# sourceMappingURL=CheerioWebRepository.js.map

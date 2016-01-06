@@ -1,7 +1,6 @@
-/// <reference path="../definitions/references.d.ts" />
-import request = require('request');
-import cheerio = require('cheerio');
-import q = require('q');
+import * as request from 'request';
+import * as cheerio from 'cheerio';
+import * as q from 'q';
 
 class Repository {
 
@@ -19,4 +18,4 @@ class Repository {
   }
 }
 
-export = Repository;
+export default Repository;

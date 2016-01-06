@@ -3,8 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/// <reference path="../../definitions/references.d.ts" />
-var BaseRepository = require('../../BaseHttpRepository');
+var BaseHttpRepository_1 = require('../../BaseHttpRepository');
 var q = require('q');
 var Repository = (function (_super) {
     __extends(Repository, _super);
@@ -77,6 +76,7 @@ var Repository = (function (_super) {
         }.bind(this));
     };
     return Repository;
-})(BaseRepository);
-module.exports = Repository;
+})(BaseHttpRepository_1.default);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Repository;
 //# sourceMappingURL=HttpRepository.js.map

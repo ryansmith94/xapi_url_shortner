@@ -1,9 +1,9 @@
-import BaseTest = require('../BaseTest');
-import Factory = require('./TestFactory');
-import UserFactory = require('../user/server/TestFactory');
-import TokenFactory = require('../token/server/TestFactory');
-import LinkFactory = require('../link/server/TestFactory');
-import q = require('q');
+import BaseTest from '../BaseTest';
+import Factory from './TestFactory';
+import UserFactory from '../user/server/TestFactory';
+import TokenFactory from '../token/server/TestFactory';
+import LinkFactory from '../link/server/TestFactory';
+import * as q from 'q';
 
 var NAME = 'Example'
 class Test extends BaseTest {
@@ -110,4 +110,4 @@ class Test extends BaseTest {
 }
 
 (new Test()).run();
-export = Test;
+export default Test;

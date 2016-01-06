@@ -1,4 +1,4 @@
-import BaseRepository = require('../BaseKnexRepository');
+import BaseRepository from '../BaseKnexRepository';
 
 class Repository extends BaseRepository {
 
@@ -51,4 +51,4 @@ class Repository extends BaseRepository {
   }
 }
 
-export = Repository;
+export default Repository;

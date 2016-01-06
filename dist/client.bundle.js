@@ -4,16 +4,15 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/// <reference path="./definitions/references.d.ts" />
-var react = require('react');
-var docCookie = require('./docCookie');
-var dom = react.DOM;
+var React = require('react');
+var docCookie_1 = require('./docCookie');
+var dom = React.DOM;
 var Component = (function (_super) {
     __extends(Component, _super);
     function Component() {
         _super.apply(this, arguments);
         this.state = {
-            token: docCookie.getItem('token') || '',
+            token: docCookie_1.default.getItem('token') || '',
             route: window.location.hash.replace('#', '')
         };
     }
@@ -21,12 +20,12 @@ var Component = (function (_super) {
         var current_date = new Date();
         var expiry_date = new Date();
         expiry_date.setMinutes(current_date.getMinutes() + 119);
-        docCookie.setItem('token', token, expiry_date);
+        docCookie_1.default.setItem('token', token, expiry_date);
         this.setState({ token: token });
     };
     Component.prototype.handleLogout = function (e) {
         this.setState({ token: '' });
-        docCookie.removeItem('token');
+        docCookie_1.default.removeItem('token');
         e.preventDefault();
     };
     Component.prototype.componentDidMount = function () {
@@ -66,11 +65,11 @@ var Component = (function (_super) {
         ]);
     };
     return Component;
-})(react.Component);
-module.exports = react.createFactory(Component);
+})(React.Component);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = React.createFactory(Component);
 
 },{"./docCookie":5,"react":181}],2:[function(require,module,exports){
-/// <reference path="./definitions/references.d.ts" />
 var jquery = require('jquery');
 var q = require('q');
 var Repository = (function () {
@@ -109,7 +108,8 @@ var Repository = (function () {
     };
     return Repository;
 })();
-module.exports = Repository;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Repository;
 
 },{"jquery":25,"q":26}],3:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
@@ -117,7 +117,6 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/// <reference path="./definitions/references.d.ts" />
 var events = require('events');
 var CHANGE_EVENT = 'change';
 var Service = (function (_super) {
@@ -136,42 +135,42 @@ var Service = (function (_super) {
     };
     return Service;
 })(events.EventEmitter);
-module.exports = Service;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Service;
 
 },{"events":182}],4:[function(require,module,exports){
-/// <reference path="./definitions/references.d.ts" />
-var react = require('react');
-var App = require('./App');
-var LinkFactory = require('./link/client/Factory');
-var LinkController = require('./link/client/ReactController');
-var TokenFactory = require('./token/client/Factory');
-var TokenCreateController = require('./token/client/ReactCreateController');
-var token_service = TokenFactory('api/token');
-var UserFactory = require('./user/client/Factory');
-var UserController = require('./user/client/ReactCreateController');
+var React = require('react');
+var App_1 = require('./App');
+var Factory_1 = require('./link/client/Factory');
+var ReactController_1 = require('./link/client/ReactController');
+var Factory_2 = require('./token/client/Factory');
+var ReactCreateController_1 = require('./token/client/ReactCreateController');
+var token_service = Factory_2.default('api/token');
+var Factory_3 = require('./user/client/Factory');
+var ReactCreateController_2 = require('./user/client/ReactCreateController');
 var content_controller = function (token, onTokenChange, route) {
     var content;
     if (token && route === 'invite') {
-        var user_service = UserFactory('api/user', token.value);
-        content = [UserController({
+        var user_service = Factory_3.default('api/user', token.value);
+        content = [ReactCreateController_2.default({
                 service: user_service
             })];
     }
     else if (token) {
-        var link_service = LinkFactory('api/link', token.value);
-        content = [LinkController({
+        var link_service = Factory_1.default('api/link', token.value);
+        content = [ReactController_1.default({
                 service: link_service
             })];
     }
     else {
-        content = [TokenCreateController({
+        content = [ReactCreateController_1.default({
                 service: token_service,
                 onTokenChange: onTokenChange
             })];
     }
     return content;
 };
-react.render(App({
+React.render(App_1.default({
     content_controller: content_controller
 }), document.getElementById('app'));
 
@@ -199,7 +198,8 @@ react.render(App({
 |*|  * docCookies.keys()
 |*|
 \*/
-module.exports = {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = {
     getItem: function (sKey) {
         if (!sKey) {
             return null;
@@ -261,8 +261,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var BaseService = require('../BaseService');
-var url_regex = require('./UrlRegex');
+var BaseService_1 = require('../BaseService');
+var UrlRegex_1 = require('./UrlRegex');
 var q = require('q');
 var Service = (function (_super) {
     __extends(Service, _super);
@@ -272,7 +272,7 @@ var Service = (function (_super) {
     }
     Service.prototype.validateLink = function (long_url, custom_url) {
         var deferred = q.defer();
-        if (!url_regex.test(long_url)) {
+        if (!UrlRegex_1.default.test(long_url)) {
             deferred.reject(new Error('Invalid Long URL'));
         }
         if (!/^[\da-z]+$/.test(custom_url)) {
@@ -313,11 +313,13 @@ var Service = (function (_super) {
         return this.repo.getLinkById(id);
     };
     return Service;
-})(BaseService);
-module.exports = Service;
+})(BaseService_1.default);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Service;
 
 },{"../BaseService":3,"./UrlRegex":7,"q":26}],7:[function(require,module,exports){
-module.exports = new RegExp("^" +
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = new RegExp("^" +
     "(?:(?:https?|ftp)://)" +
     "(?:\\S+(?::\\S*)?@)?" +
     "(?:" +
@@ -338,12 +340,15 @@ module.exports = new RegExp("^" +
     "$", "i");
 
 },{}],8:[function(require,module,exports){
-var Repository = require('./HttpRepository');
-var Service = require('./Service');
-module.exports = function (endpoint, token_value) {
-    var repo = new Repository(endpoint, token_value);
-    return new Service(repo);
-};
+var HttpRepository_1 = require('./HttpRepository');
+var Service_1 = require('./Service');
+function default_1(endpoint, token_value) {
+    var repo = new HttpRepository_1.default(endpoint, token_value);
+    return new Service_1.default(repo);
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = default_1;
+;
 
 },{"./HttpRepository":9,"./Service":14}],9:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
@@ -351,8 +356,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/// <reference path="../../definitions/references.d.ts" />
-var BaseRepository = require('../../BaseHttpRepository');
+var BaseHttpRepository_1 = require('../../BaseHttpRepository');
 var q = require('q');
 var Repository = (function (_super) {
     __extends(Repository, _super);
@@ -425,8 +429,9 @@ var Repository = (function (_super) {
         }.bind(this));
     };
     return Repository;
-})(BaseRepository);
-module.exports = Repository;
+})(BaseHttpRepository_1.default);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Repository;
 
 },{"../../BaseHttpRepository":2,"q":26}],10:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
@@ -434,11 +439,10 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/// <reference path="../../definitions/references.d.ts" />
-var react = require('react');
-var ReactCreateController = require('./ReactCreateController');
-var ReactListController = require('./ReactListController');
-var dom = react.DOM;
+var React = require('react');
+var ReactCreateController_1 = require('./ReactCreateController');
+var ReactListController_1 = require('./ReactListController');
+var dom = React.DOM;
 var Component = (function (_super) {
     __extends(Component, _super);
     function Component() {
@@ -459,20 +463,21 @@ var Component = (function (_super) {
     };
     Component.prototype.render = function () {
         return dom.div({}, [
-            ReactCreateController({
+            ReactCreateController_1.default({
                 service: this.props.service,
                 long_url: this.state.long_url,
                 onLongUrlChange: this.handleLongUrlChange.bind(this)
             }),
-            ReactListController({
+            ReactListController_1.default({
                 service: this.props.service,
                 long_url: this.state.long_url
             })
         ]);
     };
     return Component;
-})(react.Component);
-module.exports = react.createFactory(Component);
+})(React.Component);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = React.createFactory(Component);
 
 },{"./ReactCreateController":11,"./ReactListController":13,"react":181}],11:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
@@ -480,9 +485,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/// <reference path="../../definitions/references.d.ts" />
-var react = require('react');
-var dom = react.DOM;
+var React = require('react');
+var dom = React.DOM;
 var Component = (function (_super) {
     __extends(Component, _super);
     function Component() {
@@ -536,8 +540,9 @@ var Component = (function (_super) {
         ]);
     };
     return Component;
-})(react.Component);
-module.exports = react.createFactory(Component);
+})(React.Component);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = React.createFactory(Component);
 
 },{"react":181}],12:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
@@ -545,9 +550,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/// <reference path="../../definitions/references.d.ts" />
-var react = require('react');
-var dom = react.DOM;
+var React = require('react');
+var dom = React.DOM;
 var Component = (function (_super) {
     __extends(Component, _super);
     function Component() {
@@ -586,8 +590,9 @@ var Component = (function (_super) {
         ]);
     };
     return Component;
-})(react.Component);
-module.exports = react.createFactory(Component);
+})(React.Component);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = React.createFactory(Component);
 
 },{"react":181}],13:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
@@ -595,10 +600,9 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/// <reference path="../../definitions/references.d.ts" />
-var react = require('react');
-var item = require('./ReactItem');
-var dom = react.DOM;
+var React = require('react');
+var ReactItem_1 = require('./ReactItem');
+var dom = React.DOM;
 var Component = (function (_super) {
     __extends(Component, _super);
     function Component() {
@@ -636,11 +640,12 @@ var Component = (function (_super) {
         return dom.div({ className: 'link_list' }, this.state.links.filter(function (link) {
             link.onDelete = this.handleDelete.bind(this);
             return link.long_url.indexOf(this.props.long_url) !== -1;
-        }.bind(this)).reverse().map(item));
+        }.bind(this)).reverse().map(ReactItem_1.default));
     };
     return Component;
-})(react.Component);
-module.exports = react.createFactory(Component);
+})(React.Component);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = React.createFactory(Component);
 
 },{"./ReactItem":12,"react":181}],14:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
@@ -648,7 +653,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var BaseService = require('../BaseService');
+var BaseService_1 = require('../BaseService');
 var Service = (function (_super) {
     __extends(Service, _super);
     function Service(repository) {
@@ -678,8 +683,9 @@ var Service = (function (_super) {
         }.bind(this));
     };
     return Service;
-})(BaseService);
-module.exports = Service;
+})(BaseService_1.default);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Service;
 
 },{"../BaseService":6}],15:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
@@ -687,7 +693,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var BaseService = require('../BaseService');
+var BaseService_1 = require('../BaseService');
 var Service = (function (_super) {
     __extends(Service, _super);
     function Service(repository) {
@@ -695,16 +701,20 @@ var Service = (function (_super) {
         _super.call(this);
     }
     return Service;
-})(BaseService);
-module.exports = Service;
+})(BaseService_1.default);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Service;
 
 },{"../BaseService":3}],16:[function(require,module,exports){
-var Repository = require('./HttpRepository');
-var Service = require('./Service');
-module.exports = function (endpoint) {
-    var repo = new Repository(endpoint);
-    return new Service(repo);
-};
+var HttpRepository_1 = require('./HttpRepository');
+var Service_1 = require('./Service');
+function default_1(endpoint) {
+    var repo = new HttpRepository_1.default(endpoint);
+    return new Service_1.default(repo);
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = default_1;
+;
 
 },{"./HttpRepository":17,"./Service":19}],17:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
@@ -712,8 +722,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/// <reference path="../../definitions/references.d.ts" />
-var BaseRepository = require('../../BaseHttpRepository');
+var BaseHttpRepository_1 = require('../../BaseHttpRepository');
 var Repository = (function (_super) {
     __extends(Repository, _super);
     function Repository(endpoint) {
@@ -735,8 +744,9 @@ var Repository = (function (_super) {
         });
     };
     return Repository;
-})(BaseRepository);
-module.exports = Repository;
+})(BaseHttpRepository_1.default);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Repository;
 
 },{"../../BaseHttpRepository":2}],18:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
@@ -744,9 +754,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/// <reference path="../../definitions/references.d.ts" />
-var react = require('react');
-var dom = react.DOM;
+var React = require('react');
+var dom = React.DOM;
 var Component = (function (_super) {
     __extends(Component, _super);
     function Component() {
@@ -800,8 +809,9 @@ var Component = (function (_super) {
         ]);
     };
     return Component;
-})(react.Component);
-module.exports = react.createFactory(Component);
+})(React.Component);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = React.createFactory(Component);
 
 },{"react":181}],19:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
@@ -809,7 +819,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var BaseService = require('../BaseService');
+var BaseService_1 = require('../BaseService');
 var Service = (function (_super) {
     __extends(Service, _super);
     function Service() {
@@ -822,8 +832,9 @@ var Service = (function (_super) {
         });
     };
     return Service;
-})(BaseService);
-module.exports = Service;
+})(BaseService_1.default);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Service;
 
 },{"../BaseService":15}],20:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
@@ -831,7 +842,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var BaseService = require('../BaseService');
+var BaseService_1 = require('../BaseService');
 var q = require('q');
 var Service = (function (_super) {
     __extends(Service, _super);
@@ -851,8 +862,9 @@ var Service = (function (_super) {
         return deferred.promise;
     };
     return Service;
-})(BaseService);
-module.exports = Service;
+})(BaseService_1.default);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Service;
 
 },{"../BaseService":3,"q":26}],21:[function(require,module,exports){
 arguments[4][8][0].apply(exports,arguments)
@@ -862,8 +874,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/// <reference path="../../definitions/references.d.ts" />
-var BaseRepository = require('../../BaseHttpRepository');
+var BaseHttpRepository_1 = require('../../BaseHttpRepository');
 var Repository = (function (_super) {
     __extends(Repository, _super);
     function Repository(endpoint, token_value) {
@@ -883,8 +894,9 @@ var Repository = (function (_super) {
         });
     };
     return Repository;
-})(BaseRepository);
-module.exports = Repository;
+})(BaseHttpRepository_1.default);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Repository;
 
 },{"../../BaseHttpRepository":2}],23:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
@@ -892,9 +904,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/// <reference path="../../definitions/references.d.ts" />
-var react = require('react');
-var dom = react.DOM;
+var React = require('react');
+var dom = React.DOM;
 var Component = (function (_super) {
     __extends(Component, _super);
     function Component() {
@@ -952,8 +963,9 @@ var Component = (function (_super) {
         ]);
     };
     return Component;
-})(react.Component);
-module.exports = react.createFactory(Component);
+})(React.Component);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = React.createFactory(Component);
 
 },{"react":181}],24:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
@@ -961,7 +973,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var BaseService = require('../BaseService');
+var BaseService_1 = require('../BaseService');
 var Service = (function (_super) {
     __extends(Service, _super);
     function Service() {
@@ -976,8 +988,9 @@ var Service = (function (_super) {
         }.bind(this));
     };
     return Service;
-})(BaseService);
-module.exports = Service;
+})(BaseService_1.default);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Service;
 
 },{"../BaseService":20}],25:[function(require,module,exports){
 /*!

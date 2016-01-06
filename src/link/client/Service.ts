@@ -1,4 +1,4 @@
-import BaseService = require('../BaseService');
+import BaseService from '../BaseService';
 
 class Service extends BaseService {
 
@@ -53,4 +53,4 @@ class Service extends BaseService {
   }
 }
 
-export = Service;
+export default Service;

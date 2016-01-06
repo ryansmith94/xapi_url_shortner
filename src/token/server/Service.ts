@@ -1,5 +1,5 @@
-import BaseService = require('../BaseService');
-import q = require('q');
+import BaseService from '../BaseService';
+import * as q from 'q';
 
 var EXPIRY_TIME = 120; // Minutes.
 class Service extends BaseService {
@@ -43,4 +43,4 @@ class Service extends BaseService {
   }
 }
 
-export = Service;
+export default Service;

@@ -1,4 +1,3 @@
-/// <reference path="./definitions/references.d.ts" />
 var chai = require('chai');
 var source_map_support = require('source-map-support');
 source_map_support.install({
@@ -44,5 +43,6 @@ var TestCase = (function () {
     };
     return TestCase;
 })();
-module.exports = TestCase;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = TestCase;
 //# sourceMappingURL=BaseTest.js.map

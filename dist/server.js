@@ -1,8 +1,7 @@
-/// <reference path="./definitions/references.d.ts" />
 var express = require('express');
 var bodyParser = require('body-parser');
 var source_map_support = require('source-map-support');
-var config = require('./config');
+var config_1 = require('./config');
 source_map_support.install({
     handleUncaughtExceptions: false
 });
@@ -12,22 +11,22 @@ app.use('/node_modules', express.static(__dirname + '/../node_modules'));
 app.use('/example', express.static(__dirname + '/../example'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-var TrackingFactory = require('./tracking/Factory');
-var tracking_service = TrackingFactory(config.lrs);
-var TokenFactory = require('./token/server/Factory');
-var TokenController = require('./token/server/ExpressController');
-var token_service = TokenFactory(config.knex, 'token');
-var token_controller = new TokenController(app, token_service);
-var GroupFactory = require('./group/Factory');
-var group_service = GroupFactory(config.knex, 'group');
-var UserFactory = require('./user/server/Factory');
-var UserController = require('./user/server/ExpressController');
-var user_service = UserFactory(config.knex, 'user');
-var user_controller = new UserController(app, user_service);
-var LinkFactory = require('./link/server/Factory');
-var LinkController = require('./link/server/ExpressController');
-var link_service = LinkFactory(config.knex, 'link');
-var link_controller = new LinkController(app, link_service);
+var Factory_1 = require('./tracking/Factory');
+var tracking_service = Factory_1.default(config_1.default.lrs);
+var Factory_2 = require('./token/server/Factory');
+var ExpressController_1 = require('./token/server/ExpressController');
+var token_service = Factory_2.default(config_1.default.knex, 'token');
+var token_controller = new ExpressController_1.default(app, token_service);
+var Factory_3 = require('./group/Factory');
+var group_service = Factory_3.default(config_1.default.knex, 'group');
+var Factory_4 = require('./user/server/Factory');
+var ExpressController_2 = require('./user/server/ExpressController');
+var user_service = Factory_4.default(config_1.default.knex, 'user');
+var user_controller = new ExpressController_2.default(app, user_service);
+var Factory_5 = require('./link/server/Factory');
+var ExpressController_3 = require('./link/server/ExpressController');
+var link_service = Factory_5.default(config_1.default.knex, 'link');
+var link_controller = new ExpressController_3.default(app, link_service);
 user_service.setGroupService(group_service);
 user_service.setTokenService(token_service);
 token_service.setUserService(user_service);
@@ -37,10 +36,10 @@ link_service.setGroupService(group_service);
 group_service.setUserService(user_service);
 group_service.setLinkService(link_service);
 tracking_service.setGroupService(group_service);
-var react = require('react');
-var dom = react.DOM;
+var React = require('react');
+var dom = React.DOM;
 app.get('/', function (req, res) {
-    res.send(react.renderToStaticMarkup(dom.html({}, [
+    res.send(React.renderToStaticMarkup(dom.html({}, [
         dom.head({}, [
             dom.title({}, ['xAPI URL Shortener']),
             dom.link({ rel: 'stylesheet', type: 'text/css', href: '../node_modules/bootstrap/dist/css/bootstrap.min.css' }),
@@ -54,7 +53,8 @@ app.get('/', function (req, res) {
         ])
     ])));
 });
-var server = app.listen(config.port);
-console.log('App running at http://localhost:' + config.port);
-module.exports = app;
+var server = app.listen(config_1.default.port);
+console.log('App running at http://localhost:' + config_1.default.port);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = app;
 //# sourceMappingURL=server.js.map

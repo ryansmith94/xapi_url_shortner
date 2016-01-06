@@ -1,5 +1,4 @@
-/// <reference path="../definitions/references.d.ts" />
-import q = require('q');
+import * as q from 'q';
 
 class Repository {
   private links: Array<any> = [];
@@ -91,4 +90,4 @@ class Repository {
   }
 }
 
-export = Repository;
+export default Repository;

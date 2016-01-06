@@ -20,4 +20,4 @@ class Controller {
   }
 }
 
-export = Controller;
+export default Controller;

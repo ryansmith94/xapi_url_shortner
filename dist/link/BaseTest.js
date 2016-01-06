@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var BaseTest = require('../BaseTest');
+var BaseTest_1 = require('../BaseTest');
 var Test = (function (_super) {
     __extends(Test, _super);
     function Test() {
@@ -11,6 +11,7 @@ var Test = (function (_super) {
     }
     Test.prototype.beforeEach = function () { };
     return Test;
-})(BaseTest);
-module.exports = Test;
+})(BaseTest_1.default);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Test;
 //# sourceMappingURL=BaseTest.js.map

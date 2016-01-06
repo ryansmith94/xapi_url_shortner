@@ -1,9 +1,9 @@
-import BaseTest = require('../BaseTest');
-import BaseService = require('./BaseService');
+import BaseTest from '../BaseTest';
+import BaseService from './BaseService';
 
 class Test extends BaseTest {
   protected service: any;
   public beforeEach() {}
 }
 
-export = Test;
+export default Test;

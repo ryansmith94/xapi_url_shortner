@@ -1,22 +1,22 @@
 #!/usr/bin/env node
 var source_map_support = require('source-map-support');
 var commander = require('commander');
-var config = require('./config');
+var config_1 = require('./config');
 source_map_support.install({
     handleUncaughtExceptions: false
 });
-var GroupFactory = require('./group/Factory');
-var GroupController = require('./group/CommanderController');
-var LinkFactory = require('./link/server/Factory');
-var group_service = GroupFactory(config.knex, 'group');
-var group_controller = new GroupController(commander, group_service);
-var link_service = LinkFactory(config.knex, 'link');
-var UserFactory = require('./user/server/Factory');
-var UserController = require('./user/server/CommanderController');
-var TokenFactory = require('./token/server/Factory');
-var token_service = TokenFactory(config.knex, 'token');
-var user_service = UserFactory(config.knex, 'user');
-var user_controller = new UserController(commander, user_service);
+var Factory_1 = require('./group/Factory');
+var CommanderController_1 = require('./group/CommanderController');
+var Factory_2 = require('./link/server/Factory');
+var group_service = Factory_1.default(config_1.default.knex, 'group');
+var group_controller = new CommanderController_1.default(commander, group_service);
+var link_service = Factory_2.default(config_1.default.knex, 'link');
+var Factory_3 = require('./user/server/Factory');
+var CommanderController_2 = require('./user/server/CommanderController');
+var Factory_4 = require('./token/server/Factory');
+var token_service = Factory_4.default(config_1.default.knex, 'token');
+var user_service = Factory_3.default(config_1.default.knex, 'user');
+var user_controller = new CommanderController_2.default(commander, user_service);
 user_service.setGroupService(group_service);
 user_service.setTokenService(token_service);
 group_service.setLinkService(link_service);

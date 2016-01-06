@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var BaseRepository = require('../../BaseKnexRepository');
+var BaseKnexRepository_1 = require('../../BaseKnexRepository');
 var Repository = (function (_super) {
     __extends(Repository, _super);
     function Repository(config, collection) {
@@ -38,6 +38,7 @@ var Repository = (function (_super) {
         });
     };
     return Repository;
-})(BaseRepository);
-module.exports = Repository;
+})(BaseKnexRepository_1.default);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Repository;
 //# sourceMappingURL=KnexRepository.js.map

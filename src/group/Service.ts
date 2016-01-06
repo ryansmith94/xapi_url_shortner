@@ -1,5 +1,5 @@
-import BaseService = require('../BaseService');
-import q = require('q');
+import BaseService from '../BaseService';
+import * as q from 'q';
 
 class Service extends BaseService {
   private repo;
@@ -47,4 +47,4 @@ class Service extends BaseService {
   }
 }
 
-export = Service;
+export default Service;

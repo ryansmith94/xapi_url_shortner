@@ -3,7 +3,6 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/// <reference path="./definitions/references.d.ts" />
 var events = require('events');
 var CHANGE_EVENT = 'change';
 var Service = (function (_super) {
@@ -22,5 +21,6 @@ var Service = (function (_super) {
     };
     return Service;
 })(events.EventEmitter);
-module.exports = Service;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Service;
 //# sourceMappingURL=BaseService.js.map
