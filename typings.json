@@ -8,7 +8,7 @@
     "chai": "github:DefinitelyTyped/DefinitelyTyped/chai/chai.d.ts#f11e49cfb77f99678657ddfe5d43017849675c64",
     "cheerio": "github:DefinitelyTyped/DefinitelyTyped/cheerio/cheerio.d.ts#f11e49cfb77f99678657ddfe5d43017849675c64",
     "commander": "github:DefinitelyTyped/DefinitelyTyped/commander/commander.d.ts#6d09e1a5aea3240e7290be602ed03c88e38cd07d",
-    "dotenv": "github:inakianduaga/node-express-boilerplate/typings/dotenv/dotenv.d.ts#cc3d14a2b795e13d6a59652dd7ff111689b778b2",
+    "dotenv": "github:ryansmith94/xapi_url_shortner/definitions/dotenv/dotenv.d.ts#e20bb21b6c849f274be1abf3395c52195ae930bd",
     "express": "github:DefinitelyTyped/DefinitelyTyped/express/express.d.ts#f11e49cfb77f99678657ddfe5d43017849675c64",
     "form-data": "github:DefinitelyTyped/DefinitelyTyped/form-data/form-data.d.ts#f11e49cfb77f99678657ddfe5d43017849675c64",
     "jquery": "github:DefinitelyTyped/DefinitelyTyped/jquery/jquery.d.ts#f11e49cfb77f99678657ddfe5d43017849675c64",
@@ -17,9 +17,11 @@
     "mocha": "github:DefinitelyTyped/DefinitelyTyped/mocha/mocha.d.ts#f11e49cfb77f99678657ddfe5d43017849675c64",
     "node": "github:DefinitelyTyped/DefinitelyTyped/node/node.d.ts#f11e49cfb77f99678657ddfe5d43017849675c64",
     "q": "github:DefinitelyTyped/DefinitelyTyped/q/Q.d.ts#f11e49cfb77f99678657ddfe5d43017849675c64",
-    "react": "github:DefinitelyTyped/DefinitelyTyped/react/react-0.13.3.d.ts#ca5bfe76d2d9bf6852cbc712d9f3e0047c93486e",
+    "react": "github:ryansmith94/xapi_url_shortner/definitions/react/react.d.ts#e20bb21b6c849f274be1abf3395c52195ae930bd",
     "request": "github:DefinitelyTyped/DefinitelyTyped/request/request.d.ts#f11e49cfb77f99678657ddfe5d43017849675c64",
     "serve-static": "github:DefinitelyTyped/DefinitelyTyped/serve-static/serve-static.d.ts#f11e49cfb77f99678657ddfe5d43017849675c64",
-    "source-map-support": "github:DefinitelyTyped/DefinitelyTyped/source-map-support/source-map-support.d.ts#f11e49cfb77f99678657ddfe5d43017849675c64"
+    "source-map-support": "github:DefinitelyTyped/DefinitelyTyped/source-map-support/source-map-support.d.ts#f11e49cfb77f99678657ddfe5d43017849675c64",
+    "password-hash": "github:ryansmith94/xapi_url_shortner/definitions/password-hash/password-hash.d.ts#e20bb21b6c849f274be1abf3395c52195ae930bd",
+    "tincanjs": "github:ryansmith94/xapi_url_shortner/definitions/tincanjs/tincanjs.d.ts#e20bb21b6c849f274be1abf3395c52195ae930bd"
   }
 }
