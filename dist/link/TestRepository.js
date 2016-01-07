@@ -74,6 +74,17 @@ var Repository = (function () {
         deferred.resolve(true);
         return deferred.promise;
     };
+    Repository.prototype.changeLongUrl = function (id, long_url) {
+        var updated_link;
+        this.links = this.links.map(function (link) {
+            if (link.id === id) {
+                link.long_url = long_url;
+                updated_link = link;
+            }
+            return link;
+        });
+        return q.resolve(updated_link);
+    };
     return Repository;
 })();
 Object.defineProperty(exports, "__esModule", { value: true });

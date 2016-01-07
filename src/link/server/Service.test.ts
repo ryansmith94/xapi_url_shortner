@@ -170,6 +170,31 @@ class Test extends BaseTest {
   public testDeleteLinksByInvalidGroupId() {
     return this.service.deleteLinksByGroupId(1).then(this.fail(), this.pass());
   }
+
+  public testChangeLongUrl() {
+    let user, link;
+    const NEW_LONG_URL = LONG_URL + '/hello';
+    let assertUpdated = (updated_link) => {
+      this.assert(updated_link.id === link.id);
+      this.assert(updated_link.long_url === NEW_LONG_URL);
+      this.assert(updated_link.short_url === link.short_url);
+      this.assert(updated_link.user_id === user.id);
+      this.assert(updated_link.group_id === user.group_id);
+    };
+
+    return this.createUser().then((created_user) => {
+      user = created_user;
+      return this.service.createLink(LONG_URL, user.id);
+    }).then((created_link) => {
+      link = created_link;
+      return this.service.changeLongUrl(link.id, NEW_LONG_URL, user.id);
+    }).then((updated_link) => {
+      assertUpdated(updated_link);
+      return this.service.getLinkById(link.id, user.id);
+    }).then((updated_link) => {
+      assertUpdated(updated_link);
+    });
+  }
 }
 
 (new Test()).run();

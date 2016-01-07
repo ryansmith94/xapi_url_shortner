@@ -91,7 +91,9 @@ class Service extends BaseService {
           id: link.id,
           long_url: link.long_url,
           short_url: link.short_url || this.idToShortUrl(link.id),
-          owner: link.user_id == user.id
+          owner: link.user_id == user.id,
+          user_id: link.user_id,
+          group_id: link.group_id
         };
       });
     });
@@ -125,6 +127,23 @@ class Service extends BaseService {
   public deleteLinksByGroupId(group_id: number) {
     return this.group_service.getGroupById(group_id).then(() => {
       return this.repo.deleteLinksByGroupId(group_id);
+    });
+  }
+
+  /**
+   * Changes the long_url of a link.
+   * @param {number} id Identifer associated with the link.
+   * @param {string} long_url The new long_url
+   * @param {number} user_id Identifier associated with the user updating the link.
+   * @return {Promise}
+   */
+  public changeLongUrl(id: number, long_url: string, user_id: number) {
+    return this.validateLink(long_url).then(() => {
+      return this.getLinkById(id);
+    }).then((link) => {
+      if (user_id != link.user_id) throw new Error('Link cannot be modified by that user');
+      link.long_url = long_url;
+      return this.repo.updateLink(link);
     });
   }
 }

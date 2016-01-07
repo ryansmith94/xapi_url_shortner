@@ -60,6 +60,26 @@ class Test extends BaseTest {
   public testDeleteLinkByInvalidId() {
     return this.service.deleteLinkById(1).then(this.fail(), this.pass());
   }
+
+  public testChangeLongUrl() {
+    let user, link;
+    const NEW_LONG_URL = LONG_URL + '/hello';
+    let assertUpdated = (updated_link) => {
+      this.assert(updated_link.id === link.id);
+      this.assert(updated_link.long_url === NEW_LONG_URL);
+      this.assert(updated_link.short_url === link.short_url);
+    };
+
+    return this.service.createLink(LONG_URL).then((created_link) => {
+      link = created_link;
+      return this.service.changeLongUrl(link.id, NEW_LONG_URL);
+    }).then((updated_link) => {
+      assertUpdated(updated_link);
+      return this.service.getLinkById(link.id);
+    }).then((updated_link) => {
+      assertUpdated(updated_link);
+    });
+  }
 }
 
 (new Test()).run();

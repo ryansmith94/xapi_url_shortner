@@ -166,6 +166,30 @@ var Test = (function (_super) {
     Test.prototype.testDeleteLinksByInvalidGroupId = function () {
         return this.service.deleteLinksByGroupId(1).then(this.fail(), this.pass());
     };
+    Test.prototype.testChangeLongUrl = function () {
+        var _this = this;
+        var user, link;
+        var NEW_LONG_URL = LONG_URL + '/hello';
+        var assertUpdated = function (updated_link) {
+            _this.assert(updated_link.id === link.id);
+            _this.assert(updated_link.long_url === NEW_LONG_URL);
+            _this.assert(updated_link.short_url === link.short_url);
+            _this.assert(updated_link.user_id === user.id);
+            _this.assert(updated_link.group_id === user.group_id);
+        };
+        return this.createUser().then(function (created_user) {
+            user = created_user;
+            return _this.service.createLink(LONG_URL, user.id);
+        }).then(function (created_link) {
+            link = created_link;
+            return _this.service.changeLongUrl(link.id, NEW_LONG_URL, user.id);
+        }).then(function (updated_link) {
+            assertUpdated(updated_link);
+            return _this.service.getLinkById(link.id, user.id);
+        }).then(function (updated_link) {
+            assertUpdated(updated_link);
+        });
+    };
     return Test;
 })(BaseTest_1.default);
 (new Test()).run();

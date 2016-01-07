@@ -12,6 +12,7 @@ class Controller {
     app.post('/api/link', this.createLink.bind(this));
     app.get('/api/link', this.getLinks.bind(this));
     app.delete('/api/link/:id', this.deleteLink.bind(this));
+    app.put('/api/link/:id', this.changeLongUrl.bind(this));
     app.get('/:short_url(\\w+)', this.visitLink.bind(this));
   }
 
@@ -61,6 +62,20 @@ class Controller {
     }).then(function () {
       res.json(true);
     }, function (err) {
+      console.error(err.stack);
+      res.status(400).send(String(err));
+    });
+  }
+
+  public changeLongUrl(req, res) {
+    var token = req.get('Authorization').replace('Bearer ', '');
+    var id = req.params.id;
+    this.token_service.getUserByValue(token).then((user_id: number) => {
+      console.log('log', user_id);
+      return this.service.changeLongUrl(id, req.body.long_url, user_id);
+    }).then(function() {
+      res.json(true);
+    }, function(err) {
       console.error(err.stack);
       res.status(400).send(String(err));
     });

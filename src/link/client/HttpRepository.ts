@@ -80,6 +80,21 @@ class Repository extends BaseRepository {
       return true;
     }.bind(this));
   }
+
+  public changeLongUrl(id, long_url) {
+    return this.connect({
+      method: 'PUT',
+      url: this.endpoint + '/' + id,
+      data: { long_url: long_url }
+    }).then(() => {
+      this.links = this.links.map((link) => {
+        if (link.id === id) {
+          link.long_url = long_url;
+        }
+        return link;
+      });
+    });
+  }
 }
 
 export default Repository;

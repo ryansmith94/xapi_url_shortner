@@ -29,8 +29,10 @@ var Component = (function (_super) {
         });
     };
     Component.prototype.handleDataChange = function () {
-        console.log('Data Changed');
         this.getLinks();
+    };
+    Component.prototype.handleLongUrlChange = function (id, long_url) {
+        this.props.service.changeLongUrl(id, long_url);
     };
     Component.prototype.componentDidMount = function () {
         this.props.service.addChangeListener(this.handleDataChange.bind(this));
@@ -42,6 +44,8 @@ var Component = (function (_super) {
     Component.prototype.render = function () {
         return dom.div({ className: 'link_list' }, this.state.links.filter(function (link) {
             link.onDelete = this.handleDelete.bind(this);
+            link.onLongUrlChange = this.handleLongUrlChange.bind(this);
+            link.key = link.id;
             return link.long_url.indexOf(this.props.long_url) !== -1;
         }.bind(this)).reverse().map(ReactItem_1.default));
     };

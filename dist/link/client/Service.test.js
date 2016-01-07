@@ -62,6 +62,25 @@ var Test = (function (_super) {
     Test.prototype.testDeleteLinkByInvalidId = function () {
         return this.service.deleteLinkById(1).then(this.fail(), this.pass());
     };
+    Test.prototype.testChangeLongUrl = function () {
+        var _this = this;
+        var user, link;
+        var NEW_LONG_URL = LONG_URL + '/hello';
+        var assertUpdated = function (updated_link) {
+            _this.assert(updated_link.id === link.id);
+            _this.assert(updated_link.long_url === NEW_LONG_URL);
+            _this.assert(updated_link.short_url === link.short_url);
+        };
+        return this.service.createLink(LONG_URL).then(function (created_link) {
+            link = created_link;
+            return _this.service.changeLongUrl(link.id, NEW_LONG_URL);
+        }).then(function (updated_link) {
+            assertUpdated(updated_link);
+            return _this.service.getLinkById(link.id);
+        }).then(function (updated_link) {
+            assertUpdated(updated_link);
+        });
+    };
     return Test;
 })(BaseTest_1.default);
 (new Test()).run();

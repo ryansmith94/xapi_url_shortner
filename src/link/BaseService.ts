@@ -34,11 +34,15 @@ class Service extends BaseService {
     }
 
     // Checks that the custom_url doesn't exist already.
-    this.getLinkByShortUrl(custom_url).then(function (link) {
-      deferred.reject(new Error('Custom URL already exists.'));
-    }, function (err) {
+    if (custom_url != undefined) {
+      this.getLinkByShortUrl(custom_url).then(function(link) {
+        deferred.reject(new Error('Custom URL already exists.'));
+      }, function(err) {
+        deferred.resolve(true);
+      });
+    } else {
       deferred.resolve(true);
-    });
+    }
 
     return deferred.promise;
   }
@@ -104,7 +108,7 @@ class Service extends BaseService {
    * @param {number} id The id to find.
    * @return {Future}
    */
-  private getLinkById(id) {
+  protected getLinkById(id) {
     return this.repo.getLinkById(id);
   }
 }

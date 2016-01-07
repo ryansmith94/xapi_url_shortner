@@ -75,6 +75,21 @@ var Repository = (function (_super) {
             return true;
         }.bind(this));
     };
+    Repository.prototype.changeLongUrl = function (id, long_url) {
+        var _this = this;
+        return this.connect({
+            method: 'PUT',
+            url: this.endpoint + '/' + id,
+            data: { long_url: long_url }
+        }).then(function () {
+            _this.links = _this.links.map(function (link) {
+                if (link.id === id) {
+                    link.long_url = long_url;
+                }
+                return link;
+            });
+        });
+    };
     return Repository;
 })(BaseHttpRepository_1.default);
 Object.defineProperty(exports, "__esModule", { value: true });

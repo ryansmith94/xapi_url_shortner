@@ -32,6 +32,15 @@ var Service = (function (_super) {
             return true;
         }.bind(this));
     };
+    Service.prototype.changeLongUrl = function (id, long_url) {
+        var _this = this;
+        return this.validateLink(long_url).then(function () {
+            return _this.repo.changeLongUrl(id, long_url);
+        }).then(function (result) {
+            _this.emitChange();
+            return result;
+        });
+    };
     return Service;
 })(BaseService_1.default);
 Object.defineProperty(exports, "__esModule", { value: true });

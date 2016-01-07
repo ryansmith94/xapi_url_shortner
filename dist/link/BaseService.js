@@ -20,11 +20,16 @@ var Service = (function (_super) {
         if (!/^[\da-z]+$/.test(custom_url)) {
             deferred.reject(new Error('Invalid Custom URL `' + custom_url + '`. It may only contain digits and lowercase letters.'));
         }
-        this.getLinkByShortUrl(custom_url).then(function (link) {
-            deferred.reject(new Error('Custom URL already exists.'));
-        }, function (err) {
+        if (custom_url != undefined) {
+            this.getLinkByShortUrl(custom_url).then(function (link) {
+                deferred.reject(new Error('Custom URL already exists.'));
+            }, function (err) {
+                deferred.resolve(true);
+            });
+        }
+        else {
             deferred.resolve(true);
-        });
+        }
         return deferred.promise;
     };
     Service.prototype.idToShortUrl = function (value) {

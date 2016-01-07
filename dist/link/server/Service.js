@@ -64,7 +64,9 @@ var Service = (function (_super) {
                     id: link.id,
                     long_url: link.long_url,
                     short_url: link.short_url || _this.idToShortUrl(link.id),
-                    owner: link.user_id == user.id
+                    owner: link.user_id == user.id,
+                    user_id: link.user_id,
+                    group_id: link.group_id
                 };
             });
         });
@@ -88,6 +90,17 @@ var Service = (function (_super) {
         var _this = this;
         return this.group_service.getGroupById(group_id).then(function () {
             return _this.repo.deleteLinksByGroupId(group_id);
+        });
+    };
+    Service.prototype.changeLongUrl = function (id, long_url, user_id) {
+        var _this = this;
+        return this.validateLink(long_url).then(function () {
+            return _this.getLinkById(id);
+        }).then(function (link) {
+            if (user_id != link.user_id)
+                throw new Error('Link cannot be modified by that user');
+            link.long_url = long_url;
+            return _this.repo.updateLink(link);
         });
     };
     return Service;

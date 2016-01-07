@@ -88,6 +88,18 @@ class Repository {
     deferred.resolve(true);
     return deferred.promise;
   }
+
+  public changeLongUrl(id, long_url) {
+    let updated_link;
+    this.links = this.links.map((link) => {
+      if (link.id === id) {
+        link.long_url = long_url;
+        updated_link = link;
+      }
+      return link;
+    });
+    return q.resolve(updated_link);
+  }
 }
 
 export default Repository;

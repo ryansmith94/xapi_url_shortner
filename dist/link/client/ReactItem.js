@@ -35,7 +35,7 @@ var Component = (function (_super) {
         this.setState({ long_url: input.value });
     };
     Component.prototype.handleSave = function () {
-        this.props.handleLongUrlChange(this.props.id, this.state.long_url);
+        this.props.onLongUrlChange(this.props.id, this.state.long_url);
         this.setState({ editing: false });
     };
     Component.prototype.handleCancel = function () {
@@ -49,13 +49,13 @@ var Component = (function (_super) {
             this.handleSave();
         }
     };
-    Component.prototype.handleEdit = function () {
-        this.setState({ editing: true });
+    Component.prototype.handleToggleEdit = function () {
+        this.setState({ editing: !this.state.editing });
     };
     Component.prototype.render = function () {
         var location = document.location;
         var short_url = location.protocol + '//' + location.host + '/' + this.props.short_url;
-        return dom.div({ className: 'link_item clearfix', onDoubleClick: this.handleEdit.bind(this) }, [
+        return dom.div({ className: 'link_item clearfix', onDoubleClick: this.handleToggleEdit.bind(this) }, [
             dom.span({ className: 'col col-xs-1 link_icon_col' }, [
                 dom.img({ className: 'link_icon', src: this.getFavicon(this.props.long_url) }),
             ]),
@@ -75,11 +75,11 @@ var Component = (function (_super) {
                 ])
             ]),
             this.props.owner ? dom.span({ className: 'col col-xs-3 link_action_col pull-right' }, [
+                dom.span({ className: 'edit btn dtn-danger', onClick: this.handleToggleEdit.bind(this) }, [
+                    dom.span({ className: 'glyphicon glyphicon-pencil' })
+                ]),
                 dom.span({ className: 'delete btn dtn-danger', onClick: this.handleDelete.bind(this) }, [
                     dom.span({ className: 'glyphicon glyphicon-remove' })
-                ]),
-                dom.span({ className: 'edit btn dtn-danger', onClick: this.handleEdit.bind(this) }, [
-                    dom.span({ className: 'glyphicon glyphicon-pencil' })
                 ])
             ]) : null
         ]);

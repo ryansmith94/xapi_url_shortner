@@ -51,6 +51,21 @@ class Service extends BaseService {
       return true;
     }.bind(this));
   }
+
+  /**
+   * Changes the long_url of a link.
+   * @param {number} id Identifer associated with the link.
+   * @param {string} long_url The new long_url.
+   * @return {Promise}
+   */
+  public changeLongUrl(id: number, long_url: string) {
+    return this.validateLink(long_url).then(() => {
+      return this.repo.changeLongUrl(id, long_url);
+    }).then((result) => {
+      this.emitChange();
+      return result;
+    });
+  }
 }
 
 export default Service;

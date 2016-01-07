@@ -26,7 +26,7 @@ class Component extends React.Component<any, any> {
     this.setState({ long_url: input.value });
   }
   private handleSave(): void {
-    this.props.handleLongUrlChange(this.props.id, this.state.long_url);
+    this.props.onLongUrlChange(this.props.id, this.state.long_url);
     this.setState({ editing: false });
   }
   private handleCancel(): void {
@@ -39,14 +39,14 @@ class Component extends React.Component<any, any> {
       this.handleSave();
     }
   }
-  private handleEdit(): void {
-    this.setState({ editing: true });
+  private handleToggleEdit(): void {
+    this.setState({ editing: !this.state.editing });
   }
   render() {
     let location = document.location;
     let short_url = location.protocol + '//' + location.host + '/' + this.props.short_url;
 
-    return dom.div({className: 'link_item clearfix', onDoubleClick: this.handleEdit.bind(this)}, [
+    return dom.div({className: 'link_item clearfix', onDoubleClick: this.handleToggleEdit.bind(this)}, [
       dom.span({className: 'col col-xs-1 link_icon_col'}, [
         dom.img({className: 'link_icon', src: this.getFavicon(this.props.long_url)}),
       ]),
@@ -66,11 +66,11 @@ class Component extends React.Component<any, any> {
         ])
       ]),
       this.props.owner ? dom.span({className: 'col col-xs-3 link_action_col pull-right'}, [
+        dom.span({className: 'edit btn dtn-danger', onClick: this.handleToggleEdit.bind(this)}, [
+          dom.span({className: 'glyphicon glyphicon-pencil'})
+        ]),
         dom.span({className: 'delete btn dtn-danger', onClick: this.handleDelete.bind(this)}, [
           dom.span({className: 'glyphicon glyphicon-remove'})
-        ]),
-        dom.span({className: 'edit btn dtn-danger', onClick: this.handleEdit.bind(this)}, [
-          dom.span({className: 'glyphicon glyphicon-pencil'})
         ])
       ]) : null
     ]);

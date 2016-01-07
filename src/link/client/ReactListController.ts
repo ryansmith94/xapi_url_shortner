@@ -22,8 +22,10 @@ class Component extends React.Component<any, any> {
     });
   }
   handleDataChange() {
-    console.log('Data Changed');
     this.getLinks();
+  }
+  handleLongUrlChange(id, long_url) {
+    this.props.service.changeLongUrl(id, long_url);
   }
   componentDidMount() {
     this.props.service.addChangeListener(this.handleDataChange.bind(this));
@@ -35,6 +37,8 @@ class Component extends React.Component<any, any> {
   render() {
     return dom.div({className: 'link_list'}, this.state.links.filter(function (link) {
       link.onDelete = this.handleDelete.bind(this);
+      link.onLongUrlChange = this.handleLongUrlChange.bind(this);
+      link.key = link.id;
       return link.long_url.indexOf(this.props.long_url) !== -1;
     }.bind(this)).reverse().map(item));
   }
