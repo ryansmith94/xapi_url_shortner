@@ -1,6 +1,7 @@
 var Controller = (function () {
-    function Controller(app, service) {
+    function Controller(app, service, token_service) {
         this.service = service;
+        this.token_service = token_service;
         this.constructRoutes(app);
     }
     Controller.prototype.constructRoutes = function (app) {
@@ -10,8 +11,11 @@ var Controller = (function () {
         app.get('/:short_url(\\w+)', this.visitLink.bind(this));
     };
     Controller.prototype.createLink = function (req, res) {
+        var _this = this;
         var token = req.get('Authorization').replace('Bearer ', '');
-        this.service.createLinkWithToken(req.body.long_url, token, req.body.short_url).then(function (model) {
+        this.token_service.getUserByValue(token).then(function (user_id) {
+            return _this.service.createLinkWithToken(req.body.long_url, user_id, req.body.short_url);
+        }).then(function (model) {
             res.json(model);
         }, function (err) {
             console.error(err.stack);
@@ -28,8 +32,11 @@ var Controller = (function () {
         });
     };
     Controller.prototype.getLinks = function (req, res) {
+        var _this = this;
         var token = req.get('Authorization').replace('Bearer ', '');
-        this.service.getLinksByToken(token).then(function (models) {
+        this.token_service.getUserByValue(token).then(function (user_id) {
+            return _this.service.getLinks(user_id);
+        }).then(function (models) {
             res.json(models);
         }, function (err) {
             console.error(err.stack);
@@ -37,9 +44,12 @@ var Controller = (function () {
         });
     };
     Controller.prototype.deleteLink = function (req, res) {
+        var _this = this;
         var token = req.get('Authorization').replace('Bearer ', '');
         var id = req.params.id;
-        this.service.deleteLinkByIdWithToken(id, token).then(function () {
+        this.token_service.getUserByValue(token).then(function (user_id) {
+            return _this.service.deleteLinkById(id, user_id);
+        }).then(function () {
             res.json(true);
         }, function (err) {
             console.error(err.stack);

@@ -13,24 +13,25 @@ var Service = (function (_super) {
     Service.prototype.setTrackingService = function (tracking_service) {
         this.tracking_service = tracking_service;
     };
-    Service.prototype.setTokenService = function (token_service) {
-        this.token_service = token_service;
+    Service.prototype.setUserService = function (user_service) {
+        this.user_service = user_service;
     };
     Service.prototype.setGroupService = function (group_service) {
         this.group_service = group_service;
     };
     Service.prototype.trackLink = function (short_url, tracking_options) {
+        var _this = this;
         return this.getLinkByShortUrl(short_url).then(function (link) {
-            this.tracking_service.trackLink(link, tracking_options);
+            _this.tracking_service.trackLink(link, tracking_options);
             return link;
-        }.bind(this));
+        });
     };
-    Service.prototype.createLinkWithToken = function (long_url, token, custom_url) {
-        var self = this;
-        return self.validateLink(long_url, custom_url).then(function () {
-            return self.token_service.getUserByValue(token);
+    Service.prototype.createLink = function (long_url, user_id, custom_url) {
+        var _this = this;
+        return this.validateLink(long_url, custom_url).then(function () {
+            return _this.user_service.getUserById(user_id);
         }).then(function (user) {
-            return self.repo.createLink({
+            return _this.repo.createLink({
                 long_url: long_url,
                 short_url: custom_url,
                 group_id: user.group_id,
@@ -38,53 +39,56 @@ var Service = (function (_super) {
             });
         }).then(function (link) {
             link.owner = true;
-            return self.getCustomLinkById(link.id).then(function (custom_link) {
-                link.short_url = self.idToShortUrl(custom_link.id);
-                return self.repo.updateLink(link).then(function (link) {
-                    self.emitChange();
+            return _this.getCustomLinkById(link.id).then(function (custom_link) {
+                link.short_url = _this.idToShortUrl(custom_link.id);
+                return _this.repo.updateLink(link).then(function (link) {
+                    _this.emitChange();
                     return link;
                 });
             }, function (err) {
-                link.short_url = link.short_url || self.idToShortUrl(link.id);
-                self.emitChange();
+                link.short_url = link.short_url || _this.idToShortUrl(link.id);
+                _this.emitChange();
                 return link;
             });
         });
     };
-    Service.prototype.getLinksByToken = function (token) {
+    Service.prototype.getLinks = function (user_id) {
+        var _this = this;
         var user;
-        return this.token_service.getUserByValue(token).then(function (token_user) {
+        return this.user_service.getUserById(user_id).then(function (token_user) {
             user = token_user;
-            return this.repo.getLinksByGroupId(user.group_id);
-        }.bind(this)).then(function (links) {
+            return _this.repo.getLinksByGroupId(user.group_id);
+        }).then(function (links) {
             return links.map(function (link) {
                 return {
                     id: link.id,
                     long_url: link.long_url,
-                    short_url: link.short_url || this.idToShortUrl(link.id),
+                    short_url: link.short_url || _this.idToShortUrl(link.id),
                     owner: link.user_id == user.id
                 };
-            }.bind(this));
-        }.bind(this));
+            });
+        });
     };
-    Service.prototype.deleteLinkByIdWithToken = function (id, token) {
+    Service.prototype.deleteLinkById = function (id, user_id) {
+        var _this = this;
         return q.all([
-            this.token_service.getUserByValue(token),
+            this.user_service.getUserById(user_id),
             this.repo.getLinkById(id)
         ]).spread(function (user, link) {
             if (link.user_id == user.id) {
-                this.repo.deleteLinkById(link.id);
+                _this.repo.deleteLinkById(link.id);
                 return true;
             }
             else {
-                throw new Error('Link cannot be deleted with that token');
+                throw new Error('Link cannot be deleted by that user');
             }
-        }.bind(this));
+        });
     };
     Service.prototype.deleteLinksByGroupId = function (group_id) {
+        var _this = this;
         return this.group_service.getGroupById(group_id).then(function () {
-            return this.repo.deleteLinksByGroupId(group_id);
-        }.bind(this));
+            return _this.repo.deleteLinksByGroupId(group_id);
+        });
     };
     return Service;
 })(BaseService_1.default);

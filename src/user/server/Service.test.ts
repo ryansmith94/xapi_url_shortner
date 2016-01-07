@@ -1,7 +1,6 @@
 import BaseTest from '../../BaseTest';
 import Factory from './TestFactory';
 import GroupFactory from '../../group/TestFactory';
-import TokenFactory from '../../token/server/TestFactory';
 import * as passhash from 'password-hash';
 
 var EMAIL = 'test@example.com';
@@ -17,23 +16,18 @@ class Test extends BaseTest {
   public beforeEach() {
     // Initialises services.
     this.group_service = GroupFactory();
-    this.token_service = TokenFactory();
     this.service = Factory();
 
     // Injects services into services.
     this.service.setGroupService(this.group_service);
-    this.service.setTokenService(this.token_service);
-    this.token_service.setUserService(this.service);
   }
 
-  private createToken(id = '') {
+  private createUser(id = '') {
     var user_email = id+'test@example.com';
     var user_pass = 'test_password';
     var group_name = 'GROUP_NAME';
     return this.group_service.createGroup(group_name).then((group) => {
       return this.service.createUser(user_email, user_pass, group.id);
-    }).then((user) => {
-      return this.token_service.createToken(user_email, user_pass);
     });
   }
 
@@ -103,25 +97,24 @@ class Test extends BaseTest {
     return this.service.deleteUserById(1).then(this.fail(), this.pass());
   }
 
-  public testCreateUserWithToken() {
-    return this.createToken('1').then((token: any) => {
-      return this.service.createUserWithToken(EMAIL, PASSWORD, token.value);
+  public testCreateUserWithUser() {
+    return this.createUser('1').then((user: any) => {
+      return this.service.createUserWithUser(EMAIL, PASSWORD, user.id);
     }).then((user: any) => {
       this.assert(user.email === EMAIL);
       this.assert(passhash.verify(PASSWORD, user.password));
-      this.assert(user.group_id === user.group_id);
     });
   }
 
-  public testCreateUserWithTokenAndInvalidEmail() {
-    return this.createToken('1').then((token: any) => {
-      return this.service.createUserWithToken('invalid email', PASSWORD, token.value);
+  public testCreateUserWithUserAndInvalidEmail() {
+    return this.createUser('1').then((user: any) => {
+      return this.service.createUserWithUser('invalid email', PASSWORD, user.id);
     }).then(this.fail(), this.pass());
   }
 
-  public testCreateUserWithTokenThatExists() {
-    return this.createToken().then((token: any) => {
-      return this.service.createUserWithToken(EMAIL, PASSWORD, token.value);
+  public testCreateUserWithUserThatExists() {
+    return this.createUser().then((user: any) => {
+      return this.service.createUserWithUser(EMAIL, PASSWORD, user.id);
     }).then(this.fail(), this.pass());
   }
 

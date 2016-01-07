@@ -1,8 +1,10 @@
 class Controller {
   private service;
+  private token_service;
 
-  public constructor(app, service) {
+  public constructor(app, service, token_service) {
     this.service = service;
+    this.token_service = token_service;
     this.constructRoutes(app);
   }
 
@@ -15,11 +17,13 @@ class Controller {
 
   public createLink(req, res) {
     var token = req.get('Authorization').replace('Bearer ', '');
-    this.service.createLinkWithToken(
-      req.body.long_url,
-      token,
-      req.body.short_url
-    ).then(function (model) {
+    this.token_service.getUserByValue(token).then((user_id: number) => {
+      return this.service.createLinkWithToken(
+        req.body.long_url,
+        user_id,
+        req.body.short_url
+      );
+    }).then(function (model) {
       res.json(model);
     }, function (err) {
       console.error(err.stack);
@@ -39,7 +43,9 @@ class Controller {
 
   public getLinks(req, res) {
     var token = req.get('Authorization').replace('Bearer ', '');
-    this.service.getLinksByToken(token).then(function (models) {
+    this.token_service.getUserByValue(token).then((user_id: number) => {
+      return this.service.getLinks(user_id);
+    }).then(function (models) {
       res.json(models);
     }, function (err) {
       console.error(err.stack);
@@ -50,7 +56,9 @@ class Controller {
   public deleteLink(req, res) {
     var token = req.get('Authorization').replace('Bearer ', '');
     var id = req.params.id;
-    this.service.deleteLinkByIdWithToken(id, token).then(function () {
+    this.token_service.getUserByValue(token).then((user_id: number) => {
+      return this.service.deleteLinkById(id, user_id);
+    }).then(function () {
       res.json(true);
     }, function (err) {
       console.error(err.stack);

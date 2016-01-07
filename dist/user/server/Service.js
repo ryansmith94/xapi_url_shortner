@@ -13,9 +13,6 @@ var Service = (function (_super) {
     Service.prototype.setGroupService = function (group_service) {
         this.group_service = group_service;
     };
-    Service.prototype.setTokenService = function (token_service) {
-        this.token_service = token_service;
-    };
     Service.prototype.validateGroupId = function (group_id) {
         return this.group_service.getGroupById(group_id).then(function (group) {
             return group;
@@ -24,10 +21,11 @@ var Service = (function (_super) {
         });
     };
     Service.prototype.validateCreateUser = function (email, password, group_id) {
+        var _this = this;
         return this.validateEmail(email).then(function () {
-            return this.validateGroupId(group_id);
-        }.bind(this)).then(function (group) {
-            return this.getUserByEmail(email).then(function (user) {
+            return _this.validateGroupId(group_id);
+        }).then(function (group) {
+            return _this.getUserByEmail(email).then(function (user) {
                 if (user.group_id == group_id) {
                     throw new Error('Email already exists in the group.');
                 }
@@ -37,7 +35,7 @@ var Service = (function (_super) {
             }, function (err) {
                 return true;
             });
-        }.bind(this));
+        });
     };
     Service.prototype.validateUser = function (email, group_id) {
         return this.validateEmail(email).then(function () {
@@ -53,10 +51,11 @@ var Service = (function (_super) {
             });
         }.bind(this));
     };
-    Service.prototype.createUserWithToken = function (email, password, token) {
-        return this.token_service.getUserByValue(token).then(function (user) {
-            return this.createUser(email, password, user.group_id);
-        }.bind(this));
+    Service.prototype.createUserWithUser = function (email, password, user_id) {
+        var _this = this;
+        return this.getUserById(user_id).then(function (user) {
+            return _this.createUser(email, password, user.group_id);
+        });
     };
     Service.prototype.deleteUserById = function (id) {
         return this.repo.deleteUserById(id);

@@ -6,8 +6,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 var BaseTest_1 = require('../BaseTest');
 var TestFactory_1 = require('./TestFactory');
 var TestFactory_2 = require('../user/server/TestFactory');
-var TestFactory_3 = require('../token/server/TestFactory');
-var TestFactory_4 = require('../link/server/TestFactory');
+var TestFactory_3 = require('../link/server/TestFactory');
 var q = require('q');
 var NAME = 'Example';
 var Test = (function (_super) {
@@ -19,15 +18,12 @@ var Test = (function (_super) {
     Test.prototype.beforeEach = function () {
         this.service = TestFactory_1.default();
         this.user_service = TestFactory_2.default();
-        this.token_service = TestFactory_3.default();
-        this.link_service = TestFactory_4.default();
+        this.link_service = TestFactory_3.default();
         this.user_service.setGroupService(this.service);
-        this.user_service.setTokenService(this.token_service);
         this.service.setUserService(this.user_service);
         this.service.setLinkService(this.link_service);
-        this.token_service.setUserService(this.user_service);
-        this.link_service.setTokenService(this.token_service);
         this.link_service.setGroupService(this.service);
+        this.link_service.setUserService(this.user_service);
     };
     Test.prototype.testCreateGroup = function () {
         var _this = this;
@@ -100,9 +96,7 @@ var Test = (function (_super) {
             return _this.user_service.createUser('test@example.com', 'pass', group.id);
         }).then(function (created_user) {
             user = created_user;
-            return _this.token_service.createToken(user.email, 'pass');
-        }).then(function (token) {
-            return _this.link_service.createLinkWithToken('http://example.com', token.value);
+            return _this.link_service.createLink('http://example.com', user.id);
         }).then(function (link) {
             return { group: group, user: user, link: link };
         });

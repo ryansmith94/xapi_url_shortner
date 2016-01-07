@@ -6,7 +6,6 @@ var __extends = (this && this.__extends) || function (d, b) {
 var BaseTest_1 = require('../../BaseTest');
 var TestFactory_1 = require('./TestFactory');
 var TestFactory_2 = require('../../group/TestFactory');
-var TestFactory_3 = require('../../token/server/TestFactory');
 var passhash = require('password-hash');
 var EMAIL = 'test@example.com';
 var PASSWORD = 'password';
@@ -20,13 +19,10 @@ var Test = (function (_super) {
     }
     Test.prototype.beforeEach = function () {
         this.group_service = TestFactory_2.default();
-        this.token_service = TestFactory_3.default();
         this.service = TestFactory_1.default();
         this.service.setGroupService(this.group_service);
-        this.service.setTokenService(this.token_service);
-        this.token_service.setUserService(this.service);
     };
-    Test.prototype.createToken = function (id) {
+    Test.prototype.createUser = function (id) {
         var _this = this;
         if (id === void 0) { id = ''; }
         var user_email = id + 'test@example.com';
@@ -34,8 +30,6 @@ var Test = (function (_super) {
         var group_name = 'GROUP_NAME';
         return this.group_service.createGroup(group_name).then(function (group) {
             return _this.service.createUser(user_email, user_pass, group.id);
-        }).then(function (user) {
-            return _this.token_service.createToken(user_email, user_pass);
         });
     };
     Test.prototype.testCreateUser = function () {
@@ -99,26 +93,25 @@ var Test = (function (_super) {
     Test.prototype.testDeleteUserByIdWithNoUser = function () {
         return this.service.deleteUserById(1).then(this.fail(), this.pass());
     };
-    Test.prototype.testCreateUserWithToken = function () {
+    Test.prototype.testCreateUserWithUser = function () {
         var _this = this;
-        return this.createToken('1').then(function (token) {
-            return _this.service.createUserWithToken(EMAIL, PASSWORD, token.value);
+        return this.createUser('1').then(function (user) {
+            return _this.service.createUserWithUser(EMAIL, PASSWORD, user.id);
         }).then(function (user) {
             _this.assert(user.email === EMAIL);
             _this.assert(passhash.verify(PASSWORD, user.password));
-            _this.assert(user.group_id === user.group_id);
         });
     };
-    Test.prototype.testCreateUserWithTokenAndInvalidEmail = function () {
+    Test.prototype.testCreateUserWithUserAndInvalidEmail = function () {
         var _this = this;
-        return this.createToken('1').then(function (token) {
-            return _this.service.createUserWithToken('invalid email', PASSWORD, token.value);
+        return this.createUser('1').then(function (user) {
+            return _this.service.createUserWithUser('invalid email', PASSWORD, user.id);
         }).then(this.fail(), this.pass());
     };
-    Test.prototype.testCreateUserWithTokenThatExists = function () {
+    Test.prototype.testCreateUserWithUserThatExists = function () {
         var _this = this;
-        return this.createToken().then(function (token) {
-            return _this.service.createUserWithToken(EMAIL, PASSWORD, token.value);
+        return this.createUser().then(function (user) {
+            return _this.service.createUserWithUser(EMAIL, PASSWORD, user.id);
         }).then(this.fail(), this.pass());
     };
     Test.prototype.testGetUsersWithGroupId = function () {

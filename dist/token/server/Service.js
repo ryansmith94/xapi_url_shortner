@@ -4,7 +4,6 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var BaseService_1 = require('../BaseService');
-var q = require('q');
 var EXPIRY_TIME = 120;
 var Service = (function (_super) {
     __extends(Service, _super);
@@ -15,33 +14,28 @@ var Service = (function (_super) {
         this.user_service = user_service;
     };
     Service.prototype.createToken = function (email, password) {
-        var deferred = q.defer();
-        this.user_service.getUserByEmailAndPassword(email, password).then(function (user) {
+        var _this = this;
+        return this.user_service.getUserByEmailAndPassword(email, password).then(function (user) {
             var expiry = new Date();
             expiry.setMinutes(expiry.getMinutes() + EXPIRY_TIME);
-            return this.repo.createToken({
+            return _this.repo.createToken({
                 value: Math.random().toString(36).substr(2),
                 user_id: user.id,
                 expiry: expiry.toISOString()
-            }).then(function (token) {
-                return deferred.resolve(token);
             });
-        }.bind(this)).then(function (err) {
-            deferred.reject(err);
-        }, function (err) {
-            deferred.reject(err);
+        }).then(function (token) {
+            return token;
         });
-        return deferred.promise;
     };
     Service.prototype.getUserByValue = function (token_value) {
         return this.repo.getTokenByValue(token_value).then(function (token) {
             if ((new Date()).toISOString() < token.expiry) {
-                return this.user_service.getUserById(token.user_id);
+                return token.user_id;
             }
             else {
                 throw new Error('No token. Log out and log back in.');
             }
-        }.bind(this));
+        });
     };
     return Service;
 })(BaseService_1.default);

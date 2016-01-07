@@ -1,7 +1,6 @@
 import BaseTest from '../BaseTest';
 import Factory from './TestFactory';
 import UserFactory from '../user/server/TestFactory';
-import TokenFactory from '../token/server/TestFactory';
 import LinkFactory from '../link/server/TestFactory';
 import * as q from 'q';
 
@@ -10,22 +9,18 @@ class Test extends BaseTest {
   protected name: string = __filename;
   protected service;
   protected user_service;
-  protected token_service;
   protected link_service;
 
   public beforeEach() {
     this.service = Factory();
     this.user_service = UserFactory();
-    this.token_service = TokenFactory();
     this.link_service = LinkFactory();
 
     this.user_service.setGroupService(this.service);
-    this.user_service.setTokenService(this.token_service);
     this.service.setUserService(this.user_service);
     this.service.setLinkService(this.link_service);
-    this.token_service.setUserService(this.user_service);
-    this.link_service.setTokenService(this.token_service);
     this.link_service.setGroupService(this.service);
+    this.link_service.setUserService(this.user_service);
   }
 
   public testCreateGroup() {
@@ -100,9 +95,7 @@ class Test extends BaseTest {
       return this.user_service.createUser('test@example.com', 'pass', group.id);
     }).then((created_user) => {
       user = created_user;
-      return this.token_service.createToken(user.email, 'pass');
-    }).then((token) => {
-      return this.link_service.createLinkWithToken('http://example.com', token.value);
+      return this.link_service.createLink('http://example.com', user.id);
     }).then((link) => {
       return { group: group, user: user, link: link };
     });
