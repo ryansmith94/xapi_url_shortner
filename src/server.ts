@@ -34,20 +34,19 @@ var group_service = GroupFactory(config.knex, 'group');
 import UserFactory from './user/server/Factory';
 import UserController from './user/server/ExpressController';
 var user_service = UserFactory(config.knex, 'user');
-var user_controller = new UserController(app, user_service);
+var user_controller = new UserController(app, user_service, token_service);
 
 // Link.
 import LinkFactory from './link/server/Factory';
 import LinkController from './link/server/ExpressController';
 var link_service = LinkFactory(config.knex, 'link');
-var link_controller = new LinkController(app, link_service);
+var link_controller = new LinkController(app, link_service, token_service);
 
 // Injects services into services.
 user_service.setGroupService(group_service);
-user_service.setTokenService(token_service);
 token_service.setUserService(user_service);
 link_service.setTrackingService(tracking_service);
-link_service.setTokenService(token_service);
+link_service.setUserService(user_service);
 link_service.setGroupService(group_service);
 group_service.setUserService(user_service);
 group_service.setLinkService(link_service);

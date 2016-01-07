@@ -8,7 +8,6 @@ var TestFactory_1 = require('./TestFactory');
 var TestFactory_2 = require('../../tracking/TestFactory');
 var TestFactory_3 = require('../../group/TestFactory');
 var TestFactory_4 = require('../../user/server/TestFactory');
-var TestFactory_5 = require('../../token/server/TestFactory');
 var LONG_URL = 'http://www.example.com';
 var SHORT_URL = '2';
 var Test = (function (_super) {
@@ -20,18 +19,15 @@ var Test = (function (_super) {
     Test.prototype.beforeEach = function () {
         this.tracking_service = TestFactory_2.default();
         this.group_service = TestFactory_3.default();
-        this.token_service = TestFactory_5.default();
         this.user_service = TestFactory_4.default();
         this.service = TestFactory_1.default();
         this.user_service.setGroupService(this.group_service);
-        this.user_service.setTokenService(this.token_service);
-        this.token_service.setUserService(this.user_service);
         this.tracking_service.setGroupService(this.group_service);
         this.service.setTrackingService(this.tracking_service);
-        this.service.setTokenService(this.token_service);
         this.service.setGroupService(this.group_service);
+        this.service.setUserService(this.user_service);
     };
-    Test.prototype.createToken = function (id) {
+    Test.prototype.createUser = function (id) {
         var _this = this;
         if (id === void 0) { id = ''; }
         var user_email = id + 'test@example.com';
@@ -39,39 +35,37 @@ var Test = (function (_super) {
         var group_name = 'GROUP_NAME';
         return this.group_service.createGroup(group_name).then(function (group) {
             return _this.user_service.createUser(user_email, user_pass, group.id);
-        }).then(function (user) {
-            return _this.token_service.createToken(user_email, user_pass);
         });
     };
     Test.prototype.testTrackLinkNoOptions = function () {
         var _this = this;
-        return this.createToken().then(function (token) {
-            return _this.service.createLinkWithToken(LONG_URL, token.value);
+        return this.createUser().then(function (user) {
+            return _this.service.createLink(LONG_URL, user.id);
         }).then(function (link) {
             return _this.service.trackLink(link.short_url);
         }).then(function () { return null; });
     };
     Test.prototype.testCreateLink = function () {
         var _this = this;
-        var token;
-        return this.createToken().then(function (new_token) {
-            token = new_token;
-            return _this.service.createLinkWithToken(LONG_URL, token.value);
+        var user;
+        return this.createUser().then(function (created_user) {
+            user = created_user;
+            return _this.service.createLink(LONG_URL, user.id);
         }).then(function (link) {
             _this.assert(link.long_url === LONG_URL);
-            _this.assert(link.user_id === token.user_id);
+            _this.assert(link.user_id === user.id);
         });
     };
     Test.prototype.testCreateLinkInvalidLongUrl = function () {
         var _this = this;
-        return this.createToken().then(function (token) {
-            return _this.service.createLinkWithToken('', token.value);
+        return this.createUser().then(function (user) {
+            return _this.service.createLink('', user.id);
         }).then(this.fail(), this.pass());
     };
     Test.prototype.testCreateLinkWithShortUrl = function () {
         var _this = this;
-        return this.createToken().then(function (token) {
-            return _this.service.createLinkWithToken(LONG_URL, token.value, SHORT_URL);
+        return this.createUser().then(function (user) {
+            return _this.service.createLink(LONG_URL, user.id, SHORT_URL);
         }).then(function (link) {
             _this.assert(link.long_url === LONG_URL);
             _this.assert(link.short_url === SHORT_URL);
@@ -79,9 +73,9 @@ var Test = (function (_super) {
     };
     Test.prototype.testCreateLinkWithExistingShortUrl = function () {
         var _this = this;
-        return this.createToken().then(function (token) {
-            return _this.service.createLinkWithToken(LONG_URL, token.value, '2').then(function (first_link) {
-                return _this.service.createLinkWithToken(LONG_URL + '/2', token.value).then(function (second_link) {
+        return this.createUser().then(function (user) {
+            return _this.service.createLink(LONG_URL, user.id, '2').then(function (first_link) {
+                return _this.service.createLink(LONG_URL + '/2', user.id).then(function (second_link) {
                     _this.assert(second_link.short_url === String(first_link.id));
                 });
             });
@@ -89,17 +83,17 @@ var Test = (function (_super) {
     };
     Test.prototype.testCreateLinkWithShortUrlOfExistingId = function () {
         var _this = this;
-        return this.createToken().then(function (token) {
-            return _this.service.createLinkWithToken(LONG_URL, token.value).then(function (first_link) {
-                return _this.service.createLinkWithToken(LONG_URL + '/2', token.value, '' + first_link.id).then(_this.fail(), _this.pass());
+        return this.createUser().then(function (user) {
+            return _this.service.createLink(LONG_URL, user.id).then(function (first_link) {
+                return _this.service.createLink(LONG_URL + '/2', user.id, '' + first_link.id).then(_this.fail(), _this.pass());
             });
         });
     };
-    Test.prototype.testGetLinksByUserId = function () {
+    Test.prototype.testGetLinks = function () {
         var _this = this;
-        return this.createToken().then(function (token) {
-            return _this.service.createLinkWithToken(LONG_URL, token.value, '2').then(function (link) {
-                return _this.service.getLinksByToken(token.value).then(function (links) {
+        return this.createUser().then(function (user) {
+            return _this.service.createLink(LONG_URL, user.id, '2').then(function (link) {
+                return _this.service.getLinks(user.id).then(function (links) {
                     _this.assert(Array.isArray(links));
                     _this.assert(links.length === 1);
                     _this.assert(links[0].id === link.id);
@@ -109,66 +103,62 @@ var Test = (function (_super) {
             });
         });
     };
-    Test.prototype.testGetLinksByUserIdFromOtherGroup = function () {
+    Test.prototype.testGetLinksFromOtherGroup = function () {
         var _this = this;
-        return this.createToken().then(function (token) {
-            return _this.service.createLinkWithToken(LONG_URL, token.value);
+        return this.createUser().then(function (user) {
+            return _this.service.createLink(LONG_URL, user.id);
         }).then(function () {
-            return _this.createToken('2');
-        }).then(function (token) {
-            return _this.service.getLinksByToken(token.value);
+            return _this.createUser('2');
+        }).then(function (user) {
+            return _this.service.getLinks(user.id);
         }).then(function (links) {
             _this.assert(Array.isArray(links));
             _this.assert(links.length === 0);
         });
     };
-    Test.prototype.testGetLinksByUserIdWithIncorrectId = function () {
-        return this.service.createLinkWithToken(LONG_URL, '1').then(this.fail(), this.pass());
+    Test.prototype.testGetLinksWithIncorrectId = function () {
+        return this.service.getLinks(1).then(this.fail(), this.pass());
     };
-    Test.prototype.testDeleteLinkByIdWithToken = function () {
+    Test.prototype.testDeleteLinkById = function () {
         var _this = this;
-        var token;
-        return this.createToken().then(function (created_token) {
-            token = created_token;
-            return _this.service.createLinkWithToken(LONG_URL, token.value);
+        var user;
+        return this.createUser().then(function (created_user) {
+            user = created_user;
+            return _this.service.createLink(LONG_URL, user.id);
         }).then(function (link) {
-            return _this.service.deleteLinkByIdWithToken(link.id, token.value);
+            return _this.service.deleteLinkById(link.id, user.id);
         }).then(this.pass(), this.fail());
     };
-    Test.prototype.testDeleteLinkByInvalidIdWithToken = function () {
+    Test.prototype.testDeleteLinkByInvalidId = function () {
         var _this = this;
-        return this.createToken().then(function (token) {
-            return _this.service.deleteLinkByIdWithToken(1, token.value);
+        return this.createUser().then(function (user) {
+            return _this.service.deleteLinkById(1, user.id);
         }).then(this.fail(), this.pass());
     };
-    Test.prototype.testDeleteLinkByIdWithInvalidToken = function () {
+    Test.prototype.testDeleteLinkByIdWithInvalidUser = function () {
         var _this = this;
         var link;
-        return this.createToken().then(function (token) {
-            return _this.service.createLinkWithToken(LONG_URL, token.value);
+        return this.createUser().then(function (user) {
+            return _this.service.createLink(LONG_URL, user.id);
         }).then(function (created_link) {
             link = created_link;
-            return _this.createToken('2');
-        }).then(function (token) {
-            return _this.service.deleteLinkByIdWithToken(link.id, token.value);
+            return _this.createUser('2');
+        }).then(function (user) {
+            return _this.service.deleteLinkById(link.id, user.id);
         }).then(this.fail(), this.pass());
     };
     Test.prototype.testDeleteLinksByGroupId = function () {
         var _this = this;
-        var token;
+        var user;
         var user_email = 'test@example.com';
         var user_pass = 'test_password';
-        return this.group_service.createGroup('GROUP_NAME').then(function (group) {
-            return _this.user_service.createUser(user_email, user_pass, group.id);
-        }).then(function (user) {
-            return _this.token_service.createToken(user_email, user_pass);
-        }).then(function (created_token) {
-            token = created_token;
-            return _this.service.createLinkWithToken(LONG_URL, token.value);
+        return this.createUser().then(function (created_user) {
+            user = created_user;
+            return _this.service.createLink(LONG_URL, user.id);
         }).then(function (link) {
             return _this.service.deleteLinksByGroupId(link.group_id);
         }).then(function () {
-            return _this.service.getLinksByToken(token.value);
+            return _this.service.getLinks(user.id);
         }).then(function (links) {
             _this.assert(links.length === 0);
         });

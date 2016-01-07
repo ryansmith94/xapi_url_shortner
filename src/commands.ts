@@ -18,13 +18,10 @@ var link_service = LinkFactory(config.knex, 'link');
 // User.
 import UserFactory from './user/server/Factory';
 import UserController from './user/server/CommanderController';
-import TokenFactory from './token/server/Factory';
-var token_service = TokenFactory(config.knex, 'token');
 var user_service = UserFactory(config.knex, 'user');
 var user_controller = new UserController(commander, user_service);
 
 user_service.setGroupService(group_service);
-user_service.setTokenService(token_service);
 group_service.setLinkService(link_service);
 group_service.setUserService(user_service);
 link_service.setGroupService(group_service);

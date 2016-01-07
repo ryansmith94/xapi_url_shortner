@@ -13,12 +13,9 @@ var group_controller = new CommanderController_1.default(commander, group_servic
 var link_service = Factory_2.default(config_1.default.knex, 'link');
 var Factory_3 = require('./user/server/Factory');
 var CommanderController_2 = require('./user/server/CommanderController');
-var Factory_4 = require('./token/server/Factory');
-var token_service = Factory_4.default(config_1.default.knex, 'token');
 var user_service = Factory_3.default(config_1.default.knex, 'user');
 var user_controller = new CommanderController_2.default(commander, user_service);
 user_service.setGroupService(group_service);
-user_service.setTokenService(token_service);
 group_service.setLinkService(link_service);
 group_service.setUserService(user_service);
 link_service.setGroupService(group_service);

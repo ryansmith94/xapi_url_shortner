@@ -4,14 +4,9 @@ import * as passhash from 'password-hash';
 
 class Service extends BaseService {
   private group_service;
-  private token_service;
 
   public setGroupService(group_service) {
     this.group_service = group_service;
-  }
-
-  public setTokenService(token_service) {
-    this.token_service = token_service;
   }
 
   private validateGroupId(group_id) {
@@ -23,19 +18,19 @@ class Service extends BaseService {
   }
 
   private validateCreateUser(email: string, password: string, group_id) {
-    return this.validateEmail(email).then(function () {
+    return this.validateEmail(email).then(() => {
       return this.validateGroupId(group_id);
-    }.bind(this)).then(function (group) {
-      return this.getUserByEmail(email).then(function (user) {
+    }).then((group) => {
+      return this.getUserByEmail(email).then((user) => {
         if (user.group_id == group_id) {
           throw new Error('Email already exists in the group.');
         } else {
           throw new Error('Email already exists in another group.');
         }
-      }, function (err) {
+      }, (err) => {
         return true;
       });
-    }.bind(this));
+    });
   }
 
   private validateUser(email: string, group_id) {
@@ -54,10 +49,10 @@ class Service extends BaseService {
     }.bind(this));
   }
 
-  public createUserWithToken(email: string, password: string, token: string) {
-    return this.token_service.getUserByValue(token).then(function (user) {
+  public createUserWithUser(email: string, password: string, user_id: number) {
+    return this.getUserById(user_id).then((user) => {
       return this.createUser(email, password, user.group_id);
-    }.bind(this));
+    });
   }
 
   public deleteUserById(id) {

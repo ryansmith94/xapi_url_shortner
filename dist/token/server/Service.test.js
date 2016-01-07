@@ -21,7 +21,6 @@ var Test = (function (_super) {
         this.service = TestFactory_1.default();
         this.user_service = TestFactory_2.default();
         this.user_service.setGroupService(this.group_service);
-        this.user_service.setTokenService(this.service);
         this.service.setUserService(this.user_service);
     };
     Test.prototype.testCreateToken = function () {
@@ -44,8 +43,8 @@ var Test = (function (_super) {
             return _this.user_service.createUser(EMAIL, PASSWORD, group.id);
         }).then(function (user) {
             return _this.service.createToken(EMAIL, PASSWORD).then(function (token) {
-                return _this.service.getUserByValue(token.value).then(function (token_user) {
-                    _this.assert(token_user.id === token.user_id);
+                return _this.service.getUserByValue(token.value).then(function (user_id) {
+                    _this.assert(user_id === token.user_id);
                 });
             });
         });

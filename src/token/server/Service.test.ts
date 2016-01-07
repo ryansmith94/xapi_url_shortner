@@ -20,7 +20,6 @@ class Test extends BaseTest {
 
     // Injects services into services.
     this.user_service.setGroupService(this.group_service);
-    this.user_service.setTokenService(this.service);
     this.service.setUserService(this.user_service);
   }
 
@@ -44,8 +43,8 @@ class Test extends BaseTest {
       return this.user_service.createUser(EMAIL, PASSWORD, group.id);
     }).then((user: any) => {
       return this.service.createToken(EMAIL, PASSWORD).then((token) => {
-        return this.service.getUserByValue(token.value).then((token_user) => {
-          this.assert(token_user.id === token.user_id);
+        return this.service.getUserByValue(token.value).then((user_id) => {
+          this.assert(user_id === token.user_id);
         });
       });
     });

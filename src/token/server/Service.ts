@@ -1,7 +1,7 @@
 import BaseService from '../BaseService';
 import * as q from 'q';
 
-var EXPIRY_TIME = 120; // Minutes.
+const EXPIRY_TIME = 120; // Minutes.
 class Service extends BaseService {
   private user_service;
 
@@ -10,36 +10,28 @@ class Service extends BaseService {
   }
 
   public createToken(email: string, password: string) {
-    var deferred = q.defer();
-
-    this.user_service.getUserByEmailAndPassword(email, password).then(function (user) {
-      var expiry = new Date();
+    return this.user_service.getUserByEmailAndPassword(email, password).then((user) => {
+      let expiry = new Date();
       expiry.setMinutes(expiry.getMinutes() + EXPIRY_TIME);
 
       return this.repo.createToken({
         value: Math.random().toString(36).substr(2),
         user_id: user.id,
         expiry: expiry.toISOString()
-      }).then(function (token) {
-        return deferred.resolve(token);
       });
-    }.bind(this)).then(function (err) {
-      deferred.reject(err);
-    }, function (err) {
-      deferred.reject(err);
+    }).then((token) => {
+      return token;
     });
-
-    return deferred.promise;
   }
 
   public getUserByValue(token_value: string) {
-    return this.repo.getTokenByValue(token_value).then(function (token) {
+    return this.repo.getTokenByValue(token_value).then((token) => {
       if ((new Date()).toISOString() < token.expiry) {
-        return this.user_service.getUserById(token.user_id);
+        return token.user_id;
       } else {
         throw new Error('No token. Log out and log back in.');
       }
-    }.bind(this));
+    });
   }
 }
 

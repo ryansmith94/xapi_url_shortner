@@ -1,14 +1,18 @@
 var Controller = (function () {
-    function Controller(app, service) {
+    function Controller(app, service, token_service) {
         this.service = service;
+        this.token_service = token_service;
         this.constructRoutes(app);
     }
     Controller.prototype.constructRoutes = function (app) {
         app.post('/api/user', this.createUser.bind(this));
     };
     Controller.prototype.createUser = function (req, res) {
+        var _this = this;
         var token = req.get('Authorization').replace('Bearer ', '');
-        this.service.createUserWithToken(req.body.email, req.body.password, token).then(function (model) {
+        this.token_service.getUserByValue(token).then(function (user_id) {
+            return _this.service.createUserWithUser(req.body.email, req.body.password, user_id);
+        }).then(function (model) {
             res.json(model);
         }, function (err) {
             console.error(err.stack);
