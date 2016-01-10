@@ -22,7 +22,7 @@ git clone git@github.com:ryansmith94/xapi_url_shortner.git shortener; cd shorten
 ## Upgrading
 Run the following in your terminal.
 ```
-git pull; npm link
+git pull; npm install --production; npm link
 ```
 
 ## Usage
