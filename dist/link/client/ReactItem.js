@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var React = require('react');
+var copyToClipboard_1 = require('../../copyToClipboard');
 var ENTER_KEY = 13;
 var ESCAPE_KEY = 27;
 var dom = React.DOM;
@@ -49,17 +50,27 @@ var Component = (function (_super) {
             this.handleSave();
         }
     };
+    Component.prototype.handleCopy = function (event) {
+        copyToClipboard_1.default(this.getShortUrl());
+        console.log(this.getShortUrl());
+    };
     Component.prototype.handleToggleEdit = function () {
         this.setState({ editing: !this.state.editing });
     };
+    Component.prototype.getShortUrl = function () {
+        return location.protocol + '//' + location.host + '/' + this.props.short_url;
+    };
     Component.prototype.render = function () {
         var location = document.location;
-        var short_url = location.protocol + '//' + location.host + '/' + this.props.short_url;
-        return dom.div({ className: 'link_item clearfix', onDoubleClick: this.handleToggleEdit.bind(this) }, [
+        var short_url = this.getShortUrl();
+        return dom.div({
+            className: 'link_item clearfix',
+            onDoubleClick: this.props.owner ? this.handleToggleEdit.bind(this) : null
+        }, [
             dom.span({ className: 'col col-xs-1 link_icon_col' }, [
                 dom.img({ className: 'link_icon', src: this.getFavicon(this.props.long_url) }),
             ]),
-            dom.span({ className: 'col col-xs-7 link_info_col' }, [
+            dom.span({ className: 'col col-xs-5 link_info_col' }, [
                 dom.div({}, [dom.a({ className: 'short_url text-primary', href: short_url }, [short_url])]),
                 dom.div({}, [
                     this.state.editing ? dom.input({
@@ -74,14 +85,18 @@ var Component = (function (_super) {
                     }, [this.props.long_url])
                 ])
             ]),
-            this.props.owner ? dom.span({ className: 'col col-xs-3 link_action_col pull-right' }, [
-                dom.span({ className: 'edit btn dtn-danger', onClick: this.handleToggleEdit.bind(this) }, [
+            dom.span({ className: 'col col-xs-5 link_action_col pull-right' }, [
+                dom.span({ className: 'copy btn', onClick: this.handleCopy.bind(this) }, [
+                    dom.span({ className: 'glyphicon glyphicon-copy' })
+                ])
+            ].concat((this.props.owner ? [
+                dom.span({ className: 'edit btn', onClick: this.handleToggleEdit.bind(this) }, [
                     dom.span({ className: 'glyphicon glyphicon-pencil' })
                 ]),
-                dom.span({ className: 'delete btn dtn-danger', onClick: this.handleDelete.bind(this) }, [
+                dom.span({ className: 'delete btn', onClick: this.handleDelete.bind(this) }, [
                     dom.span({ className: 'glyphicon glyphicon-remove' })
                 ])
-            ]) : null
+            ] : [])))
         ]);
     };
     return Component;

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import copy from '../../copyToClipboard';
 
 const ENTER_KEY = 13;
 const ESCAPE_KEY = 27;
@@ -39,18 +40,28 @@ class Component extends React.Component<any, any> {
       this.handleSave();
     }
   }
+  private handleCopy(event): void {
+    copy(this.getShortUrl());
+    console.log(this.getShortUrl());
+  }
   private handleToggleEdit(): void {
     this.setState({ editing: !this.state.editing });
   }
+  private getShortUrl(): string {
+    return location.protocol + '//' + location.host + '/' + this.props.short_url;
+  }
   render() {
     let location = document.location;
-    let short_url = location.protocol + '//' + location.host + '/' + this.props.short_url;
+    let short_url = this.getShortUrl();
 
-    return dom.div({className: 'link_item clearfix', onDoubleClick: this.handleToggleEdit.bind(this)}, [
+    return dom.div({
+      className: 'link_item clearfix',
+      onDoubleClick: this.props.owner ? this.handleToggleEdit.bind(this) : null
+    }, [
       dom.span({className: 'col col-xs-1 link_icon_col'}, [
         dom.img({className: 'link_icon', src: this.getFavicon(this.props.long_url)}),
       ]),
-      dom.span({className: 'col col-xs-7 link_info_col'}, [
+      dom.span({className: 'col col-xs-5 link_info_col'}, [
         dom.div({}, [dom.a({className: 'short_url text-primary', href: short_url}, [short_url])]),
         dom.div({}, [
           this.state.editing ? dom.input({
@@ -65,14 +76,19 @@ class Component extends React.Component<any, any> {
           }, [this.props.long_url])
         ])
       ]),
-      this.props.owner ? dom.span({className: 'col col-xs-3 link_action_col pull-right'}, [
-        dom.span({className: 'edit btn dtn-danger', onClick: this.handleToggleEdit.bind(this)}, [
-          dom.span({className: 'glyphicon glyphicon-pencil'})
+      dom.span({className: 'col col-xs-5 link_action_col pull-right'}, [
+        dom.span({className: 'copy btn', onClick: this.handleCopy.bind(this)}, [
+          dom.span({className: 'glyphicon glyphicon-copy'})
         ]),
-        dom.span({className: 'delete btn dtn-danger', onClick: this.handleDelete.bind(this)}, [
-          dom.span({className: 'glyphicon glyphicon-remove'})
-        ])
-      ]) : null
+        ... (this.props.owner ? [
+          dom.span({className: 'edit btn', onClick: this.handleToggleEdit.bind(this)}, [
+            dom.span({className: 'glyphicon glyphicon-pencil'})
+          ]),
+          dom.span({className: 'delete btn', onClick: this.handleDelete.bind(this)}, [
+            dom.span({className: 'glyphicon glyphicon-remove'})
+          ])
+        ] : [])
+      ]) 
     ]);
   }
 }
