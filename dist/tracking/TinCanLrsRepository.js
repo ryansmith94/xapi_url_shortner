@@ -1,11 +1,11 @@
-var tincanjs_1 = require('tincanjs');
+var Tincan = require('tincanjs');
 var q = require('q');
 var Repository = (function () {
     function Repository(config) {
         this.config = config;
     }
     Repository.prototype.connect = function () {
-        return new tincanjs_1.default({ recordStores: [this.config] });
+        return new Tincan({ recordStores: [this.config] });
     };
     Repository.prototype.createStatement = function (statement) {
         var deferred = q.defer();
