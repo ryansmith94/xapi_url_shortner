@@ -195,6 +195,33 @@ class Test extends BaseTest {
       assertUpdated(updated_link);
     });
   }
+
+  public testChangeLongUrlWithInvalidId() {
+    const NEW_LONG_URL = LONG_URL + '/hello';
+    return this.createUser().then((user) => {
+      return this.service.changeLongUrl(1, NEW_LONG_URL, user.id);
+    }).then(this.fail(), this.pass());
+  }
+
+  public testChangeLongUrlWithInvalidLongUrl() {
+    let user;
+    const NEW_LONG_URL = '';
+    return this.createUser().then((created_user) => {
+      user = created_user;
+      return this.service.createLink(LONG_URL, user.id);
+    }).then((link) => {
+      return this.service.changeLongUrl(link.id, NEW_LONG_URL, user.id);
+    }).then(this.fail(), this.pass());
+  }
+
+  public testChangeLongUrlWithInvalidUserId() {
+    const NEW_LONG_URL = '';
+    return this.createUser().then((user) => {
+      return this.service.createLink(LONG_URL, user.id);
+    }).then((link) => {
+      return this.service.changeLongUrl(link.id, NEW_LONG_URL, 100);
+    }).then(this.fail(), this.pass());
+  }
 }
 
 (new Test()).run();

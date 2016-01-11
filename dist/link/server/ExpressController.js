@@ -26,7 +26,7 @@ var Controller = (function () {
     Controller.prototype.visitLink = function (req, res) {
         var options = req.query.options;
         this.service.trackLink(req.params.short_url, options && JSON.parse(options)).then(function (model) {
-            res.redirect(301, model.long_url);
+            res.redirect(307, model.long_url);
         }, function (err) {
             console.error(err.stack);
             res.status(400).send(String(err));

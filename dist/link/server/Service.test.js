@@ -190,6 +190,33 @@ var Test = (function (_super) {
             assertUpdated(updated_link);
         });
     };
+    Test.prototype.testChangeLongUrlWithInvalidId = function () {
+        var _this = this;
+        var NEW_LONG_URL = LONG_URL + '/hello';
+        return this.createUser().then(function (user) {
+            return _this.service.changeLongUrl(1, NEW_LONG_URL, user.id);
+        }).then(this.fail(), this.pass());
+    };
+    Test.prototype.testChangeLongUrlWithInvalidLongUrl = function () {
+        var _this = this;
+        var user;
+        var NEW_LONG_URL = '';
+        return this.createUser().then(function (created_user) {
+            user = created_user;
+            return _this.service.createLink(LONG_URL, user.id);
+        }).then(function (link) {
+            return _this.service.changeLongUrl(link.id, NEW_LONG_URL, user.id);
+        }).then(this.fail(), this.pass());
+    };
+    Test.prototype.testChangeLongUrlWithInvalidUserId = function () {
+        var _this = this;
+        var NEW_LONG_URL = '';
+        return this.createUser().then(function (user) {
+            return _this.service.createLink(LONG_URL, user.id);
+        }).then(function (link) {
+            return _this.service.changeLongUrl(link.id, NEW_LONG_URL, 100);
+        }).then(this.fail(), this.pass());
+    };
     return Test;
 })(BaseTest_1.default);
 (new Test()).run();
