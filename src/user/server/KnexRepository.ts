@@ -11,6 +11,7 @@ class Repository extends BaseRepository {
     table.string('email').notNullable();
     table.string('password').notNullable();
     table.integer('group_id').notNullable();
+    table.boolean('admin').notNullable();
   }
 
   public createUser(user) {
@@ -19,7 +20,8 @@ class Repository extends BaseRepository {
         id: ids[0],
         email: user.email,
         password: user.password,
-        group_id: user.group_id
+        group_id: user.group_id,
+        admin: user.admin
       };
     });
   }
@@ -61,6 +63,13 @@ class Repository extends BaseRepository {
   public deleteUsersByGroupId(group_id) {
     return this.connect().where('group_id', group_id).delete().then(function () {
       return true;
+    });
+  }
+
+  public updateUserById(id, user) {
+    return this.connect().where('id', id).update(user).then((ids) => {
+      if (ids === 0) throw new Error('No user');
+      return user;
     });
   }
 }

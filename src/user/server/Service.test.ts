@@ -37,6 +37,7 @@ class Test extends BaseTest {
         this.assert(user.email === EMAIL);
         this.assert(passhash.verify(PASSWORD, user.password));
         this.assert(user.group_id === group.id);
+        this.assert(user.admin === false);
       });
     });
   }
@@ -66,6 +67,7 @@ class Test extends BaseTest {
           this.assert(user.id === existing_user.id);
           this.assert(user.email === EMAIL);
           this.assert(passhash.verify(PASSWORD, user.password));
+          this.assert(user.admin === false);
         });
       });
     });
@@ -103,6 +105,7 @@ class Test extends BaseTest {
     }).then((user: any) => {
       this.assert(user.email === EMAIL);
       this.assert(passhash.verify(PASSWORD, user.password));
+      this.assert(user.admin === false);
     });
   }
 
@@ -150,6 +153,14 @@ class Test extends BaseTest {
 
   public testDeleteUsersByInvalidGroupId() {
     return this.service.deleteUsersByGroupId(1).then(this.fail(), this.pass());
+  }
+
+  public testCreateAdmin() {
+    return this.createUser().then((user) => {
+      return this.service.createAdmin(user.id);
+    }).then((user) => {
+      this.assert(user.admin === true);
+    });
   }
 }
 

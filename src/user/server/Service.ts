@@ -44,7 +44,8 @@ class Service extends BaseService {
       return this.repo.createUser({
         email: email,
         password: passhash.generate(password),
-        group_id: group_id
+        group_id: group_id,
+        admin: false
       });
     }.bind(this));
   }
@@ -89,6 +90,13 @@ class Service extends BaseService {
 
   private getUserByEmail(email: string) {
     return this.repo.getUserByEmail(email);
+  }
+
+  public createAdmin(id) {
+    return this.getUserById(id).then((user) => {
+      user.admin = true;
+      return this.repo.updateUserById(id, user);
+    });
   }
 }
 

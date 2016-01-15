@@ -15,7 +15,7 @@ var Controller = (function () {
         var _this = this;
         var token = req.get('Authorization').replace('Bearer ', '');
         this.token_service.getUserByValue(token).then(function (user_id) {
-            return _this.service.createLinkWithToken(req.body.long_url, user_id, req.body.short_url);
+            return _this.service.createLink(req.body.long_url, user_id, req.body.short_url);
         }).then(function (model) {
             res.json(model);
         }, function (err) {

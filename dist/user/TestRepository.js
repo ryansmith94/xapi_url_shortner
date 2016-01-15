@@ -65,6 +65,19 @@ var Repository = (function () {
         deferred.resolve(true);
         return deferred.promise;
     };
+    Repository.prototype.updateUserById = function (id, user) {
+        var deferred = q.defer();
+        this.users = this.users.map(function (stored_user) {
+            if (stored_user.id === id) {
+                return user;
+            }
+            else {
+                return stored_user;
+            }
+        });
+        deferred.resolve(user);
+        return deferred.promise;
+    };
     return Repository;
 })();
 Object.defineProperty(exports, "__esModule", { value: true });

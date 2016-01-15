@@ -91,7 +91,7 @@ class Service extends BaseService {
           id: link.id,
           long_url: link.long_url,
           short_url: link.short_url || this.idToShortUrl(link.id),
-          owner: link.user_id == user.id,
+          editable: link.user_id == user.id || (!!user.admin),
           user_id: link.user_id,
           group_id: link.group_id
         };

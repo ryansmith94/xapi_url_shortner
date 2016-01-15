@@ -21,6 +21,11 @@ class Controller {
       .command('lu <group_id>')
       .description('List the users in a group')
       .action(this.getUsersByGroupId.bind(this));
+
+    commander
+      .command('ca <user_id>')
+      .description('Make user an admin of their group')
+      .action(this.createAdmin.bind(this));
   }
 
   public createUser(email, password, group_id) {
@@ -43,6 +48,14 @@ class Controller {
     this.service.getUsersByGroupId(group_id).then(function (models) {
       console.log(models.map(function(model) { return JSON.stringify(model); }).join('\n'));
     }, function (err) {
+      console.error(err.stack);
+    }).then(process.exit, process.exit);
+  }
+
+  public createAdmin(id) {
+    this.service.createAdmin(id).then((model) => {
+      console.log(JSON.stringify(model));
+    }, (err) => {
       console.error(err.stack);
     }).then(process.exit, process.exit);
   }

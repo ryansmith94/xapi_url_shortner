@@ -19,7 +19,7 @@ class Controller {
   public createLink(req, res) {
     var token = req.get('Authorization').replace('Bearer ', '');
     this.token_service.getUserByValue(token).then((user_id: number) => {
-      return this.service.createLinkWithToken(
+      return this.service.createLink(
         req.body.long_url,
         user_id,
         req.body.short_url

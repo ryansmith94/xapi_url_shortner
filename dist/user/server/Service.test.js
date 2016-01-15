@@ -39,6 +39,7 @@ var Test = (function (_super) {
                 _this.assert(user.email === EMAIL);
                 _this.assert(passhash.verify(PASSWORD, user.password));
                 _this.assert(user.group_id === group.id);
+                _this.assert(user.admin === false);
             });
         });
     };
@@ -67,6 +68,7 @@ var Test = (function (_super) {
                     _this.assert(user.id === existing_user.id);
                     _this.assert(user.email === EMAIL);
                     _this.assert(passhash.verify(PASSWORD, user.password));
+                    _this.assert(user.admin === false);
                 });
             });
         });
@@ -100,6 +102,7 @@ var Test = (function (_super) {
         }).then(function (user) {
             _this.assert(user.email === EMAIL);
             _this.assert(passhash.verify(PASSWORD, user.password));
+            _this.assert(user.admin === false);
         });
     };
     Test.prototype.testCreateUserWithUserAndInvalidEmail = function () {
@@ -144,6 +147,14 @@ var Test = (function (_super) {
     };
     Test.prototype.testDeleteUsersByInvalidGroupId = function () {
         return this.service.deleteUsersByGroupId(1).then(this.fail(), this.pass());
+    };
+    Test.prototype.testCreateAdmin = function () {
+        var _this = this;
+        return this.createUser().then(function (user) {
+            return _this.service.createAdmin(user.id);
+        }).then(function (user) {
+            _this.assert(user.admin === true);
+        });
     };
     return Test;
 })(BaseTest_1.default);

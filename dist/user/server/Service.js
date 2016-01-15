@@ -47,7 +47,8 @@ var Service = (function (_super) {
             return this.repo.createUser({
                 email: email,
                 password: passhash.generate(password),
-                group_id: group_id
+                group_id: group_id,
+                admin: false
             });
         }.bind(this));
     };
@@ -87,6 +88,13 @@ var Service = (function (_super) {
     };
     Service.prototype.getUserByEmail = function (email) {
         return this.repo.getUserByEmail(email);
+    };
+    Service.prototype.createAdmin = function (id) {
+        var _this = this;
+        return this.getUserById(id).then(function (user) {
+            user.admin = true;
+            return _this.repo.updateUserById(id, user);
+        });
     };
     return Service;
 })(BaseService_1.default);

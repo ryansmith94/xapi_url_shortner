@@ -56,7 +56,7 @@ class Component extends React.Component<any, any> {
 
     return dom.div({
       className: 'link_item clearfix',
-      onDoubleClick: this.props.owner ? this.handleToggleEdit.bind(this) : null
+      onDoubleClick: this.props.editable ? this.handleToggleEdit.bind(this) : null
     }, [
       dom.span({className: 'col col-xs-1 link_icon_col'}, [
         dom.img({className: 'link_icon', src: this.getFavicon(this.props.long_url)}),
@@ -80,7 +80,7 @@ class Component extends React.Component<any, any> {
         dom.span({className: 'copy btn', onClick: this.handleCopy.bind(this)}, [
           dom.span({className: 'glyphicon glyphicon-copy'})
         ]),
-        ... (this.props.owner ? [
+        ... (this.props.editable ? [
           dom.span({className: 'edit btn', onClick: this.handleToggleEdit.bind(this)}, [
             dom.span({className: 'glyphicon glyphicon-pencil'})
           ]),

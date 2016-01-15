@@ -16,6 +16,10 @@ var Controller = (function () {
             .command('lu <group_id>')
             .description('List the users in a group')
             .action(this.getUsersByGroupId.bind(this));
+        commander
+            .command('ca <user_id>')
+            .description('Make user an admin of their group')
+            .action(this.createAdmin.bind(this));
     };
     Controller.prototype.createUser = function (email, password, group_id) {
         this.service.createUser(email, password, group_id).then(function (model) {
@@ -34,6 +38,13 @@ var Controller = (function () {
     Controller.prototype.getUsersByGroupId = function (group_id) {
         this.service.getUsersByGroupId(group_id).then(function (models) {
             console.log(models.map(function (model) { return JSON.stringify(model); }).join('\n'));
+        }, function (err) {
+            console.error(err.stack);
+        }).then(process.exit, process.exit);
+    };
+    Controller.prototype.createAdmin = function (id) {
+        this.service.createAdmin(id).then(function (model) {
+            console.log(JSON.stringify(model));
         }, function (err) {
             console.error(err.stack);
         }).then(process.exit, process.exit);
