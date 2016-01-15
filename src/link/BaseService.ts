@@ -20,7 +20,7 @@ class Service extends BaseService {
    * @param {string} custom_url The custom_url to validate (optional).
    * @return {Future}
    */
-  protected validateLink(long_url: string, custom_url?: string) {
+  public validateLink(long_url: string, custom_url?: string) {
     var deferred = q.defer();
 
     // Validates the long_url pattern.

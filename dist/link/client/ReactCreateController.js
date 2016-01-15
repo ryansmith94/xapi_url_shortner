@@ -10,12 +10,30 @@ var Component = (function (_super) {
     function Component() {
         _super.apply(this, arguments);
         this.state = {
-            custom_url: ''
+            custom_url: '',
+            valid: false
         };
     }
+    Component.prototype.getCustomUrl = function (custom_url) {
+        if (custom_url === void 0) { custom_url = this.state.custom_url; }
+        custom_url = custom_url.split(document.location.host + '/').pop();
+        return custom_url || undefined;
+    };
+    Component.prototype.validateLink = function (long_url, custom_url) {
+        var _this = this;
+        var mod_custom_url = this.getCustomUrl(custom_url);
+        if (long_url.indexOf('://') === -1) {
+            long_url = 'http://' + long_url;
+        }
+        this.props.service.validateLink(long_url, mod_custom_url).then(function () {
+            _this.setState({ valid: true });
+        }, function () {
+            _this.setState({ valid: false });
+        });
+    };
     Component.prototype.handleShorten = function (event) {
-        var custom_url = this.state.custom_url.split(document.location.host + '/');
-        this.props.service.createLink(this.props.long_url, custom_url[custom_url.length - 1] || undefined).then(function () {
+        var custom_url = this.getCustomUrl();
+        this.props.service.createLink(this.props.long_url, custom_url).then(function () {
             this.setState({ custom_url: '' });
         }.bind(this), function (err) {
             alert(err);
@@ -24,9 +42,11 @@ var Component = (function (_super) {
     };
     Component.prototype.handleLongUrlChange = function (event) {
         this.props.onLongUrlChange(event.target.value);
+        this.validateLink(event.target.value, this.state.custom_url);
     };
     Component.prototype.handleCustomUrlChange = function (event) {
         this.setState({ custom_url: event.target.value });
+        this.validateLink(this.props.long_url, event.target.value);
     };
     Component.prototype.handleDataChange = function () { };
     Component.prototype.componentDidMount = function () {
@@ -53,7 +73,8 @@ var Component = (function (_super) {
             }),
             dom.button({
                 type: 'submit',
-                className: 'btn btn-success'
+                className: 'btn btn-success',
+                disabled: !this.state.valid
             }, ['Shorten'])
         ]);
     };

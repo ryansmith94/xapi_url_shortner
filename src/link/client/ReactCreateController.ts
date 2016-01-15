@@ -3,13 +3,29 @@ import * as React from 'react';
 var dom = React.DOM;
 class Component extends React.Component<any, any> {
   public state = {
-    custom_url: ''
+    custom_url: '',
+    valid: false
   };
+  private getCustomUrl(custom_url = this.state.custom_url) {
+    custom_url = custom_url.split(document.location.host + '/').pop();
+    return custom_url || undefined;
+  }
+  private validateLink(long_url, custom_url) {
+    let mod_custom_url = this.getCustomUrl(custom_url);
+    if (long_url.indexOf('://') === -1) {
+      long_url = 'http://' + long_url;
+    }
+    this.props.service.validateLink(long_url, mod_custom_url).then(() => {
+      this.setState({ valid: true });
+    }, () => {
+      this.setState({ valid: false });
+    });
+  }
   private handleShorten(event) {
-    var custom_url = this.state.custom_url.split(document.location.host+'/');
+    let custom_url = this.getCustomUrl();
     this.props.service.createLink(
       this.props.long_url,
-      custom_url[custom_url.length - 1] || undefined
+      custom_url
     ).then(function () {
       this.setState({custom_url: ''});
     }.bind(this), function (err) {
@@ -19,9 +35,11 @@ class Component extends React.Component<any, any> {
   }
   private handleLongUrlChange(event) {
     this.props.onLongUrlChange(event.target.value);
+    this.validateLink(event.target.value, this.state.custom_url);
   }
   private handleCustomUrlChange(event) {
     this.setState({custom_url: event.target.value});
+    this.validateLink(this.props.long_url, event.target.value);
   }
   private handleDataChange() {}
   public componentDidMount() {
@@ -48,7 +66,8 @@ class Component extends React.Component<any, any> {
       }),
       dom.button({
         type: 'submit',
-        className: 'btn btn-success'
+        className: 'btn btn-success',
+        disabled: !this.state.valid
       }, ['Shorten'])
     ]);
   }
