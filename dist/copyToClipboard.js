@@ -1,3 +1,4 @@
+"use strict";
 function default_1(text) {
     var textArea = document.createElement('textarea');
     textArea.style.position = 'fixed';
@@ -27,4 +28,5 @@ function default_1(text) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;
 ;
+
 //# sourceMappingURL=copyToClipboard.js.map

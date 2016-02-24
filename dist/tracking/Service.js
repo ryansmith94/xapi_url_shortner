@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -8,9 +9,9 @@ var q = require('q');
 var Service = (function (_super) {
     __extends(Service, _super);
     function Service(lrs_repository, web_repository) {
+        _super.call(this);
         this.lrs_repo = lrs_repository;
         this.web_repo = web_repository;
-        _super.call(this);
     }
     Service.prototype.setGroupService = function (group_service) {
         this.group_service = group_service;
@@ -59,7 +60,8 @@ var Service = (function (_super) {
         }.bind(this));
     };
     return Service;
-})(BaseService_1.default);
+}(BaseService_1.default));
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Service;
+
 //# sourceMappingURL=Service.js.map

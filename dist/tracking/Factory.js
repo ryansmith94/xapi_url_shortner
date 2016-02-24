@@ -1,3 +1,4 @@
+"use strict";
 var TinCanLrsRepository_1 = require('./TinCanLrsRepository');
 var CheerioWebRepository_1 = require('./CheerioWebRepository');
 var Service_1 = require('./Service');
@@ -9,4 +10,5 @@ function default_1(lrs_config) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;
 ;
+
 //# sourceMappingURL=Factory.js.map

@@ -1,3 +1,4 @@
+"use strict";
 var jquery = require('jquery');
 var q = require('q');
 var Repository = (function () {
@@ -35,7 +36,8 @@ var Repository = (function () {
         });
     };
     return Repository;
-})();
+}());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Repository;
+
 //# sourceMappingURL=BaseHttpRepository.js.map

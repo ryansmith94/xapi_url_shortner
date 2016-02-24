@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+"use strict";
 var source_map_support = require('source-map-support');
 var commander = require('commander');
 var config_1 = require('./config');
@@ -20,4 +21,5 @@ group_service.setLinkService(link_service);
 group_service.setUserService(user_service);
 link_service.setGroupService(group_service);
 commander.parse(process.argv);
+
 //# sourceMappingURL=commands.js.map

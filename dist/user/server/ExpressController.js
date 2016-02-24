@@ -1,3 +1,4 @@
+"use strict";
 var Controller = (function () {
     function Controller(app, service, token_service) {
         this.service = service;
@@ -20,7 +21,8 @@ var Controller = (function () {
         });
     };
     return Controller;
-})();
+}());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Controller;
+
 //# sourceMappingURL=ExpressController.js.map

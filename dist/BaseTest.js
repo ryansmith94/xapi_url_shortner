@@ -1,3 +1,4 @@
+"use strict";
 var chai = require('chai');
 var source_map_support = require('source-map-support');
 source_map_support.install({
@@ -42,7 +43,8 @@ var TestCase = (function () {
         return function () { return _this.assert(false, 'Fail'); };
     };
     return TestCase;
-})();
+}());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = TestCase;
+
 //# sourceMappingURL=BaseTest.js.map

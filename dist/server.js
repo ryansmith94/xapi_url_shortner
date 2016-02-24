@@ -1,3 +1,4 @@
+"use strict";
 var express = require('express');
 var bodyParser = require('body-parser');
 var source_map_support = require('source-map-support');
@@ -56,4 +57,5 @@ var server = app.listen(config_1.default.port);
 console.log('App running at http://localhost:' + config_1.default.port);
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = app;
+
 //# sourceMappingURL=server.js.map

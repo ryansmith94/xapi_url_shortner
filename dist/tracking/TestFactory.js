@@ -1,3 +1,4 @@
+"use strict";
 var TestLrsRepository_1 = require('./TestLrsRepository');
 var TestWebRepository_1 = require('./TestWebRepository');
 var Service_1 = require('./Service');
@@ -9,4 +10,5 @@ function default_1() {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;
 ;
+
 //# sourceMappingURL=TestFactory.js.map

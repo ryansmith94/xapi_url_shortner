@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -20,7 +21,8 @@ var Service = (function (_super) {
         this.removeListener(CHANGE_EVENT, callback);
     };
     return Service;
-})(events.EventEmitter);
+}(events.EventEmitter));
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Service;
+
 //# sourceMappingURL=BaseService.js.map

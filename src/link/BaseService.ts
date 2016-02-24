@@ -10,8 +10,8 @@ class Service extends BaseService {
    * @param {any} repository A repository.
    */
   public constructor(repository: any) {
-    this.repo = repository;
     super();
+    this.repo = repository;
   }
 
   /**

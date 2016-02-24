@@ -1,17 +1,22 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "target": "ES5",
-        "removeComments": true,
-        "outDir": "dist",
-        "sourceMap": true,
-        "watch": true,
-        "jsx": "React"
-    },
-    "exclude": [
-        "node_modules",
-        "typings/browser",
-        "typings/browser.d.ts",
-        "definitions"
-    ]
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES5",
+    "rootDir": ".",
+    "outDir": "dist",
+    "jsx": "react",
+    "removeComments": true,
+    "sourceMap": true
+  },
+  "files": [
+    "src/client.ts",
+    "src/server.ts",
+    "src/tracker.ts",
+    "src/commands.ts"
+  ],
+  "exclude": [
+    "typings/browser",
+    "typings/browser.d.ts",
+    "node_modules"
+  ]
 }

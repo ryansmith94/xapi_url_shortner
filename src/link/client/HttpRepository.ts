@@ -6,8 +6,8 @@ class Repository extends BaseRepository {
   private links: Array<any>;
 
   public constructor(endpoint, token_value) {
-    this.token_value = token_value;
     super(endpoint);
+    this.token_value = token_value;
   }
 
   protected connect(opts) {

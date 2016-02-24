@@ -1,3 +1,4 @@
+"use strict";
 var KnexRepository_1 = require('./KnexRepository');
 var Service_1 = require('./Service');
 function default_1(knex_config, collection) {
@@ -7,4 +8,5 @@ function default_1(knex_config, collection) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;
 ;
+
 //# sourceMappingURL=Factory.js.map

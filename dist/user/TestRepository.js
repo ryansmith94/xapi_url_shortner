@@ -1,3 +1,4 @@
+"use strict";
 var q = require('q');
 var Repository = (function () {
     function Repository() {
@@ -79,7 +80,8 @@ var Repository = (function () {
         return deferred.promise;
     };
     return Repository;
-})();
+}());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Repository;
+
 //# sourceMappingURL=TestRepository.js.map

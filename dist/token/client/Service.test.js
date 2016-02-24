@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -20,8 +21,9 @@ var Test = (function (_super) {
         return this.service.createToken(EMAIL, PASSWORD).then(this.pass());
     };
     return Test;
-})(BaseTest_1.default);
+}(BaseTest_1.default));
 (new Test()).run();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Test;
+
 //# sourceMappingURL=Service.test.js.map

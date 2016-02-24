@@ -1,3 +1,4 @@
+"use strict";
 var Controller = (function () {
     function Controller(commander, service) {
         this.service = service;
@@ -50,7 +51,8 @@ var Controller = (function () {
         }).then(process.exit, process.exit);
     };
     return Controller;
-})();
+}());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Controller;
+
 //# sourceMappingURL=CommanderController.js.map

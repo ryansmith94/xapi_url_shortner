@@ -1,3 +1,4 @@
+"use strict";
 var React = require('react');
 var App_1 = require('./App');
 var Factory_1 = require('./link/client/Factory');
@@ -32,4 +33,5 @@ var content_controller = function (token, onTokenChange, route) {
 React.render(App_1.default({
     content_controller: content_controller
 }), document.getElementById('app'));
+
 //# sourceMappingURL=client.js.map

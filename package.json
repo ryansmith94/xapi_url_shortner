@@ -22,22 +22,29 @@
     "blanket": "^1.2.1",
     "browserify": "^11.0.1",
     "chai": "^3.2.0",
+    "forever": "^0.15.1",
+    "gulp": "^3.9.1",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-typescript": "^2.12.0",
+    "merge2": "^1.0.1",
     "mocha": "^2.3.1",
     "mocha-text-cov": "^0.1.0",
     "sassify": "^0.9.1",
     "source-map-support": "^0.3.2",
     "tsify": "^0.11.11",
-    "typescript": "^1.6.0-beta",
+    "typescript": "^1.8.0-beta",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.4.0"
   },
   "scripts": {
-    "dev:ify": "watchify dist/client.js -o dist/client.bundle.js",
-    "dev:ts": "tsc",
-    "dev:start": "nodemon dist/server.js",
+    "build": "gulp",
     "test": "mocha dist/**/**/*.test.js dist/**/*.test.js",
     "clean": "find dist/ -type f -not -name '*.css' | xargs rm -rf; find dist/* -type d | xargs rm -rf",
     "cover:text": "mocha dist/**/**/*.test.js dist/**/*.test.js --require blanket -R mocha-text-cov",
-    "cover:html": "mocha dist/**/**/*.test.js dist/**/*.test.js --require blanket -R html-cov > coverage.html"
+    "cover:html": "mocha dist/**/**/*.test.js dist/**/*.test.js --require blanket -R html-cov > coverage.html",
+    "start": "./node_modules/forever/bin/forever start dist/server.js",
+    "stop": "./node_modules/forever/bin/forever stopall"
   },
   "bin": {
     "xus": "./dist/commands.js"

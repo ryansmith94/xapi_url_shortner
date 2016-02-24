@@ -17,9 +17,9 @@ class Service extends BaseService {
   private group_service;
 
   public constructor(lrs_repository, web_repository) {
+    super();
     this.lrs_repo = lrs_repository;
     this.web_repo = web_repository;
-    super();
   }
 
   public setGroupService(group_service) {

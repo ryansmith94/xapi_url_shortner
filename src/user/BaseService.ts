@@ -5,8 +5,8 @@ class Service extends BaseService {
   protected repo;
 
   public constructor(repository) {
-    this.repo = repository;
     super();
+    this.repo = repository;
   }
 
   protected validateEmail(email: string) {

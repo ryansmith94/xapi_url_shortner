@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -62,7 +63,8 @@ var Component = (function (_super) {
         ]);
     };
     return Component;
-})(React.Component);
+}(React.Component));
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = React.createFactory(Component);
+
 //# sourceMappingURL=ReactCreateController.js.map

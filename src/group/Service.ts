@@ -7,8 +7,8 @@ class Service extends BaseService {
   private link_service;
 
   public constructor(repository) {
-    this.repo = repository;
     super();
+    this.repo = repository;
   }
 
   public setUserService(user_service) {

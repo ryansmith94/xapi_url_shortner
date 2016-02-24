@@ -1,3 +1,4 @@
+"use strict";
 var dotenv = require('dotenv');
 dotenv.load();
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -19,4 +20,5 @@ exports.default = {
     debug: process.env.APP_DEBUG === 'true',
     port: parseInt(process.env.APP_PORT)
 };
+
 //# sourceMappingURL=config.js.map

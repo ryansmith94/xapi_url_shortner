@@ -1,3 +1,4 @@
+"use strict";
 var Tincan = require('tincanjs');
 var q = require('q');
 var Repository = (function () {
@@ -22,7 +23,8 @@ var Repository = (function () {
         return deferred.promise;
     };
     return Repository;
-})();
+}());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Repository;
-//# sourceMappingURL=TinCanLrsRepository.js.map
+
+//# sourceMappingURL=TincanLrsRepository.js.map

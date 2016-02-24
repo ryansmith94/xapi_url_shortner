@@ -1,3 +1,4 @@
+"use strict";
 var knex = require('knex');
 var config_1 = require('./config');
 var Repository = (function () {
@@ -29,7 +30,8 @@ var Repository = (function () {
         return knex(this.config)(this.collection);
     };
     return Repository;
-})();
+}());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Repository;
+
 //# sourceMappingURL=BaseKnexRepository.js.map

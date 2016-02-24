@@ -1,3 +1,4 @@
+"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = new RegExp("^" +
     "(?:(?:https?|ftp)://)" +
@@ -18,4 +19,5 @@ exports.default = new RegExp("^" +
     "(?::\\d{2,5})?" +
     "(?:[/?#]\\S*)?" +
     "$", "i");
+
 //# sourceMappingURL=UrlRegex.js.map
