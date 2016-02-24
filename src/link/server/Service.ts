@@ -60,14 +60,15 @@ class Service extends BaseService {
         user_id: user.id
       });
     }).then((link) => {
-      link.owner = true;
       return this.getCustomLinkById(link.id).then((custom_link) => {
         link.short_url = this.idToShortUrl(custom_link.id);
         return this.repo.updateLink(link).then((link) => {
+          link.editable = true;
           this.emitChange();
           return link;
         });
       }, (err) => {
+        link.editable = true;
         link.short_url = link.short_url || this.idToShortUrl(link.id);
         this.emitChange();
         return link;

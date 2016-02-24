@@ -39,14 +39,15 @@ var Service = (function (_super) {
                 user_id: user.id
             });
         }).then(function (link) {
-            link.owner = true;
             return _this.getCustomLinkById(link.id).then(function (custom_link) {
                 link.short_url = _this.idToShortUrl(custom_link.id);
                 return _this.repo.updateLink(link).then(function (link) {
+                    link.editable = true;
                     _this.emitChange();
                     return link;
                 });
             }, function (err) {
+                link.editable = true;
                 link.short_url = link.short_url || _this.idToShortUrl(link.id);
                 _this.emitChange();
                 return link;

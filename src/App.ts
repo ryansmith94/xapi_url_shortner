@@ -3,11 +3,11 @@ import docCookie from './docCookie';
 
 var dom = React.DOM;
 class Component extends React.Component<any, any> {
-  state = {
+  public state = {
     token: docCookie.getItem('token') || '',
     route: window.location.hash.replace('#', '')
   }
-  handleTokenChange(token) {
+  private handleTokenChange(token) {
     // Saves token in cookies.
     var current_date = new Date();
     var expiry_date = new Date();
@@ -17,17 +17,17 @@ class Component extends React.Component<any, any> {
     // Updates state.
     this.setState({token: token});
   }
-  handleLogout(e) {
+  private handleLogout(e) {
     this.setState({token: ''});
     docCookie.removeItem('token');
     e.preventDefault();
   }
-  componentDidMount() {
+  public componentDidMount() {
     window.onhashchange = function (event) {
       this.setState({route: event.newURL.split('#').slice(1).join('#')});
     }.bind(this);
   }
-  render() {
+  public render() {
     var navbar = dom.nav({className: 'navbar navbar-default navbar-fixed-top'}, [
       dom.div({className: 'container'}, [
         dom.div({className: 'navbar-header'}, [
