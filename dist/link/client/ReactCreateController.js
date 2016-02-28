@@ -15,14 +15,14 @@ var Component = (function (_super) {
             valid: false
         };
     }
-    Component.prototype.getCustomUrl = function (custom_url) {
+    Component.prototype.formatCustomUrl = function (custom_url) {
         if (custom_url === void 0) { custom_url = this.state.custom_url; }
         custom_url = custom_url.split(document.location.host + '/').pop();
         return custom_url || undefined;
     };
     Component.prototype.validateLink = function (long_url, custom_url) {
         var _this = this;
-        var mod_custom_url = this.getCustomUrl(custom_url);
+        var mod_custom_url = this.formatCustomUrl(custom_url);
         if (long_url.indexOf('://') === -1) {
             long_url = 'http://' + long_url;
         }
@@ -33,7 +33,7 @@ var Component = (function (_super) {
         });
     };
     Component.prototype.handleShorten = function (event) {
-        var custom_url = this.getCustomUrl();
+        var custom_url = this.formatCustomUrl();
         this.props.service.createLink(this.props.long_url, custom_url).then(function () {
             this.setState({ custom_url: '' });
         }.bind(this), function (err) {
@@ -48,13 +48,6 @@ var Component = (function (_super) {
     Component.prototype.handleCustomUrlChange = function (event) {
         this.setState({ custom_url: event.target.value });
         this.validateLink(this.props.long_url, event.target.value);
-    };
-    Component.prototype.handleDataChange = function () { };
-    Component.prototype.componentDidMount = function () {
-        this.props.service.addChangeListener(this.handleDataChange.bind(this));
-    };
-    Component.prototype.componentWillUnmount = function () {
-        this.props.service.removeChangeListener(this.handleDataChange.bind(this));
     };
     Component.prototype.render = function () {
         return dom.form({ className: 'link_create', onSubmit: this.handleShorten.bind(this), style: { textAlign: 'center' } }, [

@@ -16,17 +16,31 @@ class Service extends BaseService {
   private web_repo;
   private group_service;
 
-  public constructor(lrs_repository, web_repository) {
+  /**
+   * Constructs a new tracking service.
+   * @param {any} lrs_repository LRS repository to use.
+   * @param {any} web_repository Web repository to use.
+   */
+  public constructor(lrs_repository: any, web_repository: any) {
     super();
     this.lrs_repo = lrs_repository;
     this.web_repo = web_repository;
   }
 
-  public setGroupService(group_service) {
+  /**
+   * Sets the group service.
+   * @param {any} group_service
+   */
+  public setGroupService(group_service: any) {
     this.group_service = group_service;
   }
 
-  public trackLink(link, tracking_options: TrackingOptions) {
+  /**
+   * Tracks a link.
+   * @param {any} link The link to be tracked.
+   * @param {TrackingOptions} tracking_options
+   */
+  public trackLink(link: any, tracking_options: TrackingOptions) {
     tracking_options = tracking_options || {};
 
     return q.all([

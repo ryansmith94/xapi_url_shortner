@@ -6,19 +6,39 @@ class Service extends BaseService {
   private user_service;
   private link_service;
 
-  public constructor(repository) {
+  /**
+   * Constructs a new Group Service.
+   * @param {any} repository The group repository.
+   */
+  public constructor(repository: any) {
     super();
     this.repo = repository;
   }
 
-  public setUserService(user_service) {
+  /**
+   * Sets the user service.
+   * @param {any} user_service The user service to be used.
+   */
+  public setUserService(user_service: any) {
     this.user_service = user_service;
   }
 
-  public setLinkService(link_service) {
+  /**
+   * Sets the link service.
+   * @param {any} link_service Sets the link service to be used.
+   */
+  public setLinkService(link_service: any) {
     this.link_service = link_service;
   }
 
+  /**
+   * Creates a group with the given attribute values.
+   * @param {string} name The name of the group.
+   * @param {string} verb_id The verb identifier to use for tracking.
+   * @param {string} verb_lang The verb language to use for tracking.
+   * @param {string} verb_display The verb display to use for tracking.
+   * @return {Promise}
+   */
   public createGroup(name: string, verb_id?: string, verb_lang?: string, verb_display?: string) {
     return this.repo.createGroup({
       name: name,
@@ -28,14 +48,28 @@ class Service extends BaseService {
     });
   }
 
-  public getGroupById(id) {
+  /**
+   * Gets a group by its identifier.
+   * @param {string} id The identifier associated with the group.
+   * @return {Promise}
+   */
+  public getGroupById(id: string) {
     return this.repo.getGroupById(id);
   }
 
+  /**
+   * Gets groups.
+   * @return {Promise}
+   */
   public getGroups() {
     return this.repo.getGroups();
   }
 
+  /**
+   * Deletes a group by its identifier.
+   * @param {string} id The identifier associated with the group.
+   * @return {Promise}
+   */
   public deleteGroupById(id) {
     return q.all([
       this.user_service.deleteUsersByGroupId(id),

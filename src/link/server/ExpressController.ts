@@ -2,13 +2,23 @@ class Controller {
   private service;
   private token_service;
 
-  public constructor(app, service, token_service) {
+  /**
+   * Constructs a new Controller.
+   * @param {any} app
+   * @param {any} service
+   * @param {any} token_service
+   */
+  public constructor(app: any, service: any, token_service: any) {
     this.service = service;
     this.token_service = token_service;
     this.constructRoutes(app);
   }
 
-  private constructRoutes(app) {
+  /**
+   * Constructs routes on the Express App object.
+   * @param {any} app Express app object.
+   */
+  private constructRoutes(app: any) {
     app.post('/api/link', this.createLink.bind(this));
     app.get('/api/link', this.getLinks.bind(this));
     app.delete('/api/link/:id', this.deleteLink.bind(this));
@@ -16,7 +26,12 @@ class Controller {
     app.get('/:short_url(\\w+)', this.visitLink.bind(this));
   }
 
-  public createLink(req, res) {
+  /**
+   * Creates a link.
+   * @param {any} req
+   * @param {any} res
+   */
+  public createLink(req: any, res: any) {
     var token = req.get('Authorization').replace('Bearer ', '');
     this.token_service.getUserByValue(token).then((user_id: number) => {
       return this.service.createLink(
@@ -32,7 +47,12 @@ class Controller {
     });
   }
 
-  public visitLink(req, res) {
+  /**
+   * Visits a link.
+   * @param {any} req
+   * @param {any} res
+   */
+  public visitLink(req: any, res: any) {
     var options = req.query.options;
     this.service.trackLink(req.params.short_url, options && JSON.parse(options)).then(function (model) {
       res.redirect(307, model.long_url);
@@ -42,7 +62,12 @@ class Controller {
     });
   }
 
-  public getLinks(req, res) {
+  /**
+   * Gets links.
+   * @param {any} req
+   * @param {any} res
+   */
+  public getLinks(req: any, res: any) {
     var token = req.get('Authorization').replace('Bearer ', '');
     this.token_service.getUserByValue(token).then((user_id: number) => {
       return this.service.getLinks(user_id);
@@ -54,7 +79,12 @@ class Controller {
     });
   }
 
-  public deleteLink(req, res) {
+  /**
+   * Deletes a link.
+   * @param {any} req
+   * @param {any} res
+   */
+  public deleteLink(req: any, res: any) {
     var token = req.get('Authorization').replace('Bearer ', '');
     var id = req.params.id;
     this.token_service.getUserByValue(token).then((user_id: number) => {
@@ -67,7 +97,12 @@ class Controller {
     });
   }
 
-  public changeLongUrl(req, res) {
+  /**
+   * Changes a long URL.
+   * @param {any} req
+   * @param {any} res
+   */
+  public changeLongUrl(req: any, res: any) {
     var token = req.get('Authorization').replace('Bearer ', '');
     var id = req.params.id;
     this.token_service.getUserByValue(token).then((user_id: number) => {
