@@ -27,7 +27,7 @@ class Repository {
       deferred.promise.then((arg) => {
         console.log('SUCCESSFUL STATEMENT', arg);
       }, (arg) => {
-        console.log('ERROR STATEMENT', arg);
+        console.log('ERROR STATEMENT', JSON.stringify(err_res));
       });
     });
     return deferred.promise;
