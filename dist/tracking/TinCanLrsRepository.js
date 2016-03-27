@@ -20,9 +20,9 @@ var Repository = (function () {
                 deferred.reject(err_res.err);
             deferred.resolve(statement);
             deferred.promise.then(function (arg) {
-                console.log(arg);
+                console.log('SUCCESSFUL STATEMENT', arg);
             }, function (arg) {
-                console.log(arg);
+                console.log('ERROR STATEMENT', arg);
             });
         });
         return deferred.promise;
