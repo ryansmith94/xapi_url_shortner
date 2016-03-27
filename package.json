@@ -36,12 +36,15 @@
   },
   "scripts": {
     "build": "gulp",
-    "test": "mocha dist/**/**/*.test.js dist/**/*.test.js",
     "clean": "find dist/ -type f -not -name '*.css' | xargs rm -rf; find dist/* -type d | xargs rm -rf",
     "cover:text": "mocha dist/**/**/*.test.js dist/**/*.test.js --require blanket -R mocha-text-cov",
     "cover:html": "mocha dist/**/**/*.test.js dist/**/*.test.js --require blanket -R html-cov > coverage.html",
-    "start": "./node_modules/forever/bin/forever start dist/server.js",
-    "stop": "./node_modules/forever/bin/forever stopall"
+    "forever": "./node_modules/forever/bin/forever",
+    "mocha": "./node_modules/mocha/bin/mocha",
+    "test": "npm run mocha dist/**/**/*.test.js dist/**/*.test.js",
+    "start": "npm run forever start dist/server.js",
+    "stop": "npm run forever stopall",
+    "restart": "npm run stop; npm run start;"
   },
   "bin": {
     "xus": "./dist/commands.js"
