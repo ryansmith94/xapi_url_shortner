@@ -22,7 +22,7 @@ var Repository = (function () {
             deferred.promise.then(function (arg) {
                 console.log('SUCCESSFUL STATEMENT', arg);
             }, function (arg) {
-                console.log('ERROR STATEMENT', JSON.stringify(err_res));
+                console.log('ERROR STATEMENT', err_res);
             });
         });
         return deferred.promise;
