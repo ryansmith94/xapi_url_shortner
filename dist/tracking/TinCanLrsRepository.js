@@ -19,6 +19,11 @@ var Repository = (function () {
             if (err_res && err_res.err)
                 deferred.reject(err_res.err);
             deferred.resolve(statement);
+            deferred.promise.then(function (arg) {
+                console.log(arg);
+            }, function (arg) {
+                console.log(arg);
+            });
         });
         return deferred.promise;
     };

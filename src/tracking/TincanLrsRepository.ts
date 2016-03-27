@@ -17,13 +17,18 @@ class Repository {
 
     this.connect().sendStatement(statement, (responses) => {
       if (!responses) deferred.reject(new Error('No LRSs configured.'));
-      
+
       var err_res = responses.filter((response) => {
         return response.err;
       })[0];
       if (err_res && err_res.err) deferred.reject(err_res.err);
 
       deferred.resolve(statement);
+      deferred.promise.then((arg) => {
+        console.log(arg);
+      }, (arg) => {
+        console.log(arg);
+      });
     });
     return deferred.promise;
   }
