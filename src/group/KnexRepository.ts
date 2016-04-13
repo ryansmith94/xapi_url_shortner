@@ -2,18 +2,6 @@ import BaseRepository from '../BaseKnexRepository';
 
 class Repository extends BaseRepository {
 
-  public constructor(config, collection) {
-    super(config, collection);
-  }
-
-  protected constructSchema(table) {
-    table.increments('id').primary();
-    table.string('name');
-    table.string('verb_id');
-    table.string('verb_lang');
-    table.string('verb_display');
-  }
-
   public createGroup(group) {
     return this.connect().insert(group, 'id').then(function (ids) {
       return {

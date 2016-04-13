@@ -1,5 +1,6 @@
 "use strict";
 var express = require('express');
+var knex = require('knex');
 var bodyParser = require('body-parser');
 var source_map_support = require('source-map-support');
 var config_1 = require('./config');
@@ -7,6 +8,7 @@ source_map_support.install({
     handleUncaughtExceptions: false
 });
 var app = express();
+var knexConnection = knex(config_1.default.knex);
 app.use(express.static(__dirname));
 app.use('/node_modules', express.static(__dirname + '/../node_modules'));
 app.use('/example', express.static(__dirname + '/../example'));
@@ -16,17 +18,17 @@ var Factory_1 = require('./tracking/Factory');
 var tracking_service = Factory_1.default(config_1.default.lrs);
 var Factory_2 = require('./token/server/Factory');
 var ExpressController_1 = require('./token/server/ExpressController');
-var token_service = Factory_2.default(config_1.default.knex, 'token');
+var token_service = Factory_2.default(knexConnection, 'token');
 var token_controller = new ExpressController_1.default(app, token_service);
 var Factory_3 = require('./group/Factory');
-var group_service = Factory_3.default(config_1.default.knex, 'group');
+var group_service = Factory_3.default(knexConnection, 'group');
 var Factory_4 = require('./user/server/Factory');
 var ExpressController_2 = require('./user/server/ExpressController');
-var user_service = Factory_4.default(config_1.default.knex, 'user');
+var user_service = Factory_4.default(knexConnection, 'user');
 var user_controller = new ExpressController_2.default(app, user_service, token_service);
 var Factory_5 = require('./link/server/Factory');
 var ExpressController_3 = require('./link/server/ExpressController');
-var link_service = Factory_5.default(config_1.default.knex, 'link');
+var link_service = Factory_5.default(knexConnection, 'link');
 var link_controller = new ExpressController_3.default(app, link_service, token_service);
 user_service.setGroupService(group_service);
 token_service.setUserService(user_service);

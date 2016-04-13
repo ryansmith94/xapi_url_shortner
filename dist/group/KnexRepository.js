@@ -7,16 +7,9 @@ var __extends = (this && this.__extends) || function (d, b) {
 var BaseKnexRepository_1 = require('../BaseKnexRepository');
 var Repository = (function (_super) {
     __extends(Repository, _super);
-    function Repository(config, collection) {
-        _super.call(this, config, collection);
+    function Repository() {
+        _super.apply(this, arguments);
     }
-    Repository.prototype.constructSchema = function (table) {
-        table.increments('id').primary();
-        table.string('name');
-        table.string('verb_id');
-        table.string('verb_lang');
-        table.string('verb_display');
-    };
     Repository.prototype.createGroup = function (group) {
         return this.connect().insert(group, 'id').then(function (ids) {
             return {

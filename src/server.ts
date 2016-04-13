@@ -9,6 +9,7 @@ source_map_support.install({
 });
 
 var app = express();
+const knexConnection = knex(config.knex);
 
 app.use(express.static(__dirname));
 app.use('/node_modules', express.static(__dirname+'/../node_modules'));
@@ -23,23 +24,23 @@ var tracking_service = TrackingFactory(config.lrs);
 // Token.
 import TokenFactory from './token/server/Factory';
 import TokenController from './token/server/ExpressController';
-var token_service = TokenFactory(config.knex, 'token');
+var token_service = TokenFactory(knexConnection, 'token');
 var token_controller = new TokenController(app, token_service);
 
 // Group.
 import GroupFactory from './group/Factory';
-var group_service = GroupFactory(config.knex, 'group');
+var group_service = GroupFactory(knexConnection, 'group');
 
 // User.
 import UserFactory from './user/server/Factory';
 import UserController from './user/server/ExpressController';
-var user_service = UserFactory(config.knex, 'user');
+var user_service = UserFactory(knexConnection, 'user');
 var user_controller = new UserController(app, user_service, token_service);
 
 // Link.
 import LinkFactory from './link/server/Factory';
 import LinkController from './link/server/ExpressController';
-var link_service = LinkFactory(config.knex, 'link');
+var link_service = LinkFactory(knexConnection, 'link');
 var link_controller = new LinkController(app, link_service, token_service);
 
 // Injects services into services.

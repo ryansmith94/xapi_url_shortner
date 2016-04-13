@@ -2,18 +2,6 @@ import BaseRepository from '../../BaseKnexRepository';
 
 class Repository extends BaseRepository {
 
-  public constructor(config, collection) {
-    super(config, collection);
-  }
-
-  protected constructSchema(table) {
-    table.increments('id').primary();
-    table.string('long_url').notNullable();
-    table.string('short_url').unique();
-    table.string('group_id').notNullable();
-    table.string('user_id').notNullable();
-  }
-
   public createLink(link) {
     return this.connect().insert(link, 'id').then(function (ids) {
       link.id = ids[0];

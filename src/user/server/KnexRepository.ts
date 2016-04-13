@@ -2,18 +2,6 @@ import BaseRepository from '../../BaseKnexRepository';
 
 class Repository extends BaseRepository {
 
-  public constructor(config, collection) {
-    super(config, collection);
-  }
-
-  protected constructSchema(table) {
-    table.increments('id').primary();
-    table.string('email').notNullable();
-    table.string('password').notNullable();
-    table.integer('group_id').notNullable();
-    table.boolean('admin').notNullable();
-  }
-
   public createUser(user) {
     return this.connect().insert(user, 'id').then(function (ids) {
       return {
